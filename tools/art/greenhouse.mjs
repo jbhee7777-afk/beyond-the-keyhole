@@ -97,12 +97,21 @@ function sky(day) {
     const cx = rand(0, W), cy = rand(60, 330), rx = rand(90, 200);
     o += fill(ell(cx, cy, rx, rx * 0.32), day ? '#fffaf0' : '#8a93a0', day ? 0.7 : 0.6);
   }
-  // 바깥 정원의 나무들
-  for (let i = 0; i < 26; i++) {
-    const cx = i * 66 + rand(-20, 20), r = rand(50, 95);
-    o += fill(ell(cx, 520 - r * 0.4, r, r * 0.8), day ? pick(['#7fa55a', '#6b934c', '#8db566']) : pick(['#5d6c73', '#55636a', '#68757a']));
+  // 바깥 정원: 먼 언덕 → 뒷줄 나무(흐릿) → 앞줄 나무 → 산울타리
+  o += fill(wob([[0, 470], [300, 430], [700, 458], [1100, 418], [1600, 452], [1600, 900], [0, 900]], { step: 80, amp: 6 }), day ? '#c3d69a' : '#7b878c');
+  for (let i = 0; i < 24; i++) {
+    const cx = i * 70 + rand(-20, 20), r = rand(36, 62);
+    o += fill(ell(cx, 478 - r * 0.3, r, r * 0.72), day ? pick(['#a9c47f', '#9ebb76']) : pick(['#6f7c82', '#68757b']), 0.95);
   }
-  o += fill(rect(0, 500, W, 400), day ? '#9cbd6c' : '#67757a');
+  for (let i = 0; i < 15; i++) {
+    const cx = i * 112 + rand(-30, 30), r = rand(52, 82), cy = 500 - r * 0.55;
+    o += fill(rect(cx - 5, cy + r * 0.4, 10, r * 0.7), day ? '#6d5536' : '#4c5358');
+    o += fill(ell(cx, cy, r, r * 0.78), day ? pick(['#7fa55a', '#6b934c', '#86ad5d']) : pick(['#58666d', '#515f66', '#5f6c72']));
+    o += fill(ell(cx - r * 0.42, cy + r * 0.18, r * 0.55, r * 0.45), day ? '#759c50' : '#4e5b61');
+    o += fill(ell(cx - r * 0.25, cy - r * 0.3, r * 0.42, r * 0.26), day ? '#a7c97a' : '#6c787e', 0.7);
+  }
+  o += fill(rect(0, 505, W, 400, { amp: 0 }), day ? '#93b765' : '#626f74');
+  for (let x = 0; x < W; x += 46) o += fill(ell(x + rand(-6, 6), 506, 30, 15), day ? '#6f9a4f' : '#56636a');
   put(`bg/sky_${day ? 'day' : 'dusk'}.svg`, W, H, o, { id: day ? 3 : 4 });
 }
 
@@ -135,9 +144,18 @@ function shell(variant) {
     o += line([[x + 110, 120], [x + 110, 520]], { sw: 2.4, color: C.iron2 });
     o += line([[x, 240], [x + 165, 240]], { sw: 2, color: C.iron2 });
     o += line([[x, 430], [x + 165, 430]], { sw: 2, color: C.iron2 });
-    // 유리 반사 빗금
-    o += line([[x + 18, 200], [x + 46, 172]], { sw: 2, color: '#ffffff', op: 0.45 });
-    o += line([[x + 20, 222], [x + 40, 202]], { sw: 1.4, color: '#ffffff', op: 0.35 });
+    // 유리 칸마다 살짝 다른 빛깔 (오래된 손유리 느낌)
+    for (let c = 0; c < 3; c++) for (const [y0, y1] of [[100, 240], [240, 330], [330, 430], [430, 512]]) {
+      const tint = rand() < 0.12 ? '#f3e6b0' : pick(['#eef6ea', '#d7e8d2', '#e4efe0']);
+      o += fill(rect(x + c * 55 + 2, y0 + 2, 51, y1 - y0 - 4, { amp: 0.4 }), tint, rand(0.05, 0.22));
+    }
+    // 유리 반사: 긴 사선 두 줄
+    const ry = rand(250, 380);
+    o += line([[x + 14, ry + 70], [x + 92, ry - 20]], { sw: 3, color: '#ffffff', op: 0.38 });
+    o += line([[x + 30, ry + 82], [x + 84, ry + 20]], { sw: 1.6, color: '#ffffff', op: 0.3 });
+    // 아래쪽 김 서린 물방울
+    for (let k = 0; k < 5; k++) { const dx = x + rand(8, 158), dy = rand(470, 510); o += `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="${rand(1.4, 3).toFixed(1)}" fill="#ffffff" opacity="0.45"/>`; }
+    if (rand() < 0.25) { const dx = x + rand(20, 140); o += line([[dx, 440], [dx + 1, 470], [dx, 505]], { sw: 1.4, color: '#ffffff', op: 0.4 }); }
   }
   for (let i = 0; i <= 8; i++) o += line([[140 + i * 165, 70], [140 + i * 165, 520]], { sw: 9, color: C.iron });
   o += line([[140, 330], [1460, 330]], { sw: 6, color: C.iron });
@@ -630,11 +648,20 @@ function lightBeams(view) {
   let o = '';
   const xs = view === 'south' ? [380, 660, 980] : [250, 620, 1050, 1300];
   xs.forEach((x, i) => {
-    o += `<path d="M${x} -20 L${x + 140} -20 L${x + 520} 900 L${x + 240} 900Z" fill="#ffe9a8" opacity="${0.22 + (i % 2) * 0.1}" filter="url(#blur)"/>`;
+    o += `<path d="M${x} -20 L${x + 140} -20 L${x + 520} 900 L${x + 240} 900Z" fill="#ffe9a8" opacity="${0.12 + (i % 2) * 0.06}" filter="url(#blur)"/>`;
   });
-  if (view === 'south') o += `<circle cx="810" cy="300" r="330" fill="#fff1b0" opacity="0.5" filter="url(#blur)"/>`;
+  if (view === 'south') o += `<circle cx="810" cy="300" r="330" fill="#fff1b0" opacity="0.45" filter="url(#blur)"/>`;
+  // 유리 지붕 틀이 바닥에 드리운 햇빛 조각들
+  const X = (x0, y) => 800 + (x0 - 800) * (1 + (y - 640) / 260 * 0.3) + (y - 640) * 0.7;
+  for (let i = 0; i < 8; i++) {
+    const x0 = 150 + i * 165;
+    for (const [y0, y1] of [[668, 738], [750, 816], [828, 900]]) {
+      const pts = [[X(x0, y0), y0], [X(x0 + 140, y0), y0], [X(x0 + 140, y1), y1], [X(x0, y1), y1]];
+      o += `<path d="M${pts.map((p) => p.map((n) => n.toFixed(1)).join(' ')).join('L')}Z" fill="#ffe3a0" opacity="0.3" filter="url(#soft)"/>`;
+    }
+  }
   // 반짝이는 먼지 자리는 엔진에서 애니메이션
-  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><defs><filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter></defs>${o}</svg>`;
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><defs><filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter><filter id="soft"><feGaussianBlur stdDeviation="4"/></filter></defs>${o}</svg>`;
   import('node:fs').then(({ writeFileSync }) => writeFileSync(OUT + `bg/beams_${view}.svg`, svgStr));
 }
 
@@ -752,8 +779,9 @@ function zoomDrawer(open) {
 }
 function zoomBarrel() {
   seed(113);
-  let o = fill(rect(0, 0, W, H, { amp: 0 }), C.tc2);
-  o += hatch(rect(0, 0, W, H), 0.15);
+  let o = fill(rect(0, 0, W, H, { amp: 0 }), '#8f4a2c');
+  for (let y = -40; y < H; y += 190) for (let x = -60; x < W; x += 190) o += shape(rect(x + 4, y + 4, 182, 182, { amp: 1.5 }), pick([C.tc, C.tc2, C.tc3, C.tc]), { sw: 2 });
+  o += fill(ell(830, 500, 720, 450), INK, 0.35);
   o += shape(ell(800, 470, 680, 420), C.wood2, { sw: 5 });
   for (let i = 0; i < 32; i++) { const a = i * Math.PI / 16; o += line([[800 + Math.cos(a) * 610, 470 + Math.sin(a) * 370], [800 + Math.cos(a) * 678, 470 + Math.sin(a) * 418]], { sw: 2, op: 0.7 }); }
   o += shape(ell(800, 470, 600, 362), C.water, { sw: 4 });
@@ -808,6 +836,41 @@ function items() {
   seed(210);
   I('key', `<g transform="rotate(-35 80 80)">${shape(ell(80, 40, 26, 26), C.brass, { sw: 2.6 })}${[...Array(10)].map((_, i) => { const a = i * Math.PI / 5; return leaf(80 + Math.cos(a) * 10, 40 + Math.sin(a) * 10, 12, a, C.sun2, { w: 0.5, vein: false }); }).join('')}${shape(ell(80, 40, 8, 8), C.seed)}${shape(rect(74, 64, 12, 80), C.brass, { sw: 2.4 })}${shape(rect(86, 116, 20, 10), C.brass)}${shape(rect(86, 132, 14, 9), C.brass)}</g>` + sparkle(122, 40, 12), 210);
 }
+
+/* ───────────── 햇빛 그림자 · 앞쪽 잎사귀 ───────────── */
+function castShadows(view) {
+  const P = (pts) => `<path d="M${pts.map((p) => p.join(' ')).join('L')}Z"/>`;
+  const sh = {
+    north: P([[258, 650], [608, 650], [672, 712], [310, 712]]) + P([[1030, 652], [1220, 652], [1290, 700], [1080, 700]]) + P([[1300, 690], [1460, 690], [1500, 716], [1330, 716]]) + P([[940, 236], [970, 250], [970, 640], [940, 640]]),
+    east: P([[290, 702], [1340, 702], [1420, 752], [330, 752]]) + P([[262, 552], [1340, 552], [1340, 600], [262, 590]]) + P([[312, 276], [770, 276], [790, 300], [326, 304]]) + P([[896, 210], [1152, 210], [1158, 388], [904, 392]]) + P([[1180, 680], [1180, 680]]),
+    south: P([[680, 650], [920, 650], [1010, 708], [740, 708]]) + P([[910, 640], [990, 640], [1020, 664], [930, 664]]),
+    west: P([[300, 690], [550, 690], [630, 740], [350, 740]]) + `<ellipse cx="1120" cy="742" rx="110" ry="22"/>` + P([[1214, 196], [1440, 196], [1440, 498], [1214, 498]]),
+  }[view];
+  let extra = '';
+  if (view === 'west') for (let k = 0; k < 9; k++) extra += `<line x1="${1030 + k * 22}" y1="726" x2="${1044 + k * 22}" y2="760" stroke="#3b2414" stroke-width="3" opacity="0.5"/>`;
+  const out = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><defs><filter id="b" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="7"/></filter></defs><g fill="#4a2c18" opacity="0.38" filter="url(#b)">${sh}${extra}</g></svg>`;
+  import('node:fs').then(({ writeFileSync }) => writeFileSync(OUT + `bg/cast_${view}.svg`, out));
+}
+function foreground(view) {
+  seed(170 + view.length * 3);
+  const dark = ['#3d5f2c', '#4a6e34', '#34512a'];
+  let o = '';
+  // 왼쪽 위·오른쪽 위에서 늘어진 큰 잎 (앞쪽이라 크고 진하게)
+  o += vine(70, -20, view === 'east' ? 230 : 300, { sway: 30, leafLen: 54, colors: dark, dir: 1 });
+  o += vine(18, -20, 180, { sway: 18, leafLen: 46, colors: dark, dir: -1 });
+  if (view !== 'west') o += vine(1470, -20, 160, { sway: 20, leafLen: 50, colors: dark, dir: -1 });
+  o += hatch(wob([[0, 0], [150, 0], [120, 260], [0, 330]]), 0.12);
+  // 앞쪽 바닥 구석 화분 (북·남)
+  if (view === 'north' || view === 'south') {
+    const x = view === 'north' ? -40 : 1380;
+    o += shape(wob([[x, 800], [x + 170, 800], [x + 150, 920], [x + 20, 920]]), '#a5552f', { sw: 3 });
+    o += hatch(wob([[x + 100, 804], [x + 168, 804], [x + 150, 920], [x + 110, 920]]), 0.4);
+    o += shape(rect(x - 8, 786, 186, 26), '#bf6a40', { sw: 3 });
+    for (let i = 0; i < 11; i++) o += leaf(x + 85, 792, rand(110, 170), -Math.PI / 2 + (i - 5) * 0.27, pick(dark), { w: 0.26 });
+  }
+  put(`bg/fg_${view}.svg`, W, H, o, { id: 170 + view.length });
+}
+for (const v of ['north', 'east', 'south', 'west']) { castShadows(v); foreground(v); }
 
 sky(false); sky(true);
 bgNorth(); bgEast(); bgSouth(); bgWest();

@@ -113,8 +113,8 @@ export function defs(id = 1, { displace = 2.6, wash = true } = {}) {
 <filter id="art" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
 <feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="2" seed="${id}" result="w"/>
 <feDisplacementMap in="SourceGraphic" in2="w" scale="${displace}" xChannelSelector="R" yChannelSelector="G" result="d"/>
-${wash ? `<feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="4" seed="${id + 7}" result="t"/>
-<feColorMatrix in="t" type="matrix" values="0.5 0 0 0 0.74  0.5 0 0 0 0.74  0.5 0 0 0 0.74  0 0 0 0 1" result="tw"/>
+${wash ? `<feTurbulence type="fractalNoise" baseFrequency="0.007" numOctaves="3" seed="${id + 7}" result="t"/>
+<feColorMatrix in="t" type="matrix" values="0.3 0 0 0 0.85  0.3 0 0 0 0.85  0.3 0 0 0 0.85  0 0 0 0 1" result="tw"/>
 <feBlend in="d" in2="tw" mode="multiply" result="m"/>
 <feComposite in="m" in2="d" operator="in"/>` : ''}
 </filter>

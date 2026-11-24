@@ -225,7 +225,7 @@
           else n.style.pointerEvents = 'none';
           map.set(o.id, n);
         }
-        if (n.dataset.src !== src) {
+        if (src && n.dataset.src !== src) {
           const prev = n.querySelector('img:not(.out)');
           const img = el('img', '', n);
           img.alt = ''; img.draggable = false; img.src = src;

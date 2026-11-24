@@ -107,6 +107,7 @@
       north: {
         bg: 'bg/north',
         objects: [
+          { id: 'cast', img: 'bg/cast_north', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
           {
             id: 'sunflowers', img: (s) => (lit(s) ? 'props/sunflowers_up' : 'props/sunflowers_droop'), x: 228, y: 262, w: 380, h: 390,
             hit: [240, 300, 360, 340], label: '해바라기 화단',
@@ -160,6 +161,7 @@
             id: 'snail', img: 'props/snail', x: 1250, y: 410, w: 130, h: 106, cls: 'bob', label: '달팽이 정원사',
             click: (api) => { api.sfx('tap'); window.__game && window.__game.openHint(); },
           },
+          { id: 'fg', img: 'bg/fg_north', x: 0, y: 0, w: 1600, h: 900, cls: 'fg' },
         ],
       },
 
@@ -167,6 +169,7 @@
       east: {
         bg: 'bg/east',
         objects: [
+          { id: 'cast', img: 'bg/cast_east', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
           { id: 'shelf', img: 'props/shelf', x: 300, y: 160, w: 460, h: 150, hit: [300, 160, 150, 120], look: '선인장과 분홍 꽃 화분. 가운데 화분만 유난히 앞으로 나와 있어.' },
           { id: 'shelf2', hit: [610, 160, 150, 120], x: 0, y: 0, w: 0, h: 0, img: '', look: '분홍 꽃이 시들시들해.' },
           {
@@ -189,6 +192,7 @@
             id: 'wcan', img: 'props/wcan', x: 1010, y: 584, w: 160, h: 124, show: (s) => lit(s) && !F(s).wcanTaken, label: '물뿌리개',
             click: (api, n) => { api.set('wcanTaken'); api.give('wcan', n); api.say('햇빛 덕분에 작업대 밑에 숨어 있던 물뿌리개가 보였어!'); },
           },
+          { id: 'fg', img: 'bg/fg_east', x: 0, y: 0, w: 1600, h: 900, cls: 'fg' },
         ],
       },
 
@@ -196,6 +200,7 @@
       south: {
         bg: 'bg/south',
         objects: [
+          { id: 'cast', img: 'bg/cast_south', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
           {
             id: 'sun', img: (s) => (lit(s) ? 'props/sun_awake' : 'props/sun_asleep'), x: 530, y: 60, w: 540, h: 600,
             cls: 'breathe', hit: [600, 80, 400, 380], label: '해님 기계',
@@ -212,6 +217,7 @@
             wrong: '해님은 꿈쩍도 안 해. 아주 시끄러운 소리가 필요할 것 같아.',
           },
           { id: 'sign', img: 'props/sign_sun', x: 890, y: 560, w: 100, h: 92, zoom: 'note_sun', label: '해님 안내판' },
+          { id: 'fg', img: 'bg/fg_south', x: 0, y: 0, w: 1600, h: 900, cls: 'fg' },
         ],
       },
 
@@ -219,6 +225,7 @@
       west: {
         bg: 'bg/west',
         objects: [
+          { id: 'cast', img: 'bg/cast_west', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
           {
             id: 'barrel', img: 'props/barrel', x: 270, y: 380, w: 290, h: 320, zoom: 'barrel', label: '빗물통',
             use: {
@@ -237,6 +244,7 @@
               api.say('텅 빈 새장이 살랑살랑 흔들려.');
             },
           },
+          { id: 'fg', img: 'bg/fg_west', x: 0, y: 0, w: 1600, h: 900, cls: 'fg' },
         ],
       },
     },
