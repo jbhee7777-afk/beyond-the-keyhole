@@ -1,6 +1,8 @@
 # PAPERDOOR · 페이퍼도어
 
-> 다섯 개의 문 — 종이 책 속 다섯 방을 탈출하는 손그림 방탈출 (저장소 이름은 예전 이름 beyond-the-keyhole 그대로)
+> 다섯 개의 문 — 종이 책 속 다섯 방을 탈출하는 손그림 방탈출 
+>
+> 👉 플레이: https://jbhee7777-afk.github.io/paperdoor/
 
 관찰, 아이템 조합, 넌센스로 탈출하는 손그림 포인트 앤 클릭 방탈출 게임입니다.
 퍼즐 난이도는 초등학생 기준이고, 그래픽은 스팀 인디 게임 수준을 목표로 합니다.
@@ -54,7 +56,7 @@ GitHub Pages로 공개하기 (가벼운 WebP 판):
 1. 처음 한 번만: 저장소 Settings → Pages → Source를 **Deploy from a branch**, Branch를 **gh-pages** / **(root)** 로 고르고 Save.
 2. 게임을 고친 뒤에는 `npm run pages` 한 번이면 `gh-pages` 브랜치가 새로 올라가고, 1~2분 뒤 사이트에 반영됩니다.
 
-주소: `https://jbhee7777-afk.github.io/<저장소 이름>/` (저장소 이름을 `paperdoor`로 바꾸면 `…github.io/paperdoor/`)
+주소: https://jbhee7777-afk.github.io/paperdoor/
 
 개발할 때는 `index.html#play-greenhouse` 로 열면 표지를 건너뛰고 1장으로 바로 들어갑니다.
 
