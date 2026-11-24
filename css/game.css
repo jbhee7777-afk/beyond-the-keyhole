@@ -268,3 +268,23 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 @keyframes float { 50% { transform: translate(6px, -10px) rotate(1.5deg); } }
 .flicker img { animation: flicker 2.2s ease-in-out infinite; }
 @keyframes flicker { 0%, 100% { opacity: 1; } 40% { opacity: 0.86; } 60% { opacity: 0.95; } 80% { opacity: 0.82; } }
+
+/* ── 4장: 거꾸로 된 방 ── */
+.view { transition: transform 2.4s cubic-bezier(0.65, 0, 0.3, 1); }
+.stage.upside .view { transform: rotate(180deg); }
+.obj.rot180 img { transform: rotate(180deg); }
+.obj.rot180.bob img { animation: bob180 3.6s ease-in-out infinite; }
+@keyframes bob180 { 0%, 100% { transform: rotate(180deg); } 50% { transform: rotate(180deg) translateY(3px); } }
+.sway-soft { animation: sway 4s ease-in-out infinite; }
+
+/* ── 5장: 물빛 일렁임, 물고기 그림자, 우편함 번호 ── */
+.obj.caustic { mix-blend-mode: screen; pointer-events: none; }
+.obj.caustic img { animation: caustic 10s ease-in-out infinite alternate; }
+@keyframes caustic { from { transform: translate(-30px, -10px) scale(1.04); } to { transform: translate(30px, 10px) scale(1.04); } }
+.drift img { animation: drift 6s ease-in-out infinite alternate; }
+@keyframes drift { from { transform: translate(-40px, 0); } to { transform: translate(20px, -6px); } }
+.boxes { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.mailbox { position: absolute; width: 200px; height: 220px; border: 0; padding: 0; background: none; cursor: var(--cursor); pointer-events: auto; }
+.mailbox span { position: absolute; left: 40px; top: 24px; width: 120px; height: 56px; line-height: 58px; text-align: center; font-family: var(--f-title); font-size: 44px; color: var(--ink); opacity: 0.06; transition: opacity 1.2s; }
+.boxes.lit .mailbox span { opacity: 1; }
+.mailbox:hover { background: rgba(255, 240, 200, 0.08); }

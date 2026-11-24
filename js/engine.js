@@ -151,6 +151,8 @@
       const lit = this.isLit();
       this.stage.classList.toggle('is-lit', lit);
       this.stage.classList.toggle('is-dark', !lit);
+      // 방 전체가 거꾸로 (4장): 방 레이어만 180도 돌린다. 확대 화면과 UI는 그대로
+      this.stage.classList.toggle('upside', !!(room.upside && room.upside(s)));
       // 방마다 어둠 색: dim(어두울 때), dimLit(밝아진 뒤에도 남는 밤빛 등)
       if (room.dim) {
         const d = lit ? room.dimLit : room.dim;
@@ -297,6 +299,7 @@
       else if (s.sel === id) { this.inspect(id); }
       else {
         const c = this.room.combos.find((c) => (c.a === s.sel && c.b === id) || (c.a === id && c.b === s.sel));
+        if (c && !c.result) { this.say(c.say); sfx('nope'); s.sel = null; this.renderInv(); return; }
         if (c) {
           s.inv = s.inv.filter((x) => x !== c.a && x !== c.b);
           s.inv.push(c.result); s.sel = null;

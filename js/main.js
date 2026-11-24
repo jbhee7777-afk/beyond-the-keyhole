@@ -6,7 +6,7 @@
     { id: 'toyshop', n: '2장', title: '토끼의 장난감 공방', mood: '귀엽고 아기자기한' },
     { id: 'clock13', n: '3장', title: '열세 번째 시계', mood: '은은하게 오싹한' },
     { id: 'upside', n: '4장', title: '거꾸로 된 세상', mood: '기발하고 엉뚱한' },
-    { id: 'seapost', n: '5장', title: '바닷속 우체국', mood: '신비롭고 몽환적인' },
+    { id: 'sea', n: '5장', title: '바닷속 우체국', mood: '신비롭고 몽환적인' },
   ];
   let game = null;
 

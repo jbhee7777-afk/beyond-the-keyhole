@@ -20,7 +20,8 @@ const strokeP = (d, sw, col = INK, op = 1) => `<path d="${d}" fill="none" stroke
  * shade: 부위 안에서만 보이는 그늘 모양(점 목록), hatch: 그늘에 빗금도 넣을지
  */
 export function part(pts, fill, { heavy, sw = 2, hw = 3.6, shade, shadeCol = 'rgba(80,50,40,0.16)', hatch = true, extra = '', light } = {}) {
-  const d = S(pts);
+  // 꼭짓점이 4개 이하(사각형·삼각형)면 변을 잘게 나눠 곧은 변을 유지한다. 그냥 부드럽게 이으면 둥근 덩어리가 된다
+  const d = pts.length <= 4 ? wob(pts, { step: 22, amp: 0.5 }) : S(pts);
   const id = 'c' + (uid++);
   let o = `<path d="${d}" fill="${fill}"/>`;
   if (shade || light || extra) {
@@ -357,5 +358,115 @@ export function ghostIconArt() {
   o += `<path d="${S(P([[140, 160], [150, 148], [162, 160], [152, 180]]), 0.2)}" fill="${INK}"/><path d="${S(P([[200, 160], [210, 148], [222, 160], [212, 180]]), 0.2)}" fill="${INK}"/>`;
   o += dot(48, 54, 1.4, '#fff') + dot(69, 54, 1.4, '#fff') + blush(42, 66, '#d9a0c0') + blush(78, 66, '#d9a0c0');
   o += strokeP(O(P([[170, 212], [180, 220], [190, 212]]), 0.1), 1.4);
+  return o;
+}
+
+/* ───────────── 뒤죽이 (거꾸로 매달린 박쥐) 160x220 ─────────────
+ * 발로 막대를 잡고 매달려 있다 (발이 위, 머리가 아래). 얼굴은 보기 좋게 바로 그린다.
+ * state: hang | dizzy (방이 돌아서 어지러움) */
+export function batArt(state) {
+  uid = 5000 + (state === 'dizzy' ? 100 : 0);
+  const fur = '#6a5a8a', furL = '#8a7aa8', wing = '#4e4268', pink = '#e9a0b4';
+  let o = '';
+  // 매달린 막대와 발
+  o += part([[10, 10], [150, 10], [150, 20], [10, 20]], '#8a6a4a', { sw: 1.8, heavy: [1, 2] });
+  for (const x of [64, 96]) o += part([[x - 6, 18], [x + 6, 18], [x + 5, 40], [x - 5, 40]], '#3a3050', { sw: 1.4 }) + strokeP(O([[x - 7, 16], [x - 4, 10]], 0.1), 1.6) + strokeP(O([[x + 7, 16], [x + 4, 10]], 0.1), 1.6);
+  // 접은 날개가 몸을 감싼 물방울 모양 (위가 좁고 아래가 둥금)
+  const body = [[80, 34], [104, 44], [122, 74], [128, 110], [122, 140], [104, 156], [80, 160], [56, 156], [38, 140], [32, 110], [38, 74], [56, 44]];
+  o += part(body, wing, { heavy: [2, 6], shade: [[90, 30], [140, 30], [140, 170], [90, 170]], shadeCol: 'rgba(20,10,40,0.3)' });
+  for (const [a, b] of [[[60, 48], [44, 140]], [[80, 38], [80, 156]], [[100, 48], [116, 140]]]) o += strokeP(O([a, [(a[0] + b[0]) / 2 + (a[0] < 80 ? -6 : a[0] > 80 ? 6 : 0), (a[1] + b[1]) / 2], b], 0.2), 1.3, '#2e2640', 0.8);
+  // 날개 틈으로 보이는 보송한 배
+  o += `<path d="${S([[68, 70], [92, 70], [98, 110], [80, 126], [62, 110]], 0.3)}" fill="${furL}"/>`;
+  o += tufts([[70, 80, 2.8, 7], [90, 80, 0.3, 7], [80, 118, 1.6, 6]], INK, 1);
+  // 머리 (아래쪽)
+  const head = [[80, 136], [104, 142], [116, 162], [114, 186], [100, 200], [80, 204], [60, 200], [46, 186], [44, 162], [56, 142]];
+  // 귀: 아래로 늘어진 큰 귀
+  for (const sx of [-1, 1]) {
+    const ear = [[80 + sx * 14, 196], [80 + sx * 30, 200], [80 + sx * 44, 214], [80 + sx * 40, 218], [80 + sx * 22, 210]].map(([x, y]) => [x, y]);
+    o += part(ear, fur, { sw: 1.6 }) + `<path d="${S([[80 + sx * 22, 202], [80 + sx * 36, 210], [80 + sx * 26, 208]], 0.2)}" fill="${pink}"/>`;
+  }
+  o += part(head, fur, { heavy: [2, 5], shade: [[90, 140], [124, 140], [124, 206], [90, 206]], shadeCol: 'rgba(20,10,40,0.25)', hatch: false });
+  o += tufts([[56, 146, -2.4, 8], [104, 146, -0.7, 8], [80, 138, -1.57, 7]], INK, 1.1);
+  if (state === 'dizzy') {
+    for (const sx of [-1, 1]) { const ex = 80 + sx * 16, ey = 168; const sp = []; for (let i = 0; i < 14; i++) { const a = i * 0.8, r = 1 + i * 0.55; sp.push([ex + Math.cos(a) * r, ey + Math.sin(a) * r]); } o += `<circle cx="${ex}" cy="${ey}" r="9" fill="#fffbe8" stroke="${INK}" stroke-width="1.2"/>` + strokeP(smooth(sp, false), 1.4); }
+    o += strokeP(O([[68, 188], [74, 184], [80, 188], [86, 184], [92, 188]], 0.2), 1.6);
+  } else {
+    for (const sx of [-1, 1]) {
+      const ex = 80 + sx * 16, ey = 168;
+      o += `<path d="${S([[ex - 8, ey], [ex - 6, ey - 9], [ex, ey - 11], [ex + 7, ey - 7], [ex + 8, ey + 2], [ex + 1, ey + 8], [ex - 6, ey + 6]], 0.2)}" fill="#fffbe8" stroke="${INK}" stroke-width="1.2"/>`;
+      o += `<path d="${S([[ex - 4, ey - 1], [ex - 2, ey - 6], [ex + 3, ey - 6], [ex + 5, ey], [ex, ey + 4]], 0.15)}" fill="${INK}"/>` + dot(ex + 2, ey - 4, 1.6, '#fff');
+      o += strokeP(O([[ex - 9 * sx, ey - 14], [ex + 7 * sx, ey - 17]], 0.1), 1.6);
+    }
+    o += strokeP(O([[70, 186], [80, 192], [90, 186]], 0.2), 1.6);
+    o += `<path d="M75 189 L77 195 L79 190Z" fill="#fff" stroke="${INK}" stroke-width="0.8"/><path d="M81 190 L83 195 L85 189Z" fill="#fff" stroke="${INK}" stroke-width="0.8"/>`;
+    o += blush(58, 182, '#e98fb0') + blush(102, 182, '#e98fb0');
+  }
+  o += `<path d="${S([[76, 176], [84, 176], [80, 181]], 0.1)}" fill="${pink}" stroke="${INK}" stroke-width="1"/>`;
+  return o;
+}
+
+/* ───────────── 문어 우체국장 (다리 8개를 셀 수 있게) 420x440 ─────────────
+ * state: work | happy */
+export function octopusArt(state) {
+  uid = 6000 + (state === 'happy' ? 100 : 0);
+  const sk = '#e98a72', skD = '#c96a54', skL = '#f6b8a2';
+  let o = '';
+  // 다리 8개: 서로 겹치지 않게 부채꼴로 펼친다 (아이들이 셀 수 있게). 들어 올린 팔 2개 + 아래 다리 6개
+  function tentacle(bx, by, a, L, curl, wide = 17) {
+    const n = 10, cl = [[bx, by]];
+    let x = bx, y = by;
+    for (let i = 1; i <= n; i++) { const t = i / n, ang = a + curl * t * t; x += Math.cos(ang) * L / n; y += Math.sin(ang) * L / n; cl.push([x, y]); }
+    const left = [], right = [];
+    cl.forEach((p, i) => {
+      const q = cl[Math.min(i + 1, n)], r0 = cl[Math.max(i - 1, 0)];
+      const dx = q[0] - r0[0], dy = q[1] - r0[1], len = Math.hypot(dx, dy) || 1;
+      const nx = -dy / len, ny = dx / len, w = wide * (1 - i / n) + 3;
+      left.push([p[0] + nx * w, p[1] + ny * w]); right.push([p[0] - nx * w, p[1] - ny * w]);
+    });
+    return { pts: [...left, ...right.reverse()], cl, tip: cl[n] };
+  }
+  const legs = [
+    tentacle(150, 220, -2.5, 150, 0.9),
+    tentacle(250, 220, -0.65, 150, -0.9),
+    tentacle(150, 246, 2.55, 170, 0.8),
+    tentacle(168, 252, 2.15, 175, -0.9),
+    tentacle(190, 256, 1.8, 170, 0.9),
+    tentacle(212, 256, 1.35, 170, -0.9),
+    tentacle(232, 252, 0.98, 175, 0.9),
+    tentacle(250, 246, 0.6, 170, -0.8),
+  ];
+  legs.forEach((lg, i) => {
+    o += part(lg.pts, i % 2 ? sk : skD, { heavy: [2, 9], sw: 1.8, hw: 2.8 });
+    for (let k = 2; k < 9; k += 2) { const [x, y] = lg.cl[k]; o += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(4.6 - k * 0.35).toFixed(1)}" fill="${skL}" stroke="${INK}" stroke-width="0.8"/>`; }
+  });
+  // 들어 올린 두 팔: 왼쪽은 도장, 오른쪽은 편지
+  { const [x, y] = legs[0].tip; o += part([[x - 14, y - 22], [x + 10, y - 26], [x + 12, y - 4], [x - 12, y - 2]], '#8a5a3a', { sw: 1.4 }) + part([[x - 18, y - 2], [x + 16, y - 4], [x + 18, y + 6], [x - 20, y + 8]], '#c44a3a', { sw: 1.2 }); }
+  { const [x, y] = legs[1].tip; o += part([[x - 20, y - 18], [x + 26, y - 26], [x + 30, y + 6], [x - 16, y + 12]], '#f2ead8', { sw: 1.6 }) + strokeP(O([[x - 18, y - 16], [x + 4, y - 2], [x + 28, y - 24]], 0.1), 1.2); }
+  // 머리 (아래가 넓은 둥근 주머니 모양)
+  const head = [[200, 60], [248, 74], [278, 116], [284, 170], [270, 222], [240, 254], [200, 264], [160, 254], [130, 222], [116, 170], [122, 116], [152, 74]];
+  o += part(head, sk, { heavy: [2, 7], shade: [[230, 70], [300, 120], [300, 270], [190, 270], [260, 200]], shadeCol: 'rgba(140,40,30,0.2)', light: [[150, 100], [190, 76], [176, 120], [146, 138]] });
+  for (const [x, y, r] of [[160, 120, 7], [246, 108, 5], [254, 150, 6], [150, 168, 4]]) o += `<circle cx="${x}" cy="${y}" r="${r}" fill="${skD}" opacity="0.5"/>`;
+  // 우체국 모자
+  o += part([[132, 92], [150, 54], [200, 40], [250, 54], [268, 92], [240, 98], [200, 96], [160, 98]], '#2e5a7a', { heavy: [3, 5], sw: 2 });
+  o += part([[124, 92], [276, 92], [282, 110], [118, 110]], '#1f4560', { sw: 1.8 });
+  o += part([[186, 58], [214, 58], [216, 80], [184, 80]], '#e6c977', { sw: 1.2 }) + strokeP(O([[192, 70], [200, 64], [208, 70]], 0.1), 1.2);
+  // 얼굴
+  const ey = 176;
+  if (state === 'happy') {
+    for (const sx of [-1, 1]) o += strokeP(O([[200 + sx * 34 - 14, ey + 4], [200 + sx * 34, ey - 10], [200 + sx * 34 + 14, ey + 4]], 0.2), 3);
+    o += `<path d="${S([[180, 214], [220, 214], [212, 230], [200, 234], [188, 230]], 0.2)}" fill="#a83a3a" stroke="${INK}" stroke-width="1.8"/>`;
+  } else {
+    for (const sx of [-1, 1]) {
+      const ex = 200 + sx * 34;
+      o += `<path d="${S([[ex - 16, ey], [ex - 12, ey - 16], [ex, ey - 21], [ex + 13, ey - 15], [ex + 16, ey + 2], [ex + 4, ey + 15], [ex - 11, ey + 12]], 0.2)}" fill="#fffbe8" stroke="${INK}" stroke-width="1.8"/>`;
+      o += `<path d="${S([[ex - 6, ey - 2], [ex - 3, ey - 10], [ex + 5, ey - 10], [ex + 8, ey], [ex + 1, ey + 6]], 0.15)}" fill="${INK}"/>` + dot(ex + 3, ey - 7, 2.4, '#fff');
+      o += strokeP(O([[ex - 16, ey - 16], [ex - 2, ey - 26], [ex + 14, ey - 24]].map(([x, y]) => [sx < 0 ? x : 2 * ex - x, y]), 0.1), 2);
+      // 반달 안경
+      o += strokeP(O([[ex - 16, ey + 6], [ex, ey + 14], [ex + 16, ey + 6]], 0.1), 2.2, '#8a6a28');
+    }
+    o += strokeP(O([[192, 194], [200, 190], [208, 194]], 0.1), 1.6, '#8a6a28');
+    o += strokeP(O([[188, 222], [200, 228], [212, 222]], 0.2), 2);
+  }
+  o += blush(150, 204, '#d8607a') + blush(250, 204, '#d8607a');
   return o;
 }
