@@ -1,4 +1,4 @@
-/* 열쇠 구멍 너머 — 화면 스타일
+/* PAPERDOOR(페이퍼도어) — 화면 스타일
  * 무대(.stage)는 1600x900 고정 좌표. 글자 크기도 무대 픽셀 기준이며 통째로 확대/축소된다.
  * 한 가지 분위기(어두운 극장 + 종이 무대)로 고정된 디자인이라 다크/라이트 전환은 두지 않는다. */
 /* 글꼴은 저장소에 들어 있다 (tools/subset-fonts.py, SIL OFL). 인터넷이 막혀도 같은 글꼴로 보인다. */
@@ -232,7 +232,8 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .book::before { content: ''; position: absolute; inset: 14px; border: 1.5px solid rgba(44, 32, 24, 0.5); pointer-events: none; }
 .book-seal { position: absolute; right: 44px; top: 40px; width: 84px; height: 84px; }
 .book-kicker { margin: 0; font-family: var(--f-title); font-size: 22px; letter-spacing: 0.18em; color: var(--ember); }
-.book h1 { font-family: var(--f-title); font-weight: 400; font-size: 84px; line-height: 1.05; margin: 8px 0 10px; letter-spacing: -0.02em; white-space: nowrap; }
+.book h1 { font-family: var(--f-title); font-weight: 400; font-size: 76px; line-height: 1; margin: 8px 0 2px; letter-spacing: 0.04em; white-space: nowrap; }
+.book-sub { margin: 0 0 12px; font-family: var(--f-title); font-size: 26px; letter-spacing: 0.12em; color: rgba(44, 32, 24, 0.75); }
 .book-lede { font-size: 23px; line-height: 1.5; margin: 0 0 12px; max-width: 24em; }
 .chapters { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
 .chapter {

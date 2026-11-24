@@ -1,5 +1,5 @@
 /* 표지(책 표지) 화면, 장 선택, 설정
- * 이야기 틀: 다락방에서 찾은 낡은 책 「열쇠 구멍 너머」에 빨려 들어간 주인공(나)이
+ * 이야기 틀: 다락방에서 찾은 낡은 종이 책 「PAPERDOOR」 속 작은 종이 문으로 빨려 들어간 주인공(나)이
  * 다섯 방에서 "이야기 열쇠"를 하나씩 모아야 집으로 돌아올 수 있다. */
 (function () {
   const app = document.getElementById('app');
@@ -38,9 +38,10 @@
       <div class="layer grain"></div>
       <div class="book">
         <img class="book-seal" src="assets/ui/seal.svg" alt="">
-        <p class="book-kicker">다섯 개의 방, 다섯 개의 문</p>
-        <h1>열쇠 구멍 너머</h1>
-        <p class="book-lede">다락방에서 찾은 낡은 책을 펼쳤더니 열쇠 구멍 속으로 쑥! 다섯 방에서 <b>이야기 열쇠</b>를 모두 모아야 집으로 돌아갈 수 있어요.</p>
+        <p class="book-kicker">종이 책 속 다섯 개의 방</p>
+        <h1>PAPERDOOR</h1>
+        <p class="book-sub">페이퍼도어 · 다섯 개의 문</p>
+        <p class="book-lede">다락방에서 찾은 낡은 종이 책을 펼쳤더니, 책장 사이 작은 종이 문이 덜컥 열렸어요! 다섯 방에서 <b>이야기 열쇠</b>를 모두 모아야 집으로 돌아갈 수 있어요.</p>
         <div class="key-row" aria-label="모은 이야기 열쇠">${keys}</div>
         <ol class="chapters"></ol>
       </div>
