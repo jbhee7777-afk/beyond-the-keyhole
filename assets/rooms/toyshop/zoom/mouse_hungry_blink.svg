@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 320" width="300" height="320"><defs>
+<filter id="art" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="2" seed="9" result="w"/>
+<feDisplacementMap in="SourceGraphic" in2="w" scale="0.6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.007" numOctaves="3" seed="16" result="t"/>
+<feColorMatrix in="t" type="matrix" values="0.3 0 0 0 0.85  0.3 0 0 0 0.85  0.3 0 0 0 0.85  0 0 0 0 1" result="tw"/>
+<feBlend in="d" in2="tw" mode="multiply" result="m"/>
+<feComposite in="m" in2="d" operator="in"/>
+</filter>
+<filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>
+<filter id="blur2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.5"/></filter>
+<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="6" stroke="#33261c" stroke-width="1.2"/></pattern>
+<pattern id="hatch2" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-48)"><line x1="0" y1="0" x2="0" y2="5" stroke="#33261c" stroke-width="1"/></pattern>
+<pattern id="hatchw" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><line x1="0" y1="0" x2="0" y2="7" stroke="#fff8e0" stroke-width="1.3"/></pattern>
+</defs><g filter="url(#art)"><path d="M139.1 115.1C139.1 117.8 138.1 120.7 137.1 123C136 125.3 134.5 127.5 132.7 128.8C130.8 130.2 128.2 131.1 126 131.1C123.9 131.1 121.4 130.1 119.5 128.8C117.6 127.4 115.8 125.3 114.8 123C113.7 120.7 113 117.6 113 115C113.1 112.3 113.8 109.4 114.9 107.1C115.9 104.9 117.6 102.6 119.4 101.3C121.3 99.9 123.7 99.1 125.9 99.1C128 99 130.5 99.8 132.4 101.1C134.2 102.4 136.1 104.5 137.2 106.8C138.3 109.2 139.1 112.4 139.1 115.1Z" fill="#b3adb1"/><path d="M113.7 114.2C115.7 115.5 121.8 122.2 125.9 122.1C130 122.1 136.2 115.5 138.3 114.2" fill="none" stroke="#33261c" stroke-width="2.4" stroke-linecap="round"/><path d="M187.1 115C187.1 117.6 186.3 120.7 185.3 123C184.2 125.3 182.4 127.4 180.6 128.7C178.7 130.1 176.4 130.9 174.2 131C172 131 169.3 130.3 167.4 129C165.5 127.7 163.8 125.5 162.8 123.2C161.8 120.9 161.1 117.9 161.1 115.2C161.1 112.5 161.8 109.4 162.8 107.1C163.9 104.7 165.5 102.4 167.3 101.1C169.2 99.7 171.7 99 173.9 99.1C176.2 99.1 178.8 99.9 180.6 101.2C182.5 102.5 184.1 104.8 185.2 107.1C186.3 109.4 187.1 112.3 187.1 115Z" fill="#b3adb1"/><path d="M161.6 114.2C163.7 115.5 169.9 122.1 174 122.1C178.1 122.1 184.3 115.4 186.3 114.1" fill="none" stroke="#33261c" stroke-width="2.4" stroke-linecap="round"/></g></svg>

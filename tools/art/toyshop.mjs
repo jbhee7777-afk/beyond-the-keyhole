@@ -275,6 +275,19 @@ function bgSouth() {
   o += train(1080, 520, 0.9) + block(1290, 482, 36, C.butter, 'star') + block(1340, 482, 36, C.rose, 'heart');
   o += shape(ell(1110, 388, 14, 14), C.blue) + shape(ell(1140, 388, 14, 14), C.rose) + shape(ell(1170, 388, 14, 14), C.butter);
   o += rug(800, 790, 300, 60);
+  // 바닥에 흩어진 장난감 (빈 바닥 채우기)
+  o += block(230, 760, 44, C.blue, 'star') + block(282, 770, 40, C.butter, 'heart') + block(252, 718, 40, C.rose, 'dot');
+  o += shape(ell(1380, 770, 34, 34), C.red) + line(ellPts(1380, 770, 34, 13, 0, Math.PI, 10), { sw: 1.6, color: C.cream, step: 999 }) + line(ellPts(1380, 770, 13, 34, -Math.PI / 2, Math.PI / 2, 10), { sw: 1.6, color: C.cream, step: 999 });
+  // 팽이
+  o += shape(wob([[1220, 726], [1270, 726], [1250, 760], [1245, 772], [1240, 760]]), C.mint) + line([[1245, 726], [1245, 708]], { sw: 3, color: C.wood2 }) + line([[1224, 734], [1266, 734]], { sw: 2, color: C.rose });
+  // 창 위 종이별 모빌
+  o += line([[800, 76], [800, 96]], { sw: 1.4 });
+  for (const [x, y, c] of [[740, 108, C.butter], [800, 120, C.rose], [860, 104, C.mint]]) {
+    o += line([[x, 92], [x, y - 10]], { sw: 1, op: 0.7 });
+    const st = []; for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, r = k % 2 ? 6 : 13; st.push([x + Math.cos(a) * r, y + Math.sin(a) * r]); }
+    o += shape(wob(st, { sharp: true, amp: 0.4 }), c, { sw: 1.4 });
+  }
+  o += line([[730, 92], [870, 92]], { sw: 2, color: C.wood2 });
   put('bg/south.svg', W, H, o, { id: 513 });
 }
 function bgWest() {

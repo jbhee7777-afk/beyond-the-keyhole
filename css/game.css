@@ -392,3 +392,11 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .turn-btn:active { transform: translate(calc(-50% + 3px), 3px); }
 .spin-in img { animation: spinIn 0.7s ease-out; }
 @keyframes spinIn { from { transform: rotate(-180deg) scale(0.85); opacity: 0.4; } to { transform: none; opacity: 1; } }
+
+/* 캐릭터 눈 깜빡임 (엔진: 오브젝트의 blink) */
+.obj img.blink-lid { opacity: 0; animation: blinkLid 4.4s steps(1, end) infinite; }
+@keyframes blinkLid { 0%, 94% { opacity: 0; } 95%, 98% { opacity: 1; } 99%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .obj img.blink-lid { animation: none; } }
+
+/* 숫자 바퀴가 맞는 숫자에 오면 */
+.dial.right span { color: #8f6d28; text-shadow: 0 0 14px rgba(240, 200, 90, 0.9); }

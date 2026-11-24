@@ -6,7 +6,8 @@
  *  4. 남쪽 창의 불가사리(5) + 팔방이 다리(8) → 58번 우편함 → 주소 스티커 "바다 고등학교" (논리)
  *  5. 편지 + 주소 스티커, 그리고 "고등"학교니까 고등어 우표 (조합·넌센스)
  *  6. 바닥의 물고기 떼 그림자가 산호 틈을 가리킨다 → 낚싯바늘 + 미역 줄 = 미역 갈고리 → 산호 틈의 열쇠 (그림자·조합)
- *  7. 열쇠로 거품 우편관을 열고 편지를 보내면 고래가 와서 편지를 가져가고, 수면 엘리베이터가 열린다
+ *  7. 열쇠로 거품 우편관을 열고 편지를 보내면 고래가 와서 편지를 가져간다
+ *  8. 팔방이가 엘리베이터 번호를 잊었다! 고래가 창 바깥에서 김 서린 유리에 써 준 숫자는 안에서 보면 거울처럼 뒤집혀 있다 → 1-3-8 (1장 거울 글씨의 응용, 졸업 시험)
  */
 (function () {
   const F = (s) => s.flags;
@@ -38,12 +39,51 @@
     container.appendChild(box);
   }
 
+  // 엘리베이터 숫자 판 (바퀴 세 개, 1-3-8)
+  function elevWidget(container, api, game) {
+    const f = api.flags;
+    let box = container.querySelector('.dials');
+    if (f.elevatorOpen) { if (box) box.remove(); return; }
+    if (box) return;
+    f.edial = f.edial || [0, 0, 0];
+    box = document.createElement('div'); box.className = 'dials';
+    f.edial.forEach((v, i) => {
+      const b = document.createElement('button');
+      b.className = 'dial'; b.style.left = 616 + i * 140 + 'px';
+      b.setAttribute('aria-label', (i + 1) + '번째 엘리베이터 숫자');
+      const num = document.createElement('span'); num.textContent = v; b.appendChild(num);
+      b.onclick = (e) => {
+        e.stopPropagation();
+        if (game.busy) return;
+        f.edial[i] = (f.edial[i] + 1) % 10; num.textContent = f.edial[i];
+        b.classList.remove('roll'); void b.offsetWidth; b.classList.add('roll');
+        api.sfx('dial');
+        // 단계적 반응: 그 바퀴가 맞는 숫자면 작게 딸깍 + 놋쇠 빛 (아이가 하나씩 확인하며 생각할 수 있게)
+        b.classList.toggle('right', f.edial[i] === +'138'[i]); if (f.edial[i] === +'138'[i]) api.sfx('tick');
+        if (f.edial.join('') === '138') {
+          f.elevatorOpen = true; game.busy = true;
+          setTimeout(() => {
+            game.busy = false; game.s.zoom = null; api.sfx('door'); api.burst('bubble', 1340, 420, 40);
+            api.say('팔방이: “1-3-8! 맞아요! 거울처럼 뒤집힌 글씨를 바로 읽었군요. 엘리베이터가 열렸어요!”', 5200, { who: 'octo' });
+            game.save(); game.render();
+          }, 450);
+        } else if (f.edial.join('') === '831') api.say('8-3-1로 읽었는데… 꿈쩍도 안 해. 고래는 바깥에서 썼다고 했지?');
+        game.save();
+      };
+      box.appendChild(b);
+    });
+    container.appendChild(box);
+  }
+
   function postLetter(api, game) {
     api.take('letter_ready'); api.set('posted');
     api.lock(8400); api.sfx('splash'); api.burst('bubble', 1150, 420, 30);
     api.say('쉬이익— 편지가 거품을 타고 유리관 위로 쏙 올라갔어!', 3000);
     api.after(2600, () => { api.set('whale'); api.sfx('sunrise'); api.burst('bubble', 800, 300, 24); api.say('우우웅— 남쪽 창밖에서 커다란 고래 노랫소리가 들려!', 3200); });
-    api.after(5600, () => { api.set('elevatorOpen'); api.sfx('door'); api.say('팔방이: “고래 택배가 편지를 받아 갔어요! 고마워요. 수면 엘리베이터를 열어 줄게요!”', 4600, { who: 'octo' }); });
+    api.after(5600, () => {
+      api.set('whaleWrote'); api.sfx('whisper');
+      api.say('팔방이: “고래 택배가 편지를 받아 갔어요! 그런데 이를 어쩌죠… 엘리베이터 번호를 잊어버렸어요. 고래가 남쪽 창에 뭔가 써 주고 갔대요!”', 6400, { who: 'octo', note: '엘리베이터 번호' });
+    });
   }
 
   Engine.registerRoom({
@@ -53,6 +93,7 @@
     assets: 'assets/rooms/sea/',
     sky: ['assets/rooms/sea/bg/north.svg', 'assets/rooms/sea/bg/north.svg'],
     order: ['north', 'east', 'south', 'west'],
+    frame: 'bg/frame',
     start: 'north',
     isLit: lamps,
     dim: { color: '#0a2230', opacity: 0.42 },
@@ -60,7 +101,7 @@
     repair(s, fix) {
       const f = s.flags;
       if (f.gotLetter && !f.letterGiven) { f.letterGiven = true; if (!f.posted && !fix.has('letter_addr') && !fix.has('letter_ready')) fix.give('letter'); }
-      if (f.posted) { fix.set('whale'); fix.set('elevatorOpen'); }
+      if (f.posted) { fix.set('whale'); fix.set('whaleWrote'); }
     },
     dimLit: { color: '#123a48', opacity: 0.2 },
     guide: { name: '문어 우체국장 팔방이', img: 'props/octo_icon' },
@@ -99,7 +140,7 @@
           { id: 'parcels', x: 0, y: 0, w: 0, h: 0, img: '', hit: [200, 220, 460, 96], look: '빨간 끈으로 묶은 소포들. 바다 곳곳으로 갈 거래.' },
           { id: 'counter', img: 'props/counter', x: 300, y: 420, w: 640, h: 260, hit: [300, 600, 640, 80], look: '반질반질한 우체국 창구. 봉투 문장이 새겨져 있어.' },
           {
-            id: 'octo', img: (s) => (F(s).elevatorOpen ? 'props/octopus_happy' : 'props/octopus_work'), x: 410, y: 160, w: 420, h: 440, cls: 'bob', hit: [440, 180, 360, 410], label: '문어 우체국장 팔방이',
+            id: 'octo', img: (s) => (F(s).elevatorOpen ? 'props/octopus_happy' : 'props/octopus_work'), x: 410, y: 160, w: 420, h: 440, cls: 'bob', blink: (s) => (F(s).elevatorOpen ? null : 'props/octopus_work_blink'), hit: [440, 180, 360, 410], label: '문어 우체국장 팔방이',
             click: (api, n) => {
               const f = api.flags, has = (i) => api.s.inv.includes(i);
               api.sfx('whisper');
@@ -110,6 +151,7 @@
                 return;
               }
               if (f.elevatorOpen) { api.say('팔방이: “고마워요! 엘리베이터를 타면 바다 위로 올라갈 수 있어요.”'); return; }
+              if (f.whaleWrote) { api.say('팔방이: “고래는 창 바깥에서 글씨를 썼을 거예요. 안에서 보면 어떻게 보일까요?”', 0, { who: 'octo' }); return; }
               if (f.posted) { api.say('팔방이: “고래 택배를 기다리는 중이에요.”'); return; }
               if (has('letter_ready')) { api.say('팔방이: “주소도 우표도 완벽해요! 거품 우편관에 넣어 주세요.”'); return; }
               if (has('letter_addr')) { api.say('팔방이: “바다 고등학교로 가는 편지군요! 그 학교는 학교 이름과 어울리는 물고기 우표만 받아요.”', 5000); return; }
@@ -136,7 +178,8 @@
             id: 'elevator', img: (s) => (F(s).elevatorOpen ? 'props/elevator_open' : 'props/elevator_closed'), x: 1245, y: 232, w: 200, h: 410, label: '수면 엘리베이터',
             click: (api) => {
               if (api.flags.elevatorOpen) { api.sfx('step'); api.win(); return; }
-              api.sfx('locked'); api.say('수면으로 올라가는 엘리베이터야. 철창문이 굳게 닫혀 있어.');
+              if (api.flags.whaleWrote) { api.sfx('step'); api.zoom('elevPanel'); return; }
+              api.sfx('locked'); api.say('수면으로 올라가는 엘리베이터야. 철창문이 굳게 닫혀 있어. 옆에 숫자 판이 있어.');
             },
           },
           { id: 'caustic', img: 'bg/caustics', x: 0, y: 0, w: 1600, h: 900, cls: 'caustic' },
@@ -169,6 +212,10 @@
             id: 'window', img: (s) => (F(s).whale ? 'props/window_whale' : 'props/window_sea'), x: 560, y: 90, w: 480, h: 420, label: '둥근 창',
             look: (s) => (F(s).whale ? '커다란 고래가 창밖에서 눈을 찡긋했어!' : '물고기들이 헤엄쳐. 유리창에 주황색 불가사리가 딱 붙어 있어.'),
           },
+          {
+            id: 'fog', img: 'props/window_fog', x: 560, y: 90, w: 480, h: 420, show: (s) => !!F(s).whaleWrote && !F(s).elevatorOpen, label: '김 서린 창의 숫자',
+            click: (api) => { api.note('고래가 쓴 숫자', '김 서린 창에 숫자 세 개. 고래는 창 바깥에서 썼다 → 안에서는 거울처럼 뒤집혀 보인다.'); api.say('고래가 김 서린 유리에 숫자를 써 놓았어. 그런데 글씨가 거울에 비친 것처럼 뒤집혀 있어… 고래는 창 바깥에서 썼잖아!', 6000); },
+          },
           { id: 'shadow', img: 'props/fishshadow', x: 760, y: 700, w: 300, h: 90, cls: 'drift', look: '물고기 떼 그림자가 바닥에서 화살표 모양으로 헤엄쳐. 산호 쪽을 가리키는 것 같아.' },
           { id: 'coral', img: (s) => (F(s).keyTaken ? 'props/coral' : 'props/coral_key'), x: 1100, y: 400, w: 340, h: 300, zoom: 'coral', label: '산호 바위' },
           { id: 'caustic', img: 'bg/caustics', x: 0, y: 0, w: 1600, h: 900, cls: 'caustic' },
@@ -191,6 +238,12 @@
     },
 
     zooms: {
+      elevPanel: {
+        bg: 'zoom/elev_panel',
+        note: ['엘리베이터 숫자 판', '숫자 바퀴 세 개. 위에 수면 그림, 아래에 고래 꼬리 문장.'],
+        widget: elevWidget,
+        objects: [{ id: 'elevSign', x: 0, y: 0, w: 0, h: 0, img: '', hit: [600, 170, 400, 120], label: '수면 그림', look: '해가 뜬 바다 위 그림이야. 아래 고래 꼬리 문장을 보니, 고래가 번호를 알려 준대.' }],
+      },
       conch: {
         bg: 'assets/rooms/greenhouse/zoom/paper.svg',
         text: '<h3>소라 속 작은 목소리</h3><p>(귀를 대 보니 보글보글 목소리가 들려요)</p><p>“나는 바다 고등학교 우편함지기예요.<br>우리 우편함 번호는 두 자리예요.<br>앞자리에 <em>불가사리 팔 개수</em>,<br>뒷자리에 <em>문어 다리 개수</em>를 나란히 써요.<br>더하면 안 돼요!”</p>',
@@ -248,7 +301,8 @@
         }
         return { key: 'post', steps: ['이제 편지를 보낼 수 있어요!', '북쪽 거품 우편관이에요.', '보낼 수 있는 편지를 고른 채 우편관 뚜껑을 누르세요.'] };
       }
-      if (!f.elevatorOpen) return { key: 'wait', steps: ['편지가 떠났어요. 잠깐 기다려요.', '고래가 오고 있어요.', '조금만 기다리세요.'] };
+      if (!f.whaleWrote) return { key: 'wait', steps: ['편지가 떠났어요. 잠깐 기다려요.', '고래가 오고 있어요.', '조금만 기다리세요.'] };
+      if (!f.elevatorOpen) return { key: 'mirror', steps: ['고래가 남쪽 창에 엘리베이터 번호를 써 주고 갔어요.', '고래는 창 바깥에서 썼어요. 안에서 보면 1장의 거울 글씨처럼 좌우가 뒤집혀 보여요. 오른쪽부터, 글자를 뒤집어서 읽어 보세요.', '안에서는 8 Ɛ 1처럼 보이지만 바로 읽으면 1-3-8이에요. 북쪽 엘리베이터 숫자 판을 1-3-8로 맞추세요.'] };
       return { key: 'out', steps: ['엘리베이터가 열렸어요!', '북쪽 오른쪽 엘리베이터예요.', '수면 엘리베이터를 누르세요.'] };
     },
 

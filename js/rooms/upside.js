@@ -37,6 +37,8 @@
           f.sdial[i] = (f.sdial[i] + 1) % 10; num.textContent = f.sdial[i];
           b.classList.remove('roll'); void b.offsetWidth; b.classList.add('roll');
           api.sfx('dial');
+        // 단계적 반응: 그 바퀴가 맞는 숫자면 작게 딸깍 + 놋쇠 빛 (아이가 하나씩 확인하며 생각할 수 있게)
+        b.classList.toggle('right', f.sdial[i] === +code[i]); if (f.sdial[i] === +code[i]) api.sfx('tick');
           if (f.sdial.join('') === code) {
             f[flag] = true;
             game.busy = true;
@@ -127,6 +129,7 @@
     assets: 'assets/rooms/upside/',
     sky: ['assets/rooms/upside/bg/north.svg', 'assets/rooms/upside/bg/north.svg'],
     order: ['north', 'east', 'south', 'west'],
+    frame: 'bg/frame',
     start: 'north',
     isLit: () => true,
     upside: up,
@@ -175,7 +178,7 @@
             },
             use: { key: (api) => { if (!api.flags.flipped) { api.say('거꾸로 된 문은 열어도 하늘로 떨어져. 먼저 방을 바로 세우자.'); return; } api.take('key'); api.set('doorOpen'); api.sfx('door'); api.burst('spark', 1100, 400, 24); api.say('딸깍! 문 밖으로 파란 하늘과 언덕이 보여.'); } },
           },
-          { id: 'batUp', img: 'props/bat_hang', ...U(1040, 60, 160, 230), cls: 'rot180 bob', show: up, label: '박쥐 뒤죽이', click: batClick, use: batUse, wrong: '뒤죽이: “그건 과일이 아니잖아~”' },
+          { id: 'batUp', img: (s) => (F(s).batFed ? 'props/bat_happy' : 'props/bat_hang'), ...U(1040, 60, 160, 230), cls: 'rot180 bob', blink: (s) => (F(s).batFed ? null : 'props/bat_hang_blink'), show: up, label: '박쥐 뒤죽이', click: batClick, use: batUse, wrong: '뒤죽이: “그건 과일이 아니잖아~”' },
           { id: 'batDown', img: 'props/bat_dizzy', x: 740, y: 196, w: 160, h: 230, cls: 'sway-soft', show: (s) => !up(s), label: '박쥐 뒤죽이', click: batClick, use: batUse },
         ],
       },

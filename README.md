@@ -110,6 +110,14 @@ node tools/art/ui.mjs
 ```
 
 ```bash
+node tools/art/frames.mjs
+```
+
+```bash
+node tools/art/blink.mjs
+```
+
+```bash
 npm install && npm run playtest
 ```
 

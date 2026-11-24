@@ -47,4 +47,7 @@
 - 저장 형식(플래그 이름 등)을 크게 바꾸면 `engine.js`의 `SAVE_VERSION`을 올린다 (예전 저장은 그 장만 새로 시작).
 - 엔진 도우미: `api.say(글, ms, { who: '말하는 캐릭터 id', note: '수첩 제목' })`, `api.note(제목, 글)`, `api.burst('confetti'|'spark'|'bubble'|'dust', x, y, 개수)`, `api.flash(색, ms)`, `api.anim(id, 클래스, ms)`, `api.hint()`, `api.game`(위젯에서만). 확대 화면 `note: [제목, 글]`은 처음 열 때 수첩에 적힌다. 방에는 `name`(벽 이름, 나침반에 표시), `ambient(s)`(분위기 소리: garden·night·workshop·party·attic·upside·sea)를 준다.
 - 방 파일에서 `window.__game`을 직접 부르지 않는다.
+- 방의 `frame: 'bg/frame'`은 모든 벽 맨 앞에 깔리는 방 고유의 틀(구도)이다 (`tools/art/frames.mjs`). 틀은 누르는 곳을 가리지 않는다. 화면 가장자리 80px 안쪽에는 중요한 물건을 두지 않는다.
+- 캐릭터 오브젝트에 `blink: 'props/xxx_blink'`(또는 함수)를 주면 몇 초마다 눈을 깜빡인다. 눈꺼풀 그림은 `tools/art/blink.mjs`에서 캐릭터 눈 위치에 맞춰 만든다.
+- 그림 속 숫자는 `<text>` 대신 `digits()`(ink.mjs)로 그린다 (기기마다 글꼴이 달라지지 않게).
 - 배포용 가벼운 판: `npm run build` → `dist/` (SVG를 WebP로 구움). 글꼴은 `assets/fonts/` 내장.

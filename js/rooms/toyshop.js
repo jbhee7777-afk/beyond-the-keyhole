@@ -142,6 +142,7 @@
     assets: 'assets/rooms/toyshop/',
     sky: ['bg/outside_dim', 'bg/outside_day'],
     order: ['north', 'east', 'south', 'west'],
+    frame: 'bg/frame',
     start: 'north',
     isLit: awake,
     ambient: (s) => (awake(s) ? 'party' : 'workshop'),
@@ -176,7 +177,7 @@
         objects: [
           { id: 'portrait', x: 0, y: 0, w: 0, h: 0, img: '', hit: [770, 220, 140, 160], label: '모카 그림', look: '모카의 옆모습 그림. 귀는 쫑긋 위로, 코는 오른쪽, 동그란 꼬리는 왼쪽!' },
           {
-            id: 'mocha', img: (s) => (awake(s) ? 'props/mocha_awake' : 'props/mocha_sleep'), x: 170, y: 220, w: 400, h: 480, cls: 'breathe',
+            id: 'mocha', img: (s) => (awake(s) ? 'props/mocha_awake' : 'props/mocha_sleep'), x: 170, y: 220, w: 400, h: 480, cls: 'breathe', blink: (s) => (awake(s) ? 'props/mocha_awake_blink' : null),
             hit: [210, 300, 330, 300], label: '모카',
             look: (s) => (awake(s) ? (s.inv.includes('carrot') ? '모카: “당근 인형을 잘 살펴봐. 등에 바느질 자국이 있지?”' : '모카: “공방에서 재미있게 놀았니?”') : '새근새근… 모카가 당근 인형을 꼭 안고 낮잠을 자. 흔들어도 안 깨.'),
           },
@@ -213,7 +214,7 @@
             click: (api) => { api.flags.lampOn = !api.flags.lampOn; api.sfx('click'); api.say(api.flags.lampOn ? '딸깍! 작업등이 인형극 무대를 환하게 비춰.' : '작업등을 껐어.'); },
           },
           { id: 'glow', img: 'bg/lampglow_east', x: 0, y: 0, w: 1600, h: 900, cls: 'glow', show: (s) => !!F(s).lampOn },
-          { id: 'mousePeek', img: 'props/mouse_peek', x: 1258, y: 566, w: 84, h: 80, show: (s) => !F(s).mouseFed, cls: 'bob' },
+          { id: 'mousePeek', img: 'props/mouse_peek', x: 1258, y: 566, w: 84, h: 80, show: (s) => !F(s).mouseFed, cls: 'bob', blink: 'props/mouse_peek_blink' },
           { id: 'mousehole', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 550, 120, 95], zoom: 'mousehole', label: '쥐구멍' },
         ],
       },
@@ -280,7 +281,7 @@
         dim: 0.25,
         objects: [
           {
-            id: 'mouse', img: (s) => (F(s).mouseFed ? 'zoom/mouse_happy' : 'zoom/mouse_hungry'), x: 650, y: 330, w: 300, h: 320, cls: 'bob', label: '생쥐 찍찍이',
+            id: 'mouse', img: (s) => (F(s).mouseFed ? 'zoom/mouse_happy' : 'zoom/mouse_hungry'), x: 650, y: 330, w: 300, h: 320, cls: 'bob', blink: (s) => (F(s).mouseFed ? null : 'zoom/mouse_hungry_blink'), label: '생쥐 찍찍이',
             click: (api) => { api.sfx('squeak'); api.say(api.flags.mouseFed ? '찍찍이: “냠냠… 세상에서 제일 맛있는 치즈예요!”' : '찍찍이: “찍찍! 배가 너무 고파요… 고소한 냄새 나는 거 없나요?”'); },
             use: {
               cheese: (api, n) => {

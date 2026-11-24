@@ -68,6 +68,7 @@
     assets: 'assets/rooms/clock13/',
     sky: ['assets/rooms/clock13/bg/north.svg', 'assets/rooms/clock13/bg/north.svg'],
     order: ['north', 'east', 'south', 'west'],
+    frame: 'bg/frame',
     start: 'north',
     isLit: moon,
     dim: { color: '#141a33', opacity: 0.5 },
@@ -187,7 +188,7 @@
             click: (api) => { api.sfx('whisper'); api.say('누가 소곤소곤… “너무 깜깜해… 불빛이 있으면 내 그림자라도 보여 줄 텐데.”', 4400, { note: '어두운 벽의 소곤거림' }); } },
           { id: 'glowC', img: 'bg/candleglow_west', x: 0, y: 0, w: 1600, h: 900, cls: 'glow flicker', show: (s) => !!F(s).candlePlaced },
           {
-            id: 'ghost', img: (s) => (F(s).pieceGiven ? 'props/ghost_happy' : F(s).riddleAsked ? 'props/ghost_talk' : 'props/ghost_shy'), x: 1020, y: 150, w: 360, h: 380, cls: 'float',
+            id: 'ghost', img: (s) => (F(s).pieceGiven ? 'props/ghost_happy' : F(s).riddleAsked ? 'props/ghost_talk' : 'props/ghost_shy'), x: 1020, y: 150, w: 360, h: 380, cls: 'float', blink: (s) => (F(s).pieceGiven ? null : F(s).riddleAsked ? 'props/ghost_talk_blink' : 'props/ghost_shy_blink'),
             show: (s) => !!F(s).candlePlaced, hit: [1060, 150, 290, 370], label: '그림자 유령 똑딱',
             click: (api) => {
               const f = api.flags;

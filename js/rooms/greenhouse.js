@@ -54,6 +54,8 @@
         num.textContent = f.dial[i];
         b.classList.remove('roll'); void b.offsetWidth; b.classList.add('roll');
         api.sfx('dial');
+        // 단계적 반응: 그 바퀴가 맞는 숫자면 작게 딸깍 + 놋쇠 빛 (아이가 하나씩 확인하며 생각할 수 있게)
+        b.classList.toggle('right', f.dial[i] === +'352'[i]); if (f.dial[i] === +'352'[i]) api.sfx('tick');
         if (f.dial.join('') === '352') {
           game.busy = true;
           setTimeout(() => {
@@ -167,7 +169,7 @@
             },
           },
           {
-            id: 'snail', img: 'props/snail', x: 1250, y: 410, w: 130, h: 106, cls: 'bob', label: '달팽이 정원사',
+            id: 'snail', img: 'props/snail', x: 1250, y: 410, w: 130, h: 106, cls: 'bob', blink: 'props/snail_blink', label: '달팽이 정원사',
             click: (api) => { api.sfx('tap'); api.hint(); },
           },
           { id: 'fg', img: 'bg/fg_north', x: 0, y: 0, w: 1600, h: 900, cls: 'fg' },

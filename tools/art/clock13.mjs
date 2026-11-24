@@ -168,6 +168,21 @@ function bgWest() {
   o += part(rectPts(200, 300, 320, 14), C.wood, { sw: 1.6 });
   for (const x of [220, 480]) o += part([[x, 314], [x + 14, 314], [x + 4, 344]], C.wood2, { sw: 1.2 });
   for (let i = 0; i < 6; i++) { const x = 216 + i * 50, h = rand(40, 70), c = pick(['#4a6a5a', '#6a4a5a', '#5a5a7a', '#7a6a3a']); o += part([[x, 300], [x + 32, 300], [x + 30, 300 - h + 12], [x + 22, 300 - h], [x + 10, 300 - h], [x + 2, 300 - h + 12]], c, { sw: 1.4, shade: [[x + 18, 300 - h], [x + 34, 300 - h], [x + 34, 300], [x + 18, 300]], shadeCol: 'rgba(0,0,0,0.25)', hatch: false }); o += part(rectPts(x + 8, 300 - h - 8, 16, 10), C.copper, { sw: 1 }); o += line([[x + 6, 300 - h + 18], [x + 8, 290]], { sw: 2, color: '#fff', op: 0.25 }); }
+  // 빛바랜 별자리 지도 (빈 벽 채우기)
+  o += part(rectPts(626, 140, 212, 176), C.wood2, { sw: 2, heavy: [1, 2] }) + part(rectPts(638, 152, 188, 152), '#2b3150', { sw: 1.2 });
+  const stars = [[664, 190], [700, 172], [742, 204], [786, 182], [808, 236], [760, 262], [700, 280], [668, 250]];
+  o += line(stars.slice(0, 5), { sw: 1, color: C.moon, op: 0.6 }) + line(stars.slice(4), { sw: 1, color: C.moon, op: 0.6 });
+  for (const [x, y] of stars) o += dot(x, y, 3, C.cream) + dot(x, y, 6, C.cream, 0.2);
+  o += `<path d="${S(ellPts(732, 228, 70, 54, 0, Math.PI * 2, 18), 1)}" fill="none" stroke="${C.brass}" stroke-width="1" opacity="0.5"/>`;
+  // 못에 걸린 멈춘 회중시계 둘 (모두 다른 시각에 멈춤 → 오싹한 분위기)
+  for (const [x, y, h, m] of [[676, 392, 2, 40], [784, 410, 9, 5]]) {
+    o += line([[x, y - 52], [x, y - 34]], { sw: 1.4, color: C.copper }) + dot(x, y - 54, 3, C.woodD);
+    o += clockFace(x, y, 30, { h, m, slot: null });
+  }
+  // 오래된 책 더미와 마른 꽃병
+  for (const [y, w, c] of [[640, 120, '#5a4a6a'], [618, 104, '#7a5a3a'], [598, 112, '#3e5a6e']]) o += part(rectPts(680 + (120 - w) / 2, y - 20, w, 20), c, { sw: 1.4 }) + line([[684 + (120 - w) / 2, y - 10], [676 + (120 + w) / 2, y - 10]], { sw: 1, color: C.brassL, op: 0.5 });
+  o += part([[722, 578], [758, 578], [752, 530], [742, 522], [738, 522], [728, 530]], C.glass, { sw: 1.4 });
+  for (const [dx, dy] of [[-18, -60], [0, -74], [16, -56]]) o += line([[740, 524], [740 + dx, 524 + dy]], { sw: 1.4, color: '#6a5a3a' }) + dot(740 + dx, 524 + dy, 5, '#8a6a7a');
   put('bg/west.svg', W, H, o, { id: 714 });
 }
 

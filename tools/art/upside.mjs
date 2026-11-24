@@ -2,7 +2,7 @@
 // node tools/art/upside.mjs  → assets/rooms/upside/**
 // 방은 "바르게 선" 모습으로 그린다. 게임에서 뒤집기 전에는 방 레이어 전체를 180도 돌려 보여 준다.
 // 분위기: 하늘색 구름 벽지, 레몬 징두리, 체리·크림 바둑판 마루. 기발하고 초현실적이지만 따뜻하게.
-import { seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, svg } from './ink.mjs';
+import { digits as handDigits, seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, svg } from './ink.mjs';
 import { part, S, O, batArt } from './chars.mjs';
 
 const OUT = new URL('../../assets/rooms/upside/', import.meta.url).pathname;
@@ -301,7 +301,7 @@ function items() {
 }
 
 bgNorth(); bgEast(); bgSouth(); bgWest();
-door(false); door(true); umbrellaStand(true); umbrellaStand(false); bat('hang'); bat('dizzy');
+door(false); door(true); umbrellaStand(true); umbrellaStand(false); bat('hang'); bat('dizzy'); bat('happy');
 sofa(); frame(false); frame(true); note(); keyGlint(false); keyGlint(true);
 safe(false); safe(true); lever('nohandle'); lever('up'); lever('down');
 zoomSafe(false); zoomSafe(true);
@@ -320,7 +320,7 @@ function zoomLever() {
   o += part(ellPts(542, 190, 8, 8, 0, Math.PI * 2, 10), C.lemon, { sw: 1.2 });
   o += `<path d="M612 136 A28 28 0 1 1 612 184" fill="none" stroke="${C.cherry}" stroke-width="5" stroke-linecap="round"/><path d="M600 176 L612 194 L624 174Z" fill="${C.cherry}" stroke="${INK}" stroke-width="1.4"/>`;
   o += line([[690, 124], [690, 196]], { sw: 5, color: C.cherry }) + `<path d="M674 182 L690 204 L706 182Z" fill="${C.cherry}" stroke="${INK}" stroke-width="1.4"/>`;
-  for (let i = 0; i < 3; i++) o += part(ellPts(780 + i * 110, 160, 26, 26, 0, Math.PI * 2, 12), 'none', { sw: 2, stroke: C.brass2 }) + `<text x="${780 + i * 110}" y="172" font-family="Georgia, serif" font-size="34" text-anchor="middle" fill="${C.brass2}">${i + 1}</text>`;
+  for (let i = 0; i < 3; i++) o += part(ellPts(780 + i * 110, 160, 26, 26, 0, Math.PI * 2, 12), 'none', { sw: 2, stroke: C.brass2 }) + handDigits(i + 1, 780 + i * 110, 176, 32, { color: C.brass2, sw: 3.4 });
   o += part(rectPts(770, 260, 60, 330), '#3a2a1e', { sw: 2 });
   for (let i = 0; i < 3; i++) o += part(ellPts(560 + i * 240, 720, 86, 86, 0, Math.PI * 2, 20), '#6a6870', { sw: 3 });
   put('zoom/lever.svg', W, H, o, { id: 991, displace: 3 });

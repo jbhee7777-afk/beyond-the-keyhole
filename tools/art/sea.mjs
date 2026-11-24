@@ -1,7 +1,7 @@
 // 5장 「바닷속 우체국」 그래픽 에셋 생성기
 // node tools/art/sea.mjs  → assets/rooms/sea/**
 // 분위기: 심해 청록·물빛·산호·진주·해파리 보라. 신비롭고 몽환적으로.
-import { seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, svg } from './ink.mjs';
+import { digits, seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, svg } from './ink.mjs';
 import { part, S, O, octopusArt } from './chars.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
 
@@ -206,7 +206,7 @@ function zoomBoxOpen() {
   let o = fill(rect(0, 0, W, H, { amp: 0 }), '#2e6a74');
   o += part(rectPts(380, 120, 840, 660), C.wood, { sw: 3.5, heavy: [1, 2] }) + part(rectPts(440, 180, 720, 540), '#3a2a1e', { sw: 2.4 });
   o += part([[1160, 180], [1260, 140], [1260, 760], [1160, 720]], C.wood2, { sw: 2.4 });
-  o += part(rectPts(540, 200, 120, 48), C.brassL, { sw: 1.6 }) + `<text x="600" y="236" font-family="serif" font-size="34" text-anchor="middle" fill="${INK}">58</text>`;
+  o += part(rectPts(540, 200, 120, 48), C.brassL, { sw: 1.6 }) + digits(58, 600, 238, 30, { sw: 3.4 });
   put('zoom/box_open.svg', W, H, o, { id: 1033, displace: 2.4 });
 }
 
@@ -332,7 +332,7 @@ function items() {
   put('items/letter_ready.svg', 160, 160, env(part(rectPts(40, 96, 70, 22), '#fff6d0', { sw: 1.2 }) + line([[46, 104], [100, 104]], { sw: 1.2, op: 0.6 }) + part(rectPts(112, 52, 28, 32), '#9fd6d6', { sw: 1.2 }) + fishShape(116, 68, 0.4, '#5a7fa8')), { id: 1061, displace: 1 });
   seed(1062);
   // 주소 스티커: 학교 건물 그림 + 58 (SVG 이미지 안에서는 웹 글꼴을 못 쓰므로 한글 대신 그림)
-  put('items/address.svg', 160, 160, part([[16, 40], [144, 34], [148, 122], [14, 128]], '#fff6d0', { sw: 2, heavy: [1, 2] }) + part([[34, 100], [34, 70], [62, 52], [90, 70], [90, 100]], '#e8c8a0', { sw: 1.4 }) + part([[30, 72], [62, 48], [94, 72]], C.red, { sw: 1.2 }) + part(rectPts(54, 82, 16, 18), C.wood2, { sw: 1 }) + part(ellPts(62, 66, 6, 6, 0, Math.PI * 2, 8), '#fff', { sw: 1 }) + line([[62, 48], [62, 36]], { sw: 1.4 }) + part([[62, 36], [76, 40], [62, 44]], C.red, { sw: 0.8 }) + `<text x="118" y="96" font-family="Georgia, serif" font-size="30" font-weight="bold" text-anchor="middle" fill="${C.red}">58</text>`, { id: 1062, displace: 0.6 });
+  put('items/address.svg', 160, 160, part([[16, 40], [144, 34], [148, 122], [14, 128]], '#fff6d0', { sw: 2, heavy: [1, 2] }) + part([[34, 100], [34, 70], [62, 52], [90, 70], [90, 100]], '#e8c8a0', { sw: 1.4 }) + part([[30, 72], [62, 48], [94, 72]], C.red, { sw: 1.2 }) + part(rectPts(54, 82, 16, 18), C.wood2, { sw: 1 }) + part(ellPts(62, 66, 6, 6, 0, Math.PI * 2, 8), '#fff', { sw: 1 }) + line([[62, 48], [62, 36]], { sw: 1.4 }) + part([[62, 36], [76, 40], [62, 44]], C.red, { sw: 0.8 }) + `${digits(58, 118, 98, 28, { color: C.red, sw: 3.6 })}`, { id: 1062, displace: 0.6 });
   stamp('stamp_mackerel', '#5a7fa8', 1.3);
   stamp('stamp_anchovy', '#b8c8d0', 0.7);
   stamp('stamp_saury', '#7a8aa8', 1.5);
@@ -344,7 +344,50 @@ function items() {
   put('items/key.svg', 160, 160, `<g transform="rotate(-35 80 80)">${part(ellPts(80, 44, 24, 24, 0, Math.PI * 2, 14), C.brass, { sw: 2.2 })}${starfish(80, 44, 14, 0, C.coral)}${part([[74, 66], [86, 66], [86, 144], [74, 144]], C.brass, { sw: 2 })}${part([[86, 118], [104, 118], [104, 128], [86, 128]], C.brass, { sw: 1.4 })}${part([[86, 134], [98, 134], [98, 142], [86, 142]], C.brass, { sw: 1.2 })}</g>`, { id: 1064, displace: 1 });
 }
 
-bgNorth(); bgEast(); bgSouth(); bgWest(); caustics();
+
+// 고래가 창 "바깥"에서 김 서린 유리에 써 준 엘리베이터 번호 138 → 안에서는 좌우가 뒤집혀 보인다
+function windowFog() {
+  seed(1043);
+  const w = 480, h = 420;
+  let o = `<defs><clipPath id="fogc"><ellipse cx="240" cy="210" rx="226" ry="198"/></clipPath></defs><g clip-path="url(#fogc)">`;
+  o += `<ellipse cx="240" cy="210" rx="226" ry="198" fill="#eef8fa" opacity="0.32"/>`;
+  for (let i = 0; i < 40; i++) o += dot(rand(30, 450), rand(30, 390), rand(1.5, 4), '#ffffff', 0.35);
+  const G = {
+    1: [[[4, 14], [18, 0], [18, 64]]],
+    3: [[[0, 6], [16, 0], [32, 8], [32, 22], [16, 30], [34, 40], [34, 56], [16, 64], [0, 58]]],
+    8: [ellPts(17, 15, 14, 15, 0, Math.PI * 2, 14), ellPts(17, 47, 17, 17, 0, Math.PI * 2, 14)],
+  };
+  let txt = '';
+  [1, 3, 8].forEach((d, k) => {
+    for (const st of G[d]) {
+      const pts = st.map(([x, y]) => [130 + k * 80 + x * 1.7, 120 + y * 1.7]);
+      txt += `<path d="${O(pts, 0.6)}" fill="none" stroke="#2b6a78" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>`;
+      txt += `<path d="${O(pts, 0.6)}" fill="none" stroke="#d8f4f8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>`;
+    }
+  });
+  // 바깥에서 쓴 글씨라 안에서는 거울처럼 뒤집혀 보인다
+  o += `<g transform="translate(${w} 0) scale(-1 1)">${txt}</g>`;
+  // 물방울이 흘러내린 자국
+  for (const x of [150, 236, 330]) o += line([[x, 240], [x + 2, 300]], { sw: 2, color: '#d8f4f8', op: 0.5 });
+  o += '</g>';
+  put('props/window_fog.svg', w, h, o, { id: 1043, displace: 1 });
+}
+function zoomElevPanel() {
+  seed(1044);
+  let o = fill(rect(0, 0, W, H, { amp: 0 }), C.deep2);
+  for (let i = 0; i < 18; i++) o += bubble(rand(40, 1560), rand(40, 860), rand(5, 14));
+  o += part(rectPts(500, 120, 600, 660), C.brass, { sw: 4, heavy: [1, 2], shade: [[880, 110], [1110, 110], [1110, 790], [880, 790]], shadeCol: 'rgba(90,60,10,0.25)' });
+  for (const [x, y] of [[524, 144], [1076, 144], [524, 756], [1076, 756]]) o += dot(x, y, 7, C.brassL) + `<circle cx="${x}" cy="${y}" r="7" fill="none" stroke="${INK}" stroke-width="1.4"/>`;
+  // 위쪽: 수면 그림 (해와 물결) + 위 화살표
+  o += part(rectPts(600, 170, 400, 120), '#bfe6ee', { sw: 2 }) + part(ellPts(800, 214, 26, 26, 0, Math.PI * 2, 12), '#f0d64a', { sw: 1.6 });
+  o += line([[620, 262], [680, 250], [740, 262], [800, 250], [860, 262], [920, 250], [980, 262]], { sw: 3, color: '#2e7a8a' });
+  for (let i = 0; i < 3; i++) { const x = 610 + i * 140; o += part(rectPts(x, 360, 100, 160), '#2b2119', { sw: 3 }) + part(rectPts(x + 6, 366, 88, 148), C.pearl, { sw: 1.6 }) + hatch(rect(x + 6, 366, 88, 30), 0.5) + hatch(rect(x + 6, 484, 88, 30), 0.5); }
+  // 아래: 고래 꼬리 문장 (고래가 번호를 알려 준다는 표시)
+  o += part([[760, 640], [800, 600], [840, 640], [820, 650], [800, 636], [780, 650]], '#5a7fa8', { sw: 1.8 }) + line([[800, 636], [800, 690]], { sw: 5, color: '#5a7fa8' });
+  put('zoom/elev_panel.svg', W, H, o, { id: 1044, displace: 2.4 });
+}
+
+bgNorth(); bgEast(); bgSouth(); bgWest(); caustics(); windowFog(); zoomElevPanel();
 counter(); octopus('work'); octopus('happy'); tubeHatch(false); tubeHatch(true); elevator(false); elevator(true);
 jellyLamp(false); jellyLamp(true); jellyGlowLayer(); zoomBoxes(false); zoomBoxes(true); zoomBoxOpen();
 windowSea(false); windowSea(true); coral(true); coral(false); fishShadow();

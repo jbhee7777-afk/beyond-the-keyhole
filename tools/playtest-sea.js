@@ -50,7 +50,12 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-sea';
   await view('north'); await sel('key'); await clickObj('거품 우편관 뚜껑');
   await p.evaluate(() => window.__game.openHint()); await shot('10-hint'); await p.keyboard.press('Escape');
   await sel('letter_ready'); await clickObj('거품 우편관 뚜껑'); await p.waitForTimeout(3000);
-  await view('south'); await shot('11-whale'); await view('north'); await p.waitForTimeout(5200); await shot('12-north-open');
+  await view('south'); await shot('11-whale'); await p.waitForTimeout(5200); await shot('11b-fog-mirror');
+  await clickObj('김 서린 창의 숫자'); await p.waitForTimeout(300);
+  // 엘리베이터 숫자 판: 거울 글씨를 바로 읽은 1-3-8
+  await view('north'); await clickObj('수면 엘리베이터'); await shot('12a-elev-panel');
+  for (const [i, n] of [[0, 1], [1, 3], [2, 8]]) for (let k = 0; k < n; k++) await clickObj(`${i + 1}번째 엘리베이터 숫자`);
+  await p.waitForTimeout(1200); await shot('12-north-open');
   await clickObj('수면 엘리베이터'); await p.waitForTimeout(2200); await shot('13-ending');
   const flags = await p.evaluate(() => window.__game.s.flags);
   console.log('won:', !!flags.__won);

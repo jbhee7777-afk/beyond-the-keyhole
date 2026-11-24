@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 80" width="84" height="80"><defs>
+<filter id="art" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="2" seed="9" result="w"/>
+<feDisplacementMap in="SourceGraphic" in2="w" scale="0.6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.007" numOctaves="3" seed="16" result="t"/>
+<feColorMatrix in="t" type="matrix" values="0.3 0 0 0 0.85  0.3 0 0 0 0.85  0.3 0 0 0 0.85  0 0 0 0 1" result="tw"/>
+<feBlend in="d" in2="tw" mode="multiply" result="m"/>
+<feComposite in="m" in2="d" operator="in"/>
+</filter>
+<filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>
+<filter id="blur2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.5"/></filter>
+<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="6" stroke="#33261c" stroke-width="1.2"/></pattern>
+<pattern id="hatch2" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-48)"><line x1="0" y1="0" x2="0" y2="5" stroke="#33261c" stroke-width="1"/></pattern>
+<pattern id="hatchw" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><line x1="0" y1="0" x2="0" y2="7" stroke="#fff8e0" stroke-width="1.3"/></pattern>
+</defs><g filter="url(#art)"><path d="M37.7 44C37.7 44.8 37.5 45.6 37.1 46.2C36.8 46.9 36.2 47.6 35.5 48C34.8 48.4 34 48.6 33.2 48.6C32.4 48.7 31.4 48.7 30.7 48.3C30 48 29.2 47.2 28.8 46.5C28.4 45.8 28.2 45 28.2 44.2C28.2 43.3 28.6 42.1 29 41.4C29.3 40.7 29.7 40.3 30.5 39.9C31.2 39.5 32.4 39 33.2 39C34 39 34.7 39.5 35.3 39.9C36 40.3 36.9 40.8 37.3 41.5C37.7 42.2 37.7 43.3 37.7 44Z" fill="#b3adb1"/><path d="M28.5 43.8C29.2 44.2 31.4 46.2 33 46.2C34.5 46.2 36.8 44.2 37.6 43.8" fill="none" stroke="#33261c" stroke-width="1.2" stroke-linecap="round"/><path d="M55.7 43.9C55.7 44.7 55.4 45.9 55 46.6C54.6 47.3 54.1 47.6 53.4 48C52.7 48.4 51.6 48.9 50.9 48.9C50.1 48.9 49.4 48.5 48.8 48.1C48.1 47.6 47.3 47 46.9 46.3C46.4 45.7 46.2 45 46.2 44.2C46.2 43.4 46.6 42.3 47 41.6C47.4 40.9 48 40.4 48.6 39.9C49.3 39.5 50.3 39.2 51 39.1C51.8 39.1 52.5 39.5 53.2 39.9C53.9 40.3 54.7 40.8 55.1 41.4C55.5 42.1 55.7 43 55.7 43.9Z" fill="#b3adb1"/><path d="M46.4 43.7C47.2 44.1 49.5 46.1 51 46.1C52.5 46.2 54.7 44.2 55.5 43.8" fill="none" stroke="#33261c" stroke-width="1.2" stroke-linecap="round"/></g></svg>

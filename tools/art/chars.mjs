@@ -390,6 +390,10 @@ export function batArt(state) {
   if (state === 'dizzy') {
     for (const sx of [-1, 1]) { const ex = 80 + sx * 16, ey = 168; const sp = []; for (let i = 0; i < 14; i++) { const a = i * 0.8, r = 1 + i * 0.55; sp.push([ex + Math.cos(a) * r, ey + Math.sin(a) * r]); } o += `<circle cx="${ex}" cy="${ey}" r="9" fill="#fffbe8" stroke="${INK}" stroke-width="1.2"/>` + strokeP(smooth(sp, false), 1.4); }
     o += strokeP(O([[68, 188], [74, 184], [80, 188], [86, 184], [92, 188]], 0.2), 1.6);
+  } else if (state === 'happy') {
+    // 배부르고 신난 얼굴: 웃는 반달 눈, 크게 벌린 입
+    for (const sx of [-1, 1]) { const ex = 80 + sx * 16, ey = 168; o += strokeP(O([[ex - 8, ey + 2], [ex, ey - 7], [ex + 8, ey + 2]], 0.1), 2.4); o += strokeP(O([[ex - 9 * sx, ey - 16], [ex + 7 * sx, ey - 19]], 0.1), 1.6); }
+    o += `<path d="${S([[68, 184], [92, 184], [88, 196], [80, 200], [72, 196]], 0.2)}" fill="#a83a3a" stroke="${INK}" stroke-width="1.4"/>`;
   } else {
     for (const sx of [-1, 1]) {
       const ex = 80 + sx * 16, ey = 168;

@@ -253,7 +253,9 @@
         this.viewEl.classList.remove('enter'); void this.viewEl.offsetWidth; this.viewEl.classList.add('enter');
       }
       const v = room.views[s.view];
-      this.renderObjects(this.viewEl, this.nodes, [{ id: '__bg', img: v.bg, x: 0, y: 0, w: W, h: H, bg: true }, ...v.objects]);
+      // room.frame: 방마다 다른 앞쪽 틀(인형의 집 단면, 서까래, 잠수 돔 창…). 누르는 곳은 가리지 않는다.
+      const frame = room.frame ? [{ id: '__frame', img: room.frame, x: 0, y: 0, w: W, h: H, cls: 'fg frame' }] : [];
+      this.renderObjects(this.viewEl, this.nodes, [{ id: '__bg', img: v.bg, x: 0, y: 0, w: W, h: H, bg: true }, ...v.objects, ...frame]);
 
       // 확대 화면
       if (s.zoom) {
@@ -330,7 +332,7 @@
           map.set(o.id, n);
         }
         if (src && n.dataset.src !== src) {
-          const prev = n.querySelector('img:not(.out)');
+          const prev = n.querySelector('img:not(.out):not(.blink-lid)');
           const img = el('img', '', n);
           img.alt = ''; img.draggable = false; img.src = src;
           if (prev && n.dataset.src) {
@@ -340,6 +342,14 @@
           }
           n.dataset.src = src;
         }
+        // 눈 깜빡임: blink 그림(감은 눈꺼풀)을 몇 초마다 잠깐 겹쳐 보인다
+        const lidName = typeof o.blink === 'function' ? o.blink(s) : o.blink;
+        if (lidName) {
+          if (!n._lid) { n._lid = el('img', 'blink-lid', n); n._lid.alt = ''; n._lid.draggable = false; n._lid.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's'; n._lid.style.animationDuration = (3.6 + Math.random() * 1.8).toFixed(2) + 's'; }
+          const ls = this.src(lidName);
+          if (n._lid.dataset.src !== ls) { n._lid.src = ls; n._lid.dataset.src = ls; }
+          if (n.lastElementChild !== n._lid) n.appendChild(n._lid);
+        } else if (n._lid) { n._lid.remove(); n._lid = null; }
       });
       for (const [id, n] of map) {
         if (!seen.has(id)) {
