@@ -109,7 +109,7 @@
         objects: [
           { id: 'cast', img: 'bg/cast_north', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
           {
-            id: 'sunflowers', img: (s) => (lit(s) ? 'props/sunflowers_up' : 'props/sunflowers_droop'), x: 228, y: 262, w: 380, h: 390,
+            id: 'sunflowers', img: (s) => (lit(s) ? 'props/sunflowers_up' : 'props/sunflowers_droop'), x: 228, y: 202, w: 380, h: 450,
             hit: [240, 300, 360, 340], label: '해바라기 화단',
             look: (s) => (lit(s) ? '해바라기들이 고개를 번쩍 들었어!' : '해바라기들이 고개를 푹 숙이고 있어. 햇빛을 기다리나 봐.'),
           },
@@ -144,7 +144,7 @@
           },
           {
             id: 'flower', img: (s) => (F(s).keyTaken ? 'props/giantflower' : 'props/giantflower_key'), x: 935, y: -66, w: 360, h: 720,
-            show: (s) => !!F(s).grown, hit: [1020, -10, 210, 230], origin: '50% 100%', label: '커다란 해바라기',
+            show: (s) => !!F(s).grown, hit: [1030, 50, 170, 190], origin: '50% 100%', label: '커다란 해바라기',
             click: (api, n) => {
               if (api.flags.keyTaken) { api.say('해님을 꼭 닮은 커다란 해바라기야.'); return; }
               api.set('keyTaken'); api.give('key', n); api.say('꽃 한가운데에서 해바라기 열쇠를 찾았어!');

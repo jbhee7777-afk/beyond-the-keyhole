@@ -3,7 +3,7 @@
 // 분위기: 딸기우유·버터·민트, 원목. 귀엽고 아기자기하지만 유아용 그림체는 피한다.
 import { seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, svg } from './ink.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
-import { mochaArt, mouseArt, mousePeekArt } from './chars.mjs';
+import { mochaArt, mouseArt, mousePeekArt, part, S, O, tufts } from './chars.mjs';
 
 const OUT = new URL('../../assets/rooms/toyshop/', import.meta.url).pathname;
 const W = 1600, H = 900;
@@ -134,9 +134,32 @@ function train(x, y, s = 1) {
   return o;
 }
 function doll(x, y, col) {
-  let o = shape(wob([[x - 22, y], [x - 16, y - 50], [x + 16, y - 50], [x + 22, y]]), col, { sw: 1.8 });
-  o += shape(ell(x, y - 66, 18, 18), C.fur, { sw: 1.8 }) + dot(x - 6, y - 68, 2, INK) + dot(x + 6, y - 68, 2, INK) + dot(x - 10, y - 62, 3, C.rose, 0.6) + dot(x + 10, y - 62, 3, C.rose, 0.6);
-  o += shape(wob([[x - 18, y - 74], [x - 10, y - 90], [x + 10, y - 90], [x + 18, y - 74], [x, y - 80]]), C.woodD, { sw: 1.4 });
+  // 나무 인형: 종 모양 드레스(주름), 흰 깃, 팔, 머리카락과 앞머리, 얼굴
+  let o = part([[x - 21, y], [x - 17, y - 26], [x - 11, y - 44], [x + 11, y - 44], [x + 17, y - 26], [x + 21, y]], col, { heavy: [3, 5], sw: 1.6, hw: 2.4, shade: [[x + 4, y - 50], [x + 26, y - 50], [x + 26, y + 2], [x + 6, y + 2]], shadeCol: 'rgba(40,30,40,0.2)', hatch: false });
+  o += line([[x - 8, y - 30], [x - 10, y - 2]], { sw: 1, op: 0.45 }) + line([[x + 6, y - 30], [x + 8, y - 2]], { sw: 1, op: 0.45 });
+  o += part([[x - 12, y - 46], [x, y - 40], [x + 12, y - 46], [x + 8, y - 50], [x - 8, y - 50]], C.cream, { sw: 1.2 });
+  o += part([[x - 14, y - 40], [x - 20, y - 22], [x - 16, y - 20], [x - 10, y - 34]], col, { sw: 1.2 }) + part([[x + 14, y - 40], [x + 20, y - 22], [x + 16, y - 20], [x + 10, y - 34]], col, { sw: 1.2 });
+  o += part([[x, y - 82], [x + 14, y - 76], [x + 17, y - 62], [x + 10, y - 51], [x, y - 49], [x - 10, y - 51], [x - 17, y - 62], [x - 14, y - 76]], '#f3dcc4', { heavy: [2, 4], sw: 1.4, hw: 2.2 });
+  o += part([[x - 17, y - 64], [x - 16, y - 78], [x - 4, y - 86], [x + 10, y - 84], [x + 18, y - 72], [x + 17, y - 62], [x + 10, y - 72], [x + 2, y - 70], [x - 6, y - 74], [x - 10, y - 68]], C.woodD, { sw: 1.4 });
+  o += dot(x - 6, y - 62, 1.8, INK) + dot(x + 6, y - 62, 1.8, INK) + dot(x - 10, y - 57, 2.6, C.rose, 0.6) + dot(x + 10, y - 57, 2.6, C.rose, 0.6);
+  o += line([[x - 3, y - 56], [x, y - 54], [x + 3, y - 56]], { sw: 1 });
+  return o;
+}
+function bear(x, y, col = '#c99a6a') {
+  // 앉아 있는 곰 인형 (리본, 발바닥, 주둥이)
+  const lt = '#e6c49a';
+  let o = '';
+  o += part([[x - 26, y - 6], [x - 36, y - 2], [x - 34, y + 2], [x - 14, y + 2], [x - 10, y - 8]], col, { sw: 1.4 }) + part([[x + 26, y - 6], [x + 36, y - 2], [x + 34, y + 2], [x + 14, y + 2], [x + 10, y - 8]], col, { sw: 1.4 });
+  o += dot(x - 30, y - 1, 3.4, lt) + dot(x + 30, y - 1, 3.4, lt);
+  o += part([[x, y - 44], [x + 18, y - 38], [x + 24, y - 18], [x + 18, y], [x, y + 3], [x - 18, y], [x - 24, y - 18], [x - 18, y - 38]], col, { heavy: [1, 3], sw: 1.6, hw: 2.4, shade: [[x + 6, y - 46], [x + 30, y - 46], [x + 30, y + 6], [x + 6, y + 6]], shadeCol: 'rgba(80,40,10,0.2)', hatch: false });
+  o += part([[x - 9, y - 30], [x + 9, y - 30], [x + 11, y - 8], [x - 11, y - 8]], lt, { sw: 1 });
+  for (const sx of [-1, 1]) o += part([[x + sx * 18, y - 36], [x + sx * 28, y - 26], [x + sx * 26, y - 18], [x + sx * 16, y - 26]], col, { sw: 1.4 });
+  const hy = y - 62;
+  for (const sx of [-1, 1]) o += part([[x + sx * 10, hy - 14], [x + sx * 16, hy - 22], [x + sx * 25, hy - 19], [x + sx * 24, hy - 9], [x + sx * 16, hy - 8]], col, { sw: 1.4 }) + dot(x + sx * 19, hy - 15, 3, lt);
+  o += part([[x, hy - 20], [x + 16, hy - 14], [x + 21, hy], [x + 14, hy + 14], [x, hy + 18], [x - 14, hy + 14], [x - 21, hy], [x - 16, hy - 14]], col, { heavy: [1, 3], sw: 1.6, hw: 2.4 });
+  o += part([[x - 8, hy + 2], [x + 8, hy + 2], [x + 10, hy + 12], [x, hy + 16], [x - 10, hy + 12]], lt, { sw: 1.1 });
+  o += part([[x - 4, hy + 3], [x + 4, hy + 3], [x, hy + 8]], INK, { sw: 0.8 }) + dot(x - 8, hy - 3, 2.2, INK) + dot(x + 8, hy - 3, 2.2, INK);
+  o += part([[x - 14, y - 46], [x - 2, y - 42], [x - 12, y - 36]], C.red, { sw: 1.2 }) + part([[x + 14, y - 46], [x + 2, y - 42], [x + 12, y - 36]], C.red, { sw: 1.2 }) + dot(x, y - 42, 3, C.red2);
   return o;
 }
 function book(x, y, w, h, col) { return shape(rect(x, y - h, w, h, { sharp: true }), col, { sw: 1.6 }) + line([[x + 3, y - h + 8], [x + w - 3, y - h + 8]], { sw: 1, op: 0.5 }); }
@@ -172,14 +195,38 @@ function bgNorth() {
   let o = shell();
   o += bunting(170, 1430, 92, 70);
   // 모카 옆모습 그림 (그림자 퍼즐 단서)
-  o += frame(286, 140, 150, 170, silhouette(312, 196, 0.27, '#6b4a3a') + fill(ell(361, 300, 40, 6), C.pinkD, 0.6), C.wood2);
+  o += frame(770, 220, 140, 160, silhouette(794, 268, 0.25, '#6b4a3a') + fill(ell(840, 362, 36, 5), C.pinkD, 0.6), C.wood2);
+  o += line([[790, 220], [840, 196], [890, 220]], { sw: 1.6 }) + dot(840, 196, 4, C.brass);
   // 문 자리 오목한 공간
   o += shape(wob([[930, 640], [930, 320], ...ellPts(1080, 320, 150, 118, Math.PI, Math.PI * 2, 18).slice(1, -1), [1230, 320], [1230, 640]], { step: 40 }), C.woodD, { sw: 3 });
-  // 문 옆 옷걸이와 목도리
-  o += line([[1330, 210], [1330, 640]], { sw: 8, color: C.wood2 }) + line([[1330, 210], [1330, 640]], { sw: 2, op: 0.4 });
-  o += shape(wob([[1296, 214], [1364, 214], [1360, 228], [1300, 228]]), C.wood2);
-  o += shape(wob([[1318, 228], [1346, 228], [1360, 380], [1342, 384], [1332, 300], [1322, 384], [1302, 380]]), C.blue);
-  for (let y = 250; y < 370; y += 22) o += line([[1320, y], [1344, y + 3]], { sw: 1.4, color: C.cream });
+  // 문 옆 옷걸이: 깎은 나무 기둥, 세발 받침, 위쪽 고리
+  const X = 1330;
+  for (const [dx, dy] of [[-44, 648], [44, 648], [6, 656]]) o += part([[X - 6, 604], [X + 6, 604], [X + dx + (dx > 0 ? 6 : dx < 0 ? -2 : 4), dy - 4], [X + dx, dy + 2], [X + dx + (dx > 0 ? -8 : 8), dy - 2]], C.wood2, { sw: 1.8 });
+  o += part([[X - 6, 214], [X + 6, 214], [X + 7, 612], [X - 7, 612]], C.wood2, { heavy: [1, 2], shade: [[X + 1, 200], [X + 12, 200], [X + 12, 620], [X + 1, 620]], shadeCol: 'rgba(60,30,10,0.3)', hatch: false });
+  for (const y of [300, 440, 590]) o += part([[X - 11, y - 6], [X + 11, y - 6], [X + 13, y], [X + 11, y + 6], [X - 11, y + 6], [X - 13, y]], C.wood, { sw: 1.6 });
+  o += part([[X - 10, 200], [X, 186], [X + 10, 200], [X + 8, 214], [X - 8, 214]], C.wood, { sw: 1.8 });
+  for (const sx of [-1, 1]) o += line([[X, 222], [X + sx * 26, 226], [X + sx * 34, 214], [X + sx * 28, 206]], { sw: 3.4, color: C.brass2 });
+  // 왼쪽 고리: 고리에 걸쳐 두 갈래로 늘어진 줄무늬 목도리 (끝에 술)
+  for (const [x0, len, tilt] of [[1290, 170, -6], [1308, 150, 4]]) {
+    const band = [[x0, 228], [x0 + 16, 226], [x0 + 18 + tilt, 228 + len], [x0 + 2 + tilt, 230 + len]];
+    o += part(band, C.blue, { heavy: [1, 2], sw: 1.8 });
+    for (let y = 246; y < 222 + len; y += 24) { const t = (y - 228) / len; o += part([[x0 + tilt * t, y], [x0 + 16 + tilt * t, y - 1], [x0 + 17 + tilt * t, y + 8], [x0 + 1 + tilt * t, y + 9]], C.cream, { sw: 0.8 }); }
+    for (let k = 0; k < 5; k++) o += line([[x0 + 3 + tilt + k * 3.4, 230 + len], [x0 + 3 + tilt + k * 3.4 + 1, 244 + len]], { sw: 1.4, color: C.blue2 });
+  }
+  o += part([[1286, 218], [1324, 216], [1328, 232], [1284, 234]], C.blue, { sw: 1.8, heavy: [1, 2] });
+  // 기둥 꼭대기에 얹힌 밀짚모자
+  o += part([[1290, 202], [1306, 192], [1330, 188], [1356, 192], [1372, 202], [1356, 210], [1330, 212], [1304, 210]], '#e6c57a', { heavy: [3, 6], shade: [[1330, 196], [1380, 196], [1380, 216], [1330, 216]], shadeCol: 'rgba(150,100,30,0.25)', hatch: false });
+  o += part([[1310, 196], [1314, 172], [1330, 164], [1346, 172], [1350, 196]], '#e6c57a', { sw: 1.8 });
+  o += part([[1311, 186], [1349, 186], [1350, 195], [1310, 195]], C.mint, { sw: 1.3 });
+  for (let x = 1296; x < 1368; x += 7) o += line([[x, 202], [x + 3, 208]], { sw: 0.8, color: '#a8843a', op: 0.7 });
+  // 오른쪽 고리: 노란 카디건 (어깨에서 늘어진 몸판, 소매, 단추, 고무단)
+  const cg = [[1350, 214], [1372, 214], [1390, 226], [1404, 266], [1414, 340], [1404, 346], [1394, 290], [1394, 380], [1346, 384], [1346, 290], [1336, 346], [1326, 340], [1336, 266], [1340, 226]];
+  o += part(cg, C.butter, { heavy: [3, 7], shade: [[1380, 210], [1420, 210], [1420, 390], [1370, 390]], shadeCol: 'rgba(150,110,20,0.22)' });
+  o += line([[1361, 220], [1366, 240], [1370, 384]], { sw: 1.6 });
+  for (const y of [258, 290, 322, 354]) o += `<circle cx="${1374}" cy="${y}" r="3.6" fill="${C.cream}" stroke="${INK}" stroke-width="1"/>`;
+  o += part([[1346, 366], [1394, 366], [1394, 384], [1346, 384]], C.butter2, { sw: 1.2 });
+  for (let x = 1350; x < 1394; x += 5) o += line([[x, 368], [x, 382]], { sw: 0.8, op: 0.45 });
+  o += part([[1350, 312], [1362, 312], [1362, 328], [1350, 328]], C.butter2, { sw: 1.2 });
   o += rug(700, 770, 360, 74);
   put('bg/north.svg', W, H, o, { id: 511 });
 }
@@ -218,13 +265,13 @@ function bgSouth() {
   // 왼쪽 장난감 선반
   o += shelfUnit(170, 120, 380, 510, [250, 390, 520]);
   o += train(200, 248, 1) + block(400, 210, 36, C.rose, 'star') + block(444, 214, 32, C.mint, 'dot') + block(420, 176, 30, C.butter, 'heart');
-  o += doll(230, 388, C.blue) + doll(300, 388, C.rose) + book(360, 388, 20, 80, C.mint2) + book(382, 388, 22, 70, C.red) + book(406, 388, 18, 86, C.butter2) + book(426, 388, 24, 64, C.lilac);
+  o += doll(230, 388, C.blue) + bear(300, 386, '#b48a5e') + book(360, 388, 20, 80, C.mint2) + book(382, 388, 22, 70, C.red) + book(406, 388, 18, 86, C.butter2) + book(426, 388, 24, 64, C.lilac);
   o += shape(ell(260, 494, 30, 30), C.red) + line(ellPts(260, 494, 30, 12, 0, Math.PI, 10), { sw: 1.6, color: C.cream, step: 999 });
   o += block(320, 482, 36, C.blue, 'star') + block(366, 482, 36, C.rose, 'dot') + block(342, 446, 36, C.mint, 'heart');
   // 오른쪽 선반 (병은 따로 그린다)
   o += shelfUnit(1050, 120, 380, 510, [250, 390, 520]);
   o += doll(1100, 248, C.mint) + book(1140, 248, 22, 76, C.rose) + book(1164, 248, 20, 90, C.blue2) + book(1186, 248, 24, 70, C.butter2);
-  o += shape(wob([[1280, 248], [1300, 190], [1340, 190], [1360, 248]]), C.lilac) + shape(ell(1320, 180, 20, 18), C.fur) + dot(1314, 178, 2, INK) + dot(1326, 178, 2, INK);
+  o += bear(1320, 246, '#c99a6a');
   o += train(1080, 520, 0.9) + block(1290, 482, 36, C.butter, 'star') + block(1340, 482, 36, C.rose, 'heart');
   o += shape(ell(1110, 388, 14, 14), C.blue) + shape(ell(1140, 388, 14, 14), C.rose) + shape(ell(1170, 388, 14, 14), C.butter);
   o += rug(800, 790, 300, 60);
@@ -265,14 +312,26 @@ function jbox(state) {
   const w = 160, h = 260;
   let o = fill(ell(84, 254, 64, 7), INK, 0.25);
   if (state === 'open') {
-    // 스프링과 튀어나온 토끼 인형
-    const sp = []; for (let i = 0; i <= 12; i++) sp.push([80 + (i % 2 ? 18 : -18), 150 - i * 7]);
-    o += line(sp, { sw: 3, color: C.grey2, step: 999 });
-    o += shape(ell(80, 50, 30, 28), C.cream, { sw: 2.2 }) + shape(wob(rot(ellPts(0, 0, 9, 28, 0, Math.PI * 2, 10), -0.3, 66, 18)), C.cream, { sw: 1.8 }) + shape(wob(rot(ellPts(0, 0, 9, 28, 0, Math.PI * 2, 10), 0.3, 94, 18)), C.cream, { sw: 1.8 });
-    o += dot(71, 50, 3, INK) + dot(89, 50, 3, INK) + shape(wob([[74, 60], [86, 60], [80, 68]]), '#e8888f', { sw: 1.2 });
-    o += shape(wob([[60, 28], [80, -30], [100, 28]]), C.butter, { sw: 2 }) + dot(80, -32, 6, C.rose);
-    o += shape(wob([[54, 78], [106, 78], [96, 96], [64, 96]]), C.rose, { sw: 1.6 });
-    for (let i = 0; i < 18; i++) o += `<rect x="${rand(0, 150).toFixed(0)}" y="${rand(-60, 120).toFixed(0)}" width="7" height="4" fill="${pick([C.rose, C.butter, C.mint, C.blue])}" transform="rotate(${rand(0, 180).toFixed(0)} 80 40)"/>`;
+    // 굵은 스프링
+    const sp = []; for (let i = 0; i <= 10; i++) sp.push([80 + (i % 2 ? 16 : -16), 146 - i * 7]);
+    o += line(sp, { sw: 6, color: INK, step: 999 }) + line(sp, { sw: 3.4, color: C.grey, step: 999 });
+    // 주름 깃
+    const ruff = []; for (let i = 0; i <= 12; i++) { const a = Math.PI + i / 12 * Math.PI; ruff.push([80 + Math.cos(a) * (i % 2 ? 46 : 38), 62 + Math.sin(a) * (i % 2 ? -14 : -8) + 14]); }
+    o += part([[34, 76], ...ruff.slice(1, -1), [126, 76], [104, 88], [56, 88]], C.rose, { sw: 1.8 });
+    o += part([[44, 70], [80, 78], [116, 70], [104, 80], [56, 80]], C.cream, { sw: 1.2 });
+    // 토끼 인형 머리와 귀
+    o += part([[66, -2], [60, -40], [64, -58], [72, -58], [76, -36], [78, 0]], C.cream, { sw: 1.8 }) + `<path d="${S([[67, -6], [64, -38], [68, -50], [72, -36], [73, -6]], 0.2)}" fill="#f2b3b5"/>`;
+    o += part([[84, -2], [92, -38], [104, -52], [110, -46], [100, -26], [94, 0]], C.cream, { sw: 1.8 }) + `<path d="${S([[88, -6], [96, -32], [104, -44], [97, -24], [92, -4]], 0.2)}" fill="#f2b3b5"/>`;
+    o += part([[80, -6], [104, 2], [114, 24], [108, 50], [94, 64], [80, 68], [66, 64], [52, 50], [46, 24], [56, 2]], C.cream, { heavy: [2, 5], shade: [[90, 20], [120, 20], [120, 70], [80, 70]], shadeCol: 'rgba(120,90,60,0.2)', hatch: false });
+    o += `<path d="${S([[66, 26], [72, 20], [76, 28], [70, 34]], 0.2)}" fill="${INK}"/><path d="${S([[86, 26], [92, 20], [96, 28], [90, 34]], 0.2)}" fill="${INK}"/>`;
+    o += dot(73, 24, 1.6, '#fff') + dot(93, 24, 1.6, '#fff');
+    o += `<path d="${S([[74, 42], [86, 42], [84, 52], [80, 55], [76, 52]], 0.2)}" fill="#b84a4a" stroke="${INK}" stroke-width="1.4"/>` + dot(80, 38, 3, '#e17f87');
+    o += dot(60, 40, 5, '#f0a0a4', 0.6) + dot(100, 40, 5, '#f0a0a4', 0.6);
+    // 고깔모자
+    o += part([[62, -4], [86, -64], [102, 0]], C.butter, { heavy: [1, 2], sw: 1.8 });
+    o += line([[70, -24], [92, -20]], { sw: 3, color: C.rose }) + line([[76, -42], [90, -40]], { sw: 3, color: C.mint });
+    o += `<path d="${S([[80, -66], [86, -74], [94, -68], [90, -60], [82, -60]], 0.3)}" fill="${C.rose}" stroke="${INK}" stroke-width="1.2"/>`;
+    for (let i = 0; i < 22; i++) o += `<rect x="${rand(0, 150).toFixed(0)}" y="${rand(-70, 110).toFixed(0)}" width="7" height="4" fill="${pick([C.rose, C.butter, C.mint, C.blue])}" transform="rotate(${rand(0, 180).toFixed(0)} 80 40)"/>`;
     // 젖혀진 뚜껑
     o += shape(wob([[24, 150], [136, 150], [150, 120], [38, 116]], { sharp: true }), C.mint2, { sw: 2 });
   } else {
@@ -283,7 +342,7 @@ function jbox(state) {
   for (let i = 0; i < 9; i++) o += dot(36 + (i % 3) * 38, 166 + Math.floor(i / 3) * 30, 5, C.cream);
   o += shape(wob(starPts(80, 200, 22, 10), { sharp: true, amp: 0.4 }), C.butter, { sw: 1.8 });
   o += shape(ell(141, 196, 5, 6), '#3a2618', { sw: 1.2 });
-  put(`props/jbox_${state}.svg`, w, h, o, { id: 524, vb: '0 -70 160 330' });
+  put(`props/jbox_${state}.svg`, w, 340, o, { id: 524, vb: '0 -80 160 340' });
 }
 function crankSmall() {
   seed(525);
@@ -432,16 +491,33 @@ function jar(open) {
 }
 function rockingHorse() {
   seed(563);
-  let o = fill(ell(130, 212, 120, 10), INK, 0.2);
-  o += line(ellPts(130, 120, 120, 90, 0.3, Math.PI - 0.3, 16), { sw: 10, color: C.wood2, step: 999 }) + line(ellPts(130, 120, 120, 90, 0.3, Math.PI - 0.3, 16), { sw: 2, op: 0.4, step: 999 });
-  o += line([[80, 150], [96, 100]], { sw: 7, color: C.cream }) + line([[180, 150], [166, 100]], { sw: 7, color: C.cream });
-  o += shape(wob([[70, 110], [190, 100], [196, 70], [70, 74]]), C.cream, { sw: 2.2 });
-  o += shape(wob([[180, 80], [210, 20], [236, 24], [240, 46], [214, 60], [200, 92]]), C.cream, { sw: 2.2 });
-  o += shape(wob([[196, 26], [186, 4], [212, 14]]), C.cream, { sw: 1.8 }) + dot(222, 36, 3, INK);
-  for (let i = 0; i < 6; i++) o += line([[190 + i * 5, 30 + i * 8], [176 + i * 5, 34 + i * 9]], { sw: 4, color: C.rose });
-  o += line([[70, 84], [40, 120]], { sw: 5, color: C.rose });
-  o += shape(rect(100, 84, 60, 20, { sharp: true }), C.mint, { sw: 1.8 });
-  put('props/horse.svg', 260, 220, o, { id: 563 });
+  const body = '#f3e7d2', mane = C.rose;
+  let o = `<path d="${S([[20, 210], [240, 210], [236, 218], [24, 218]])}" fill="${INK}" opacity="0.2"/>`;
+  // 흔들 받침 (초승달 나무)
+  o += part([[6, 168], [40, 188], [130, 202], [220, 188], [254, 168], [258, 176], [222, 198], [130, 214], [38, 198], [2, 176]], C.wood2, { heavy: [6, 9], sw: 2 });
+  // 다리 넷 (뒤쪽 다리는 어둡게)
+  for (const [x0, x1, c] of [[88, 76, '#d8c9ae'], [174, 186, '#d8c9ae'], [104, 96, body], [160, 170, body]]) o += part([[x0 - 7, 124], [x0 + 7, 124], [x1 + 6, 192], [x1 - 6, 194]], c, { sw: 1.6 });
+  // 꼬리 (털실)
+  for (let k = 0; k < 6; k++) o += line([[66, 102], [44 - k * 3, 112 + k * 4], [36 - k * 2, 140 + k * 3]], { sw: 3, color: k % 2 ? mane : C.rose2 });
+  // 몸통 (점박이)
+  const bd = [[66, 96], [104, 82], [170, 82], [198, 92], [206, 116], [192, 132], [150, 136], [98, 134], [70, 126], [60, 110]];
+  o += part(bd, body, { heavy: [4, 7], shade: [[60, 118], [210, 118], [210, 140], [60, 140]], shadeCol: 'rgba(120,90,60,0.2)' });
+  for (const [x, y, r] of [[92, 108, 5], [120, 98, 4], [150, 112, 5], [176, 100, 3.6], [108, 122, 3]]) o += `<path d="${S([[x - r, y], [x, y - r], [x + r, y], [x, y + r * 0.8]], 0.2)}" fill="${C.pinkD}" opacity="0.5"/>`;
+  // 안장 + 담요 + 등자
+  o += part([[108, 80], [160, 80], [166, 108], [104, 108]], C.mint, { sw: 1.6 });
+  for (let x = 106; x < 166; x += 10) o += `<path d="${S([[x, 106], [x + 10, 106], [x + 5, 114]], 0.2)}" fill="${C.mint}" stroke="${INK}" stroke-width="1"/>`;
+  o += part([[116, 70], [152, 70], [156, 84], [112, 84]], C.rose, { sw: 1.6 }) + line([[134, 84], [134, 124]], { sw: 1.4 }) + part([[128, 124], [140, 124], [138, 132], [130, 132]], C.brass, { sw: 1 });
+  // 목과 머리
+  const hd = [[176, 92], [184, 64], [196, 38], [214, 20], [236, 18], [252, 32], [254, 46], [244, 52], [230, 50], [218, 62], [210, 98]];
+  o += part(hd, body, { heavy: [4, 7], shade: [[230, 30], [260, 30], [260, 60], [226, 60]], shadeCol: 'rgba(120,90,60,0.2)' });
+  o += part([[206, 22], [210, 4], [220, 18]], body, { sw: 1.4 });
+  o += line([[224, 32], [229, 30], [233, 33]], { sw: 1.6 }) + line([[226, 34], [225, 38]], { sw: 1 }) + line([[230, 34], [231, 38]], { sw: 1 });
+  o += dot(248, 40, 2, INK) + dot(236, 44, 3.4, C.rose, 0.6);
+  o += line([[214, 26], [248, 46]], { sw: 2.4, color: C.red }) + line([[220, 48], [236, 22]], { sw: 2.4, color: C.red });
+  o += part([[196, 30], [208, 26], [212, 32], [200, 36]], C.red, { sw: 1 });
+  // 털실 갈기
+  for (let i = 0; i < 8; i++) { const x = 196 - i * 4, y = 24 + i * 9; o += `<path d="${S([[x, y], [x - 9, y + 2], [x - 11, y + 9], [x - 3, y + 8]], 0.4)}" fill="${i % 2 ? mane : C.rose2}" stroke="${INK}" stroke-width="1"/>`; }
+  put('props/horse.svg', 260, 220, o, { id: 563, displace: 1.4 });
 }
 
 /* ───────────── 서쪽 소품 ───────────── */
@@ -449,9 +525,21 @@ function sewingTable() {
   seed(571);
   const w = 700, h = 400;
   let o = fill(rect(20, 388, 660, 12, { amp: 2 }), INK, 0.2);
-  for (const x of [40, 630]) o += line([[x, 210], [x, 390]], { sw: 10, color: '#4a4448' }) + line([[x - 20, 390], [x + 20, 390]], { sw: 8, color: '#4a4448' });
-  // 발판 (꽃무늬 철제)
-  o += shape(rect(260, 330, 180, 40, { sharp: true }), '#4a4448') + line([[270, 350], [430, 350]], { sw: 2, color: C.brass });
+  const iron = '#3f3a40';
+  for (const x of [56, 620]) {
+    for (const sx of [-1, 1]) o += line([[x + sx * 14, 212], [x + sx * 30, 270], [x + sx * 20, 330], [x + sx * 30, 384]], { sw: 6, color: iron, step: 999 });
+    o += line(ellPts(x, 300, 14, 18, 0, Math.PI * 2, 12), { sw: 4, color: iron, step: 999 }) + line([[x - 18, 252], [x + 18, 252]], { sw: 4, color: iron });
+    o += part([[x - 40, 382], [x + 40, 382], [x + 44, 392], [x - 44, 392]], iron, { sw: 1.6 });
+  }
+  // 큰 바퀴와 벨트
+  o += line(ellPts(130, 300, 54, 54, 0, Math.PI * 2, 24), { sw: 6, color: iron, step: 999 });
+  for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; o += line([[130, 300], [130 + Math.cos(a) * 52, 300 + Math.sin(a) * 52]], { sw: 2.6, color: iron }); }
+  o += `<circle cx="130" cy="300" r="7" fill="${C.brass}" stroke="${INK}" stroke-width="1.4"/>`;
+  o += line([[160, 255], [178, 120]], { sw: 1.6, color: C.woodD }) + line([[100, 256], [146, 118]], { sw: 1.6, color: C.woodD });
+  // 격자 발판
+  o += part([[230, 336], [470, 336], [480, 372], [220, 372]], iron, { sw: 1.6 });
+  for (let x = 240; x < 470; x += 16) o += line([[x, 340], [x + 10, 368]], { sw: 1.6, color: '#6d6670' }) + line([[x + 10, 340], [x, 368]], { sw: 1.6, color: '#6d6670' });
+  o += line([[350, 372], [620, 300]], { sw: 3, color: iron });
   o += shape(rect(0, 180, 700, 34, { sharp: true }), C.wood3, { sw: 2.6 }) + hatch(rect(0, 202, 700, 12), 0.4);
   // 재봉틀
   o += shape(wob([[130, 180], [130, 60], [170, 30], [400, 30], [420, 60], [420, 110], [250, 110], [250, 180]]), C.mint, { sw: 2.6 });
@@ -517,15 +605,27 @@ function scoreArt(big) {
 }
 function dressForm() {
   seed(575);
-  let o = fill(ell(110, 452, 70, 8), INK, 0.2);
-  o += line([[110, 300], [110, 440]], { sw: 8, color: C.woodD }) + line([[60, 450], [110, 430], [160, 450]], { sw: 7, color: C.woodD });
-  o += shape(wob([[60, 40], [160, 40], [176, 120], [150, 200], [166, 300], [54, 300], [70, 200], [44, 120]]), C.cream2, { sw: 2.4 });
-  o += shape(wob([[60, 70], [100, 60], [108, 300], [62, 300], [74, 200], [52, 120]]), C.lilac, { sw: 2 });
-  for (let y = 90; y < 290; y += 20) o += line([[100, y], [106, y + 8]], { sw: 1.4, color: C.red });
-  o += shape(ell(110, 30, 22, 14), C.woodD) + hatch(wob([[120, 40], [160, 40], [176, 120], [150, 200], [166, 300], [120, 300]]), 0.25);
-  // 줄자
-  o += line([[66, 52], [110, 90], [160, 58]], { sw: 6, color: C.butter });
-  put('props/dressform.svg', 220, 460, o, { id: 575 });
+  let o = `<path d="${S([[40, 452], [180, 452], [176, 460], [44, 460]])}" fill="${INK}" opacity="0.2"/>`;
+  // 받침: 기둥과 세발
+  o += part([[106, 296], [114, 296], [115, 440], [105, 440]], C.woodD, { sw: 1.6 });
+  for (const [dx, dy] of [[-56, 452], [56, 452], [0, 458]]) o += part([[106, 432], [114, 432], [110 + dx + (dx > 0 ? 4 : dx < 0 ? -4 : 4), dy - 4], [110 + dx, dy + 2], [110 + dx + (dx > 0 ? -6 : 6), dy - 2]], C.woodD, { sw: 1.4 });
+  // 몸통 (어깨 · 가슴 · 허리 · 엉덩이)
+  const torso = [[90, 38], [130, 38], [152, 52], [170, 82], [164, 130], [148, 176], [156, 230], [168, 286], [160, 300], [60, 300], [52, 286], [64, 230], [72, 176], [56, 130], [50, 82], [68, 52]];
+  o += part(torso, C.cream2, { heavy: [3, 8], shade: [[120, 30], [180, 30], [180, 310], [128, 310], [150, 170]], shadeCol: 'rgba(110,80,50,0.2)' });
+  o += line([[110, 44], [110, 300]], { sw: 1, op: 0.35 });
+  // 반쯤 꿰맨 보라 조끼 (왼쪽 판만, 시침핀으로 고정)
+  const vest = [[70, 54], [96, 60], [104, 120], [106, 290], [62, 290], [68, 232], [76, 178], [60, 132], [54, 86]];
+  o += part(vest, C.lilac, { heavy: [5, 7], shade: [[60, 140], [80, 140], [80, 296], [60, 296]], shadeCol: 'rgba(60,40,90,0.2)', hatch: false });
+  for (const y of [150, 190, 230, 270]) o += `<circle cx="98" cy="${y}" r="4" fill="${C.cream}" stroke="${INK}" stroke-width="1.2"/>`;
+  for (let y = 70; y < 286; y += 14) o += line([[103, y], [106, y + 7]], { sw: 1.2, color: C.red, op: 0.8 });
+  o += part([[68, 210], [92, 208], [92, 226], [68, 228]], '#a690c6', { sw: 1.2 });
+  for (const [x, y] of [[132, 80], [140, 130], [136, 200]]) o += line([[x, y], [x + 14, y - 10]], { sw: 1.4, color: C.grey2 }) + dot(x + 15, y - 11, 3.6, pick([C.rose, C.butter, C.blue]));
+  // 목 손잡이
+  o += part([[96, 22], [124, 22], [130, 38], [90, 38]], C.woodD, { sw: 1.6 }) + part([[104, 8], [116, 8], [118, 22], [102, 22]], C.wood2, { sw: 1.4 });
+  // 목에 건 줄자
+  o += part([[78, 40], [92, 36], [110, 62], [128, 36], [142, 40], [116, 80], [124, 170], [114, 172], [106, 84], [96, 168], [86, 166], [98, 76]], C.butter, { sw: 1.4 });
+  for (let y = 90; y < 166; y += 8) o += line([[100, y], [104, y]], { sw: 0.9 }) + line([[118, y], [122, y]], { sw: 0.9 });
+  put('props/dressform.svg', 220, 460, o, { id: 575, displace: 1.4 });
 }
 
 /* ───────────── 확대 화면 ───────────── */

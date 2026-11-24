@@ -18,7 +18,7 @@
     st.innerHTML = `
       <img class="layer cover-sky" src="assets/rooms/greenhouse/bg/sky_day.svg" alt="">
       <img class="layer cover-room" src="assets/rooms/greenhouse/bg/north.svg" alt="">
-      <img class="cover-prop" style="left:228px;top:262px;width:380px;height:390px" src="assets/rooms/greenhouse/props/sunflowers_up.svg" alt="">
+      <img class="cover-prop" style="left:228px;top:202px;width:380px;height:450px" src="assets/rooms/greenhouse/props/sunflowers_up.svg" alt="">
       <img class="cover-prop" style="left:660px;top:220px;width:280px;height:420px" src="assets/rooms/greenhouse/props/door_closed.svg" alt="">
       <div class="layer cover-shade"></div>
       <div class="layer grain"></div>

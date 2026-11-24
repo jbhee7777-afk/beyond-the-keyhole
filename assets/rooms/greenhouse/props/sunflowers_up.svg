@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 390" width="380" height="390"><defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -60 380 450" width="380" height="450"><defs>
 <filter id="art" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
 <feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="2" seed="31" result="w"/>
 <feDisplacementMap in="SourceGraphic" in2="w" scale="2.6" xChannelSelector="R" yChannelSelector="G" result="d"/>

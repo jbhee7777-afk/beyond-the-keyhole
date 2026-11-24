@@ -1,6 +1,6 @@
 // 1장 「햇살이 멈춘 온실」 그래픽 에셋 생성기
 // node tools/art/greenhouse.mjs  → assets/rooms/greenhouse/** 에 SVG를 다시 그린다.
-import { snailArt } from './chars.mjs';
+import { snailArt, part, S, O } from './chars.mjs';
 import { seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, vine, svg } from './ink.mjs';
 
 const OUT = new URL('../../assets/rooms/greenhouse/', import.meta.url).pathname;
@@ -213,8 +213,16 @@ function bgNorth() {
   o += shape(wob(arch, { step: 40 }), C.woodD, { sw: 3 });
   o += fill(wob([[676, 640], [676, 336], ...ellPts(800, 336, 124, 104, Math.PI, Math.PI * 2, 18).slice(1, -1), [924, 336], [924, 640]]), '#2a211b');
   // 문 위 황동 해 장식
-  o += shape(ell(800, 186, 30, 30), C.brass);
-  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; o += line([[800 + Math.cos(a) * 34, 186 + Math.sin(a) * 34], [800 + Math.cos(a) * 50, 186 + Math.sin(a) * 50]], { sw: 4, color: C.brass2 }); }
+  // 문 위 황동 해 장식: 굽이치는 햇살 16개 + 웃는 얼굴
+  for (let i = 0; i < 16; i++) {
+    const a = i * Math.PI / 8, L = i % 2 ? 50 : 64, sw2 = i % 2 ? 0.12 : 0.15;
+    const p0 = [800 + Math.cos(a - sw2) * 28, 186 + Math.sin(a - sw2) * 28], p2 = [800 + Math.cos(a + sw2) * 28, 186 + Math.sin(a + sw2) * 28];
+    const mid = [800 + Math.cos(a + 0.08) * (L * 0.62), 186 + Math.sin(a + 0.08) * (L * 0.62)], tip = [800 + Math.cos(a) * L, 186 + Math.sin(a) * L];
+    o += part([p0, mid, tip, p2], i % 2 ? C.brass2 : C.brass, { sw: 1.6 });
+  }
+  o += part(ellPts(800, 186, 32, 32, 0, Math.PI * 2, 14), C.brassL, { heavy: [2, 6], shade: [[800, 186], [840, 186], [840, 230], [790, 230]], shadeCol: 'rgba(120,80,20,0.25)' });
+  o += line([[786, 182], [791, 178], [796, 182]], { sw: 2 }) + line([[804, 182], [809, 178], [814, 182]], { sw: 2 }) + line([[790, 196], [800, 202], [810, 196]], { sw: 2 });
+  o += `<circle cx="784" cy="194" r="4" fill="#e59a6a" opacity="0.6"/><circle cx="816" cy="194" r="4" fill="#e59a6a" opacity="0.6"/>`;
   o += hanging([[260, 160, 1], [430, 110, -1], [1120, 140, 1], [1380, 190, -1]]);
   put('bg/north.svg', W, H, o, { id: 11 });
 }
@@ -228,11 +236,20 @@ function bgEast() {
   for (let x = 250; x < 1350; x += 92) for (let y = 175; y < 510; y += 130) o += `<circle cx="${x + 46 + rand(-30, 30)}" cy="${y + rand(0, 80)}" r="2.2" fill="${INK}" opacity="0.4"/>`;
   o += hatch(rect(250, 150, 1100, 40, { sharp: true }), 0.35);
   o += line([[250, 150], [1350, 150]], { sw: 5, color: C.woodD });
-  // 걸려 있는 모종삽과 장갑
-  o += line([[1220, 190], [1220, 210]], { sw: 2 });
-  o += shape(wob([[1205, 210], [1235, 210], [1240, 280], [1220, 310], [1200, 280]]), C.silver2);
-  o += shape(rect(1213, 196, 14, 18), C.wood2);
-  o += shape(wob([[1270, 200], [1310, 200], [1318, 250], [1326, 300], [1290, 312], [1266, 280]]), '#d9a15a');
+  // 못에 걸린 모종삽: 구멍 뚫린 나무 손잡이 + 쇠고리 + 가운데 등줄기가 선 날
+  o += `<circle cx="1220" cy="190" r="3.4" fill="${INK}"/>`;
+  o += part([[1211, 186], [1229, 186], [1232, 232], [1226, 250], [1214, 250], [1208, 232]], C.wood3, { heavy: [2, 3], shade: [[1222, 180], [1240, 180], [1240, 254], [1222, 254]], shadeCol: 'rgba(90,50,20,0.22)', hatch: false });
+  o += `<circle cx="1220" cy="198" r="4" fill="#3a2618"/>`;
+  o += part([[1209, 248], [1231, 248], [1233, 262], [1207, 262]], C.silver2, { sw: 1.6 });
+  o += part([[1203, 262], [1237, 262], [1244, 298], [1236, 326], [1220, 348], [1204, 326], [1196, 298]], C.silver, { heavy: [2, 4], shade: [[1220, 258], [1252, 258], [1252, 352], [1220, 352]], shadeCol: 'rgba(40,60,60,0.25)' });
+  o += line([[1220, 266], [1220, 338]], { sw: 1.2, op: 0.5 }) + line([[1206, 272], [1212, 300]], { sw: 2, color: '#fff', op: 0.6 });
+  // 손목 고리로 걸린 원예 장갑 (손가락이 아래로)
+  o += line([[1292, 188], [1286, 200], [1298, 204]], { sw: 1.6 }) + `<circle cx="1292" cy="188" r="3.4" fill="${INK}"/>`;
+  o += part([[1268, 202], [1312, 200], [1314, 232], [1268, 234]], '#b9844c', { sw: 2, heavy: [1, 2] });
+  for (let x = 1274; x < 1310; x += 7) o += line([[x, 204], [x, 230]], { sw: 1, op: 0.35 });
+  o += part([[1270, 232], [1312, 232], [1318, 262], [1322, 298], [1316, 306], [1311, 288], [1308, 314], [1300, 316], [1297, 292], [1293, 320], [1285, 320], [1283, 294], [1278, 312], [1270, 310], [1270, 282], [1258, 272], [1252, 256], [1260, 250], [1270, 258]], '#e0aa63', { heavy: [2, 8], shade: [[1296, 230], [1330, 230], [1330, 330], [1296, 330]], shadeCol: 'rgba(120,70,20,0.22)' });
+  o += line([[1292, 252], [1294, 272]], { sw: 1, op: 0.45 }) + line([[1278, 262], [1282, 276]], { sw: 1, op: 0.45 });
+  o += `<path d="${S([[1300, 270], [1310, 266], [1312, 280], [1302, 284]], 0.3)}" fill="#8a6a3c" opacity="0.35"/>`;
   o += hanging([[200, 170, 1], [1400, 140, -1], [760, 70, 1]]);
   put('bg/east.svg', W, H, o, { id: 12 });
 }
@@ -274,8 +291,17 @@ function bgWest() {
   o += shape(wob([[1360, 230], [1376, 230], [1360, 330], [1346, 322]]), C.red);
   o += shape(wob([[1330, 320], [1362, 318], [1350, 400], [1344, 400]]), C.silver);
   // 물뿌리개 그림 달력
-  o += shape(rect(1300, 400, 110, 74), C.paper);
-  o += line([[1310, 414], [1400, 414]], { sw: 1.4, op: 0.6 });
+  o += part([[1294, 396], [1416, 392], [1418, 480], [1296, 484]], C.paper, { heavy: [1, 2], sw: 1.8 });
+  o += `<circle cx="1356" cy="398" r="4" fill="${C.red}" stroke="${INK}" stroke-width="1"/>`;
+  for (let i = 0; i < 3; i++) {
+    const x = 1312 + i * 36;
+    o += part([[x, 456], [x + 24, 456], [x + 21, 474], [x + 3, 474]], C.tc, { sw: 1.2 });
+    o += line([[x, 456], [x + 24, 456]], { sw: 1.6, color: C.soil });
+    if (i === 0) o += `<ellipse cx="${x + 12}" cy="452" rx="4" ry="2.6" fill="${C.seed2}" stroke="${INK}" stroke-width="0.8"/>`;
+    if (i >= 1) { o += line([[x + 12, 456], [x + 12, i === 1 ? 440 : 420]], { sw: 1.6, color: C.leaf2 }); o += leaf(x + 12, i === 1 ? 444 : 436, 10, -2.3, C.leaf, { w: 0.5, vein: false }) + leaf(x + 12, i === 1 ? 444 : 436, 10, -0.8, C.leaf, { w: 0.5, vein: false }); }
+    if (i === 2) o += sunHead(x + 12, 416, 9, {});
+    if (i < 2) o += line([[x + 27, 440], [x + 33, 440]], { sw: 1.2, op: 0.6 }) + line([[x + 30, 437], [x + 33, 440], [x + 30, 443]], { sw: 1.2, op: 0.6 });
+  }
   o += hanging([[180, 120, 1], [700, 150, -1], [1100, 110, 1]]);
   put('bg/west.svg', W, H, o, { id: 14 });
 }
@@ -352,7 +378,7 @@ function sunflowers(up) {
   o += shape(rect(4, 288, 372, 20, { sharp: true }), C.wood);
   for (let x = 40; x < 370; x += 60) o += line([[x, 310], [x, 384]], { sw: 1.4, op: 0.6 });
   o += hatch(rect(240, 310, 128, 74, { sharp: true }), 0.4);
-  put(`props/sunflowers_${up ? 'up' : 'droop'}.svg`, w, h, o, { id: up ? 31 : 32 });
+  put(`props/sunflowers_${up ? 'up' : 'droop'}.svg`, w, 450, o, { id: up ? 31 : 32, vb: '0 -60 380 450' });
 }
 function bigPot(state) {
   // state: empty | seeded
@@ -379,21 +405,23 @@ function bigPot(state) {
 }
 function giantFlower(withKey) {
   seed(42);
-  const w = 360, h = 600;
+  const cx = 180, cy = 222, r = 90;
   let o = '';
-  o += stem([[180, 560], [170, 420], [188, 280], [180, 190]], 16);
-  o += leaf(176, 470, 120, -0.45, C.leaf2, { w: 0.5 });
-  o += leaf(182, 420, 110, Math.PI + 0.5, C.leaf, { w: 0.5 });
-  o += leaf(184, 330, 100, -0.7, C.leaf, { w: 0.5 });
-  o += leaf(178, 290, 92, Math.PI + 0.7, C.leaf2, { w: 0.5 });
-  o += sunHead(180, 150, 130, {});
+  o += stem([[180, 560], [172, 460], [188, 350], [180, cy + 40]], 14);
+  o += leaf(176, 480, 112, -0.42, C.leaf2, { w: 0.5 });
+  o += leaf(182, 430, 104, Math.PI + 0.45, C.leaf, { w: 0.5 });
+  o += leaf(184, 360, 88, -0.72, C.leaf, { w: 0.5 });
+  o += leaf(180, 320, 78, Math.PI + 0.8, C.leaf2, { w: 0.5 });
+  // 꽃 뒤 초록 꽃받침
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2 + 0.13; o += leaf(cx + Math.cos(a) * r * 0.4, cy + Math.sin(a) * r * 0.4, r * 0.9, a, C.leaf2, { w: 0.3, vein: false }); }
+  o += sunHead(cx, cy, r, {});
   if (withKey) {
-    // 꽃 한가운데 박힌 황동 열쇠
-    o += `<g transform="translate(180 150) rotate(-20)">${shape(ell(0, -22, 20, 20), C.brass, { sw: 2.6 })}${shape(ell(0, -22, 8, 8), C.seed)}${shape(rect(-5, -4, 10, 52), C.brass, { sw: 2.4 })}${shape(rect(5, 30, 14, 8), C.brass)}${shape(rect(5, 42, 10, 6), C.brass)}</g>`;
-    o += sparkle(222, 108, 14);
+    o += `<g transform="translate(${cx} ${cy}) rotate(-20) scale(0.78)">${shape(ell(0, -22, 20, 20), C.brass, { sw: 2.6 })}${shape(ell(0, -22, 8, 8), C.seed)}${shape(rect(-5, -4, 10, 52), C.brass, { sw: 2.4 })}${shape(rect(5, 30, 14, 8), C.brass)}${shape(rect(5, 42, 10, 6), C.brass)}</g>`;
+    o += sparkle(cx + 40, cy - 40, 13);
   }
   o += pot(85, 560, 190, 150, { color: C.tc });
-  put(`props/giantflower${withKey ? '_key' : ''}.svg`, w, h, o, { id: 42, vb: '0 0 360 720' });
+  put(`props/giantflower${withKey ? '_key' : ''}.svg`, w(), 720, o, { id: 42, vb: '0 0 360 720' });
+  function w() { return 360; }
 }
 function basket(full) {
   seed(51);
@@ -557,9 +585,8 @@ function wateringCan(file, full, size = 1) {
   put(file, 160, 124, o, { id: 83 });
 }
 function underShadow() {
-  seed(84);
-  let o = `<g filter="url(#blur)">${fill(rect(30, 20, 940, 150, { amp: 6 }), '#100c10', 0.82)}</g>` + hatch(rect(60, 30, 880, 130), 0.35);
-  put('props/under_shadow.svg', 1000, 170, o, { id: 84 });
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 170" width="1000" height="170"><defs><radialGradient id="g" cx="50%" cy="40%" r="55%"><stop offset="0" stop-color="#0d0a10" stop-opacity="0.88"/><stop offset="0.65" stop-color="#0d0a10" stop-opacity="0.7"/><stop offset="1" stop-color="#0d0a10" stop-opacity="0"/></radialGradient></defs><ellipse cx="500" cy="80" rx="520" ry="100" fill="url(#g)"/></svg>`;
+  import('node:fs').then(({ writeFileSync }) => writeFileSync(OUT + 'props/under_shadow.svg', svgStr));
 }
 
 /* ───────────── 남쪽: 해님 기계 ───────────── */

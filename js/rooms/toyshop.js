@@ -163,7 +163,7 @@
       north: {
         bg: 'bg/north',
         objects: [
-          { id: 'portrait', x: 0, y: 0, w: 0, h: 0, img: '', hit: [286, 140, 150, 170], label: '모카 그림', look: '모카의 옆모습 그림. 귀는 쫑긋 위로, 코는 오른쪽, 동그란 꼬리는 왼쪽!' },
+          { id: 'portrait', x: 0, y: 0, w: 0, h: 0, img: '', hit: [770, 220, 140, 160], label: '모카 그림', look: '모카의 옆모습 그림. 귀는 쫑긋 위로, 코는 오른쪽, 동그란 꼬리는 왼쪽!' },
           {
             id: 'mocha', img: (s) => (awake(s) ? 'props/mocha_awake' : 'props/mocha_sleep'), x: 170, y: 220, w: 400, h: 480, cls: 'breathe',
             hit: [210, 300, 330, 300], label: '모카',
@@ -171,7 +171,7 @@
           },
           { id: 'table', img: 'props/table', x: 590, y: 488, w: 200, h: 212 },
           {
-            id: 'jbox', img: (s) => (F(s).boxOpen ? 'props/jbox_open' : 'props/jbox_closed'), x: 610, y: 214, w: 160, h: 330, hit: [620, 340, 150, 200], label: '깜짝 상자',
+            id: 'jbox', img: (s) => (F(s).boxOpen ? 'props/jbox_open' : 'props/jbox_closed'), x: 610, y: 204, w: 160, h: 340, hit: [620, 340, 150, 200], label: '깜짝 상자',
             click: (api) => { if (api.flags.boxOpen) { api.say('스프링 위에서 토끼 인형이 흔들흔들.'); return; } api.sfx('step'); api.zoom('jbox'); },
           },
           { id: 'crankS', img: 'props/crank_small', x: 748, y: 452, w: 40, h: 40, show: (s) => !!F(s).crankAttached && !F(s).boxOpen },
