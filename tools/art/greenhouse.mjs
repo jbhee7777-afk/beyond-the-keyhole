@@ -621,23 +621,39 @@ function sunMachine(awake) {
   o += shape(ell(cx, cy, 140, 140), awake ? C.brassL : '#b89a5a', { sw: 3 });
   o += shape(ell(cx, cy, 116, 116), awake ? '#ffe38a' : '#c9ae73', { sw: 2.4 });
   o += hatch(ell(cx + 40, cy + 40, 80, 70), awake ? 0.12 : 0.3);
-  // 얼굴
+  // 얼굴: 눈꺼풀·눈썹·볼록한 볼·입술을 가진 해님
   if (awake) {
-    o += shape(ell(cx - 42, cy - 18, 15, 19), '#fff') + `<circle cx="${cx - 38}" cy="${cy - 14}" r="9" fill="${INK}"/><circle cx="${cx - 35}" cy="${cy - 19}" r="3" fill="#fff"/>`;
-    o += shape(ell(cx + 42, cy - 18, 15, 19), '#fff') + `<circle cx="${cx + 46}" cy="${cy - 14}" r="9" fill="${INK}"/><circle cx="${cx + 49}" cy="${cy - 19}" r="3" fill="#fff"/>`;
-    o += shape(wob([[cx - 40, cy + 30], [cx, cy + 62], [cx + 40, cy + 30], [cx, cy + 44]]), '#c4573e');
-    o += `<ellipse cx="${cx - 74}" cy="${cy + 22}" rx="18" ry="11" fill="#f08a6a" opacity="0.65"/><ellipse cx="${cx + 74}" cy="${cy + 22}" rx="18" ry="11" fill="#f08a6a" opacity="0.65"/>`;
+    for (const sx of [-1, 1]) {
+      const ex = cx + sx * 42, ey = cy - 14;
+      o += part([[ex - 15, ey], [ex - 12, ey - 17], [ex, ey - 23], [ex + 13, ey - 16], [ex + 15, ey + 2], [ex + 4, ey + 15], [ex - 9, ey + 12]], '#fffaf0', { sw: 2.2, heavy: [4, 6] });
+      o += `<path d="${S([[ex - 7 + sx * 3, ey - 2], [ex - 3 + sx * 3, ey - 10], [ex + 5 + sx * 3, ey - 9], [ex + 7 + sx * 3, ey + 2], [ex + sx * 3, ey + 7]], 0.2)}" fill="${INK}"/>`;
+      o += `<circle cx="${ex + 3 + sx * 3}" cy="${ey - 5}" r="3" fill="#fff"/>`;
+      o += line([[ex - 16 * sx, ey - 34], [ex - 2 * sx, ey - 40], [ex + 14 * sx, ey - 36]], { sw: 3.4 });
+    }
+    o += part([[cx - 40, cy + 26], [cx - 20, cy + 32], [cx, cy + 30], [cx + 20, cy + 32], [cx + 40, cy + 26], [cx + 26, cy + 54], [cx, cy + 64], [cx - 26, cy + 54]], '#b84a3a', { sw: 2.4 });
+    o += `<path d="${S([[cx - 16, cy + 52], [cx + 16, cy + 52], [cx, cy + 62]], 0.3)}" fill="#e98a7a"/>`;
+    for (const sx of [-1, 1]) o += line([[cx + sx * 64, cy + 18], [cx + sx * 72, cy + 26], [cx + sx * 82, cy + 22]].map(([x, y]) => [x, y]), { sw: 2.2, color: '#d86f4e', op: 0.8 }) + line([[cx + sx * 62, cy + 26], [cx + sx * 70, cy + 34], [cx + sx * 80, cy + 30]], { sw: 2.2, color: '#d86f4e', op: 0.8 });
   } else {
-    o += line([[cx - 62, cy - 12], [cx - 42, cy], [cx - 22, cy - 12]], { sw: 4 });
-    o += line([[cx + 22, cy - 12], [cx + 42, cy], [cx + 62, cy - 12]], { sw: 4 });
-    o += shape(ell(cx, cy + 44, 10, 8), '#8d5a3a');
-    o += `<ellipse cx="${cx - 74}" cy="${cy + 22}" rx="16" ry="9" fill="#c98466" opacity="0.4"/><ellipse cx="${cx + 74}" cy="${cy + 22}" rx="16" ry="9" fill="#c98466" opacity="0.4"/>`;
-    // 수면 모자
-    o += shape(wob([[cx - 120, cy - 64], [cx - 20, cy - 132], [cx + 70, cy - 150], [cx + 200, cy - 80], [cx + 214, cy - 40], [cx + 90, cy - 100], [cx - 50, cy - 70]]), C.blue, { sw: 2.6 });
-    o += hatch(wob([[cx + 60, cy - 140], [cx + 200, cy - 80], [cx + 214, cy - 40], [cx + 90, cy - 100]]), 0.35);
-    o += shape(rect(cx - 128, cy - 76, 190, 26, { amp: 2 }), '#e8e2d0');
-    o += shape(ell(cx + 214, cy - 34, 18, 18), '#f4efe2');
-    // 쿨쿨
+    for (const sx of [-1, 1]) {
+      const ex = cx + sx * 42, ey = cy - 8;
+      o += line([[ex - 20, ey - 6], [ex - 8, ey + 4], [ex + 8, ey + 4], [ex + 20, ey - 6]], { sw: 3.6 });
+      for (const k of [-12, -4, 4, 12]) o += line([[ex + k, ey + 4], [ex + k + sx * 2, ey + 11]], { sw: 1.8 });
+      o += line([[ex - 18, ey - 26], [ex, ey - 30], [ex + 18, ey - 26]], { sw: 2.2, op: 0.7 });
+    }
+    o += part([[cx - 10, cy + 40], [cx, cy + 34], [cx + 10, cy + 40], [cx + 8, cy + 52], [cx, cy + 56], [cx - 8, cy + 52]], '#8d5a3a', { sw: 2 });
+    for (const sx of [-1, 1]) o += line([[cx + sx * 64, cy + 22], [cx + sx * 74, cy + 30]], { sw: 2.2, color: '#b5745a', op: 0.6 }) + line([[cx + sx * 60, cy + 30], [cx + sx * 70, cy + 38]], { sw: 2.2, color: '#b5745a', op: 0.6 });
+    // 주름 잡힌 수면 모자 + 털 방울
+    const cap = [[cx - 128, cy - 60], [cx - 92, cy - 112], [cx - 30, cy - 146], [cx + 40, cy - 158], [cx + 110, cy - 140], [cx + 176, cy - 100], [cx + 214, cy - 52], [cx + 206, cy - 34], [cx + 170, cy - 70], [cx + 110, cy - 96], [cx + 50, cy - 92], [cx - 20, cy - 74], [cx - 90, cy - 50]];
+    o += part(cap, C.blue, { heavy: [3, 7], shade: [[cx + 40, cy - 170], [cx + 230, cy - 120], [cx + 230, cy - 20], [cx + 60, cy - 90]], shadeCol: 'rgba(20,40,80,0.25)' });
+    for (const [a1, a2] of [[[cx - 40, cy - 138], [cx - 20, cy - 80]], [[cx + 30, cy - 152], [cx + 40, cy - 94]], [[cx + 110, cy - 138], [cx + 100, cy - 98]]]) o += line([a1, [(a1[0] + a2[0]) / 2 + 6, (a1[1] + a2[1]) / 2], a2], { sw: 1.4, op: 0.5 });
+    for (let k = 0; k < 4; k++) o += line([[cx + 120 + k * 22, cy - 130 + k * 22], [cx + 128 + k * 22, cy - 120 + k * 22]], { sw: 2.2, color: '#e8e2d0', op: 0.9 });
+    o += part([[cx - 134, cy - 74], [cx - 60, cy - 60], [cx + 20, cy - 80], [cx + 22, cy - 56], [cx - 58, cy - 36], [cx - 136, cy - 50]], '#efe9da', { sw: 2.2, heavy: [3, 5] });
+    for (let x = cx - 126; x < cx + 16; x += 10) o += line([[x, cy - 68 + (x - cx) * -0.05], [x + 2, cy - 48 + (x - cx) * -0.05]], { sw: 1, op: 0.35 });
+    const pp = []; for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2, r = i % 2 ? 22 : 17; pp.push([cx + 214 + Math.cos(a) * r, cy - 30 + Math.sin(a) * r]); }
+    o += part(pp, '#f6f1e4', { sw: 1.8, heavy: [2, 6] });
+    // 쿨쿨 콧방울
+    o += part([[cx + 18, cy + 44], [cx + 34, cy + 30], [cx + 52, cy + 36], [cx + 54, cy + 54], [cx + 38, cy + 62], [cx + 22, cy + 58]], '#dff0f4', { sw: 1.6 });
+    o += `<circle cx="${cx + 32}" cy="${cy + 40}" r="4" fill="#fff" opacity="0.9"/>`;
     o += `<g fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"><path d="M${cx + 130} ${cy - 10}h18l-18 18h18"/><path d="M${cx + 160} ${cy - 40}h13l-13 13h13"/></g>`;
   }
   put(`props/sun_${awake ? 'awake' : 'asleep'}.svg`, w, h, o, { id: awake ? 91 : 92, vb: '0 0 540 600' });
@@ -690,29 +706,36 @@ function barrel() {
   put('props/barrel.svg', w, h, o, { id: 101 });
 }
 function rooster(scale = 1, wound = false) {
-  // 양철 수탉 (아이템 아이콘 겸용, 160x160 기준)
-  let o = '';
-  o += fill(ell(80, 146, 46, 6), INK, 0.2);
-  o += shape(rect(52, 128, 60, 14, { sharp: true }), C.silver2);
-  o += line([[72, 128], [70, 112]], { sw: 4 }) + line([[92, 128], [94, 112]], { sw: 4 });
-  // 꼬리
-  for (let i = 0; i < 4; i++) o += shape(wob(rot([[0, 0], [40, -14], [52, 6], [30, 14]], -1.2 + i * 0.32, 112, 84)), [C.leafD, C.blue, C.red, C.leaf2][i], { sw: 1.8 });
+  // 양철 수탉: 이음매와 리벳이 보이는 판금 몸통, 판 깃털 꼬리, 볏·볏살, 바퀴 달린 받침
+  const tin = '#e9dcb8', tinS = 'rgba(90,80,60,0.22)';
+  let o = `<path d="${S([[30, 146], [130, 146], [126, 152], [34, 152]])}" fill="${INK}" opacity="0.2"/>`;
+  o += part([[46, 126], [116, 126], [118, 140], [44, 140]], '#8fa3a3', { sw: 1.8, heavy: [1, 2] });
+  for (const x of [56, 106]) o += part(ellPts(x, 142, 7, 7, 0, Math.PI * 2, 10), '#5f6f70', { sw: 1.4 }) + `<circle cx="${x}" cy="142" r="2" fill="${C.silver}"/>`;
+  o += line([[72, 126], [70, 108], [64, 104]], { sw: 3.4 }) + line([[90, 126], [94, 108], [100, 104]], { sw: 3.4 });
+  // 꼬리 깃털 판 (뒤쪽부터)
+  const tails = [[C.leafD, -1.45], [C.blue, -1.1], [C.red, -0.75], [C.leaf2, -0.42]];
+  tails.forEach(([c, ang]) => {
+    const pts = rot([[0, -8], [18, -13], [38, -9], [48, 2], [36, 9], [16, 10], [0, 6]], ang, 102, 80);
+    o += part(pts, c, { sw: 1.6, heavy: [2, 4], hw: 2.4 });
+    o += line(rot([[6, 0], [40, 0]], ang, 102, 80), { sw: 1, color: '#fff', op: 0.35 });
+  });
   // 몸통
-  o += shape(wob([[40, 60], [70, 70], [112, 74], [120, 100], [96, 116], [58, 114], [40, 92]]), '#e6d4a3', { sw: 2.4 });
-  o += hatch(wob([[80, 96], [120, 100], [96, 116], [70, 114]]), 0.4);
-  o += shape(wob([[64, 84], [98, 82], [104, 98], [74, 104]]), '#c9b07a', { sw: 1.6 });
-  for (let i = 0; i < 4; i++) o += line([[70 + i * 8, 88], [76 + i * 8, 100]], { sw: 1.2, op: 0.6 });
-  // 머리·볏·부리
-  o += shape(ell(42, 50, 20, 20), '#e6d4a3');
-  o += shape(wob([[28, 34], [32, 18], [40, 28], [46, 14], [52, 28], [60, 22], [56, 40]]), C.red);
-  o += shape(wob([[22, 48], [6, 54], [22, 58]]), C.sun2, { sw: 1.8 });
-  o += shape(wob([[28, 60], [34, 74], [40, 62]]), C.red);
-  o += `<circle cx="40" cy="46" r="3.2" fill="${INK}"/>`;
-  // 리벳
-  for (const [x, y] of [[54, 76], [110, 82], [62, 110]]) o += `<circle cx="${x}" cy="${y}" r="2.2" fill="${C.silver}" stroke="${INK}" stroke-width="0.8"/>`;
+  const body = [[38, 60], [56, 70], [82, 74], [108, 76], [122, 92], [114, 110], [92, 118], [62, 116], [42, 104], [34, 82]];
+  o += part(body, tin, { heavy: [3, 7], shade: [[70, 100], [130, 90], [130, 124], [60, 124]], shadeCol: tinS, light: [[48, 76], [70, 80], [56, 92], [44, 88]] });
+  o += line([[50, 98], [70, 104], [96, 104], [114, 96]], { sw: 1, op: 0.5 });
+  // 날개 판
+  o += part([[62, 84], [96, 80], [110, 90], [100, 104], [76, 106], [64, 96]], '#d6c49a', { sw: 1.6, heavy: [2, 4], hw: 2.4 });
+  for (const t of [0.3, 0.55, 0.8]) o += line([[64 + t * 40, 84], [62 + t * 40, 104]], { sw: 1, op: 0.45 });
+  for (const [x, y] of [[48, 70], [112, 86], [60, 112], [90, 114], [80, 78]]) o += `<circle cx="${x}" cy="${y}" r="2.3" fill="${C.silver}" stroke="${INK}" stroke-width="0.8"/>`;
+  // 목과 머리
+  o += part([[30, 28], [44, 22], [58, 30], [62, 50], [56, 70], [40, 66], [30, 48]], tin, { heavy: [2, 4], sw: 2, shade: [[46, 20], [66, 20], [66, 72], [46, 72]], shadeCol: tinS, hatch: false });
+  o += part([[28, 26], [30, 12], [38, 18], [42, 6], [48, 16], [56, 10], [56, 24], [46, 28], [34, 30]], C.red, { sw: 1.6, heavy: [1, 6], hw: 2.4 });
+  o += part([[26, 36], [10, 40], [26, 46]], C.sun2, { sw: 1.6 }) + line([[12, 40], [24, 40]], { sw: 0.8 });
+  o += part([[30, 46], [34, 60], [40, 48]], C.red, { sw: 1.4 });
+  o += `<circle cx="40" cy="34" r="4.5" fill="#fff" stroke="${INK}" stroke-width="1.2"/><circle cx="39" cy="34" r="2.2" fill="${INK}"/>`;
   // 등의 태엽 구멍 / 꽂힌 태엽
-  if (wound) o += keyShape(96, 46, 0.55, -0.4);
-  else o += shape(ell(98, 72, 4, 4), INK, { sw: 1 });
+  if (wound) o += keyShape(98, 50, 0.55, -0.4);
+  else o += `<circle cx="98" cy="74" r="4" fill="${INK}"/><circle cx="98" cy="74" r="6.5" fill="none" stroke="${C.silver2}" stroke-width="1.6"/>`;
   return scale === 1 ? o : `<g transform="scale(${scale})">${o}</g>`;
 }
 function keyShape(x, y, s, a) {
