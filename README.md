@@ -49,7 +49,12 @@
 npx serve .
 ```
 
-GitHub Pages로 공개하려면 저장소 Settings → Pages → Branch: `main` / root 를 고르면 됩니다.
+GitHub Pages로 공개하기 (가벼운 WebP 판):
+
+1. 처음 한 번만: 저장소 Settings → Pages → Source를 **Deploy from a branch**, Branch를 **gh-pages** / **(root)** 로 고르고 Save.
+2. 게임을 고친 뒤에는 `npm run pages` 한 번이면 `gh-pages` 브랜치가 새로 올라가고, 1~2분 뒤 사이트에 반영됩니다.
+
+주소: `https://jbhee7777-afk.github.io/<저장소 이름>/` (저장소 이름을 `paperdoor`로 바꾸면 `…github.io/paperdoor/`)
 
 개발할 때는 `index.html#play-greenhouse` 로 열면 표지를 건너뛰고 1장으로 바로 들어갑니다.
 

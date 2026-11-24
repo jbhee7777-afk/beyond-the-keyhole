@@ -7,7 +7,8 @@
     "art": "node tools/art/greenhouse.mjs && node tools/art/toyshop.mjs && node tools/art/clock13.mjs && node tools/art/upside.mjs && node tools/art/sea.mjs && node tools/art/ui.mjs",
     "playtest": "node tools/playtest.js screenshots/playtest && node tools/playtest-toyshop.js screenshots/playtest-2 && node tools/playtest-clock13.js screenshots/playtest-3 && node tools/playtest-upside.js screenshots/playtest-4 && node tools/playtest-sea.js screenshots/playtest-5 && node tools/playtest-resilience.js screenshots/playtest-resilience",
     "serve": "npx serve .",
-    "build": "node tools/build-raster.js"
+    "build": "node tools/build-raster.js",
+    "pages": "bash tools/publish-pages.sh"
   },
   "devDependencies": {
     "playwright": "1.48.2"
