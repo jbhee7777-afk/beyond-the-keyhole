@@ -121,14 +121,17 @@
       api.after(1900, () => api.say(count <= 1 ? '띵… 한 음만 울리고 멈췄어. 원통에 핀이 거의 없어.' : '띵, 띵… 어딘가 이상한 노래야. 상자도 안 열려.'));
       return;
     }
+    f.tuneRight = true; // 정답은 바로 기록 (끊겨도 repair가 마무리)
     api.after(1900, () => {
       f.boxOpen = true; f.awake = true; game.s.zoom = null; game.s.view = 'north';
-      api.sfx('pop');
+      api.sfx('pop'); window.Sfx && window.Sfx.birthday && window.Sfx.birthday();
+      api.anim('jbox', 'pop-up', 900);
+      api.after(80, () => { api.burst('confetti', 690, 330, 70); api.flash('#fff4e0', 700); });
       api.lock(7600);
       api.say('펑! 깜짝 상자에서 토끼 인형이 튀어나왔어!', 2600);
-      api.after(2600, () => { api.sfx('win'); api.say('모카: “하아암… 이건 내 생일 노래잖아! 깨워 줘서 고마워!”', 3400); });
-      api.after(6000, () => api.say('모카: “문 열쇠가 어디 있냐고? 그건… 당근이지! 히히.”', 3800));
-      api.after(9800, () => { api.give('carrot'); api.say('모카가 꼭 안고 있던 당근 인형을 건네줬어.', 3600); });
+      api.after(2600, () => { api.say('모카: “하아암… 이건 내 생일 노래잖아! 깨워 줘서 고마워!”', 3400, { who: 'mocha' }); });
+      api.after(6000, () => api.say('모카: “문 열쇠가 어디 있냐고? 그건… 당근이지! 히히.”', 4400, { who: 'mocha', note: '모카의 대답' }));
+      api.after(9800, () => { if (!f.carrotGiven) { f.carrotGiven = true; api.give('carrot'); } api.say('모카가 꼭 안고 있던 당근 인형을 건네줬어.', 3600); });
     });
   }
 
@@ -141,6 +144,13 @@
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
     isLit: awake,
+    ambient: (s) => (awake(s) ? 'party' : 'workshop'),
+    repair(s, fix) {
+      const f = s.flags;
+      if (f.mouseFed && !f.crankAttached && !fix.has('crank')) fix.give('crank');
+      if (f.tuneRight && !f.boxOpen) { fix.set('boxOpen'); fix.set('awake'); }
+      if (f.awake && !f.carrotGiven) { fix.set('carrotGiven'); if (!fix.has('key') && !f.doorOpen) fix.give('carrot'); }
+    },
     dim: { color: '#5b4470', opacity: 0.4 },
     guide: { name: '생쥐 찍찍이', img: 'props/mouse_peek' },
     intro: '모카의 장난감 공방에 놀러 왔는데, 모카가 낮잠을 자는 사이 문이 잠겨 버렸어.',
@@ -151,7 +161,7 @@
       crank: { name: '태엽 손잡이', img: 'items/crank', desc: '분홍 손잡이가 달린 작은 쇠 손잡이. 장난감 옆구리 구멍에 꽂아 돌리는 거야.' },
       pins: { name: '시침핀', img: 'items/pins', desc: '머리가 동글동글한 시침핀 한 묶음.' },
       ripper: { name: '실뜯개', img: 'items/ripper', desc: '바느질한 실을 톡톡 뜯을 때 쓰는 도구. 끝이 뾰족하니 조심!' },
-      carrot: { name: '당근 인형', img: 'items/carrot', desc: '폭신한 당근 인형. 등에 바느질 자국이 있고, 안에 뭔가 딱딱한 게 만져져.' },
+      carrot: { name: '당근 인형', img: 'items/carrot', desc: '폭신한 당근 인형. 등에 바느질 자국이 있고, 안에 뭔가 딱딱한 게 만져져.', clue: true },
       key: { name: '당근 열쇠', img: 'items/key', desc: '손잡이가 당근 모양인 열쇠. 어디서 본 모양인데…' },
     },
     combos: [
@@ -161,6 +171,7 @@
     views: {
       /* ───── 북쪽: 모카의 의자와 문 ───── */
       north: {
+        name: '모카의 의자 벽',
         bg: 'bg/north',
         objects: [
           { id: 'portrait', x: 0, y: 0, w: 0, h: 0, img: '', hit: [770, 220, 140, 160], label: '모카 그림', look: '모카의 옆모습 그림. 귀는 쫑긋 위로, 코는 오른쪽, 동그란 꼬리는 왼쪽!' },
@@ -189,6 +200,7 @@
 
       /* ───── 동쪽: 작업대와 그림자 인형극 ───── */
       east: {
+        name: '작업대 벽',
         bg: 'bg/east',
         objects: [
           { id: 'bench', img: 'props/bench', x: 190, y: 390, w: 900, h: 310, hit: [880, 470, 210, 60], look: '나무를 깎고 색칠하는 작업대. 깎다 만 나무 토끼가 있어.' },
@@ -208,6 +220,7 @@
 
       /* ───── 남쪽: 창문과 장난감 선반 ───── */
       south: {
+        name: '장난감 선반 벽',
         bg: 'bg/south',
         objects: [
           { id: 'window', img: 'props/window_day', x: 600, y: 120, w: 400, h: 360, show: awake, look: '창밖에 꽃밭과 언덕이 보여.' },
@@ -227,6 +240,7 @@
 
       /* ───── 서쪽: 재봉틀과 자수 악보 ───── */
       west: {
+        name: '재봉틀 벽',
         bg: 'bg/west',
         objects: [
           { id: 'score', img: 'props/score', x: 650, y: 110, w: 480, h: 270, hit: [656, 156, 316, 214], zoom: 'score', label: '자수 액자' },
@@ -244,6 +258,7 @@
     zooms: {
       note: {
         bg: 'assets/rooms/greenhouse/zoom/paper.svg',
+        note: ['문에 붙은 쪽지', '모카는 낮잠 중. 깨우지 마세요… 단, 생일 노래는 예외! 생일 노래가 들리면 벌떡 일어난다.'],
         text: '<h3>낮잠 중</h3><p>모카는 지금 꿀 같은 낮잠 중이에요.<br>깨우지 마세요!</p><p>…단, <em>생일 노래</em>는 예외예요.<br>생일 노래가 들리면 벌떡 일어날 거예요.</p><p class="sign">— 모카</p>',
       },
       theater: {
@@ -271,7 +286,7 @@
               cheese: (api, n) => {
                 api.take('cheese'); api.set('mouseFed'); api.sfx('squeak');
                 api.say('찍찍이: “치즈다! 고마워요! 이거 아까 주운 건데, 가져가세요.”');
-                api.after(700, () => api.give('crank', n));
+                api.give('crank', n);
               },
             },
             wrong: '찍찍이: “그건 못 먹어요…”',
@@ -295,12 +310,13 @@
           },
           {
             id: 'crankBig', img: 'zoom/crank', x: 1176, y: 360, w: 170, h: 140, show: (s) => !!F(s).crankAttached, label: '태엽 손잡이 돌리기',
-            click: (api, n) => crankTurn(api, window.__game),
+            click: (api, n) => crankTurn(api, api.game),
           },
         ],
       },
       score: {
         bg: 'zoom/score',
+        note: ['모카의 자수 악보', '줄 세 개 위에 빨간 별 여섯 개. 별의 높낮이가 생일 노래의 음이다.'],
         objects: [{ id: 'scoreHit', x: 0, y: 0, w: 0, h: 0, img: '', hit: [260, 190, 1080, 730], look: '모카가 수놓은 생일 노래 악보. 줄 세 개 위에 빨간 별 여섯 개가 높았다 낮았다 해.' }],
       },
       tin: {

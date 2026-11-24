@@ -89,7 +89,8 @@ function bgNorth() {
   o += part([[970, 640], [970, 330], [990, 280], [1040, 250], [1100, 242], [1160, 250], [1210, 280], [1230, 330], [1230, 640]], C.woodD, { sw: 3 });
   // 거꾸로 걸린 그림 (방이 바르게 서야 비로소 바르게 보이는 풍경)
   o += part(rectPts(300, 200, 200, 150), C.wood2, { sw: 2.2, heavy: [1, 2] }) + part(rectPts(312, 212, 176, 126), '#bfe0f0', { sw: 1.4 });
-  o += part([[312, 300], [380, 260], [440, 290], [488, 270], [488, 338], [312, 338]], C.green, { sw: 1.2 }) + cloud(380, 250, 0.4) + dot(450, 236, 12, C.lemon);
+  // 위에서부터 해 → 구름 → 언덕 (레버 단추판의 순서 단서)
+  o += part(ellPts(400, 236, 15, 15, 0, Math.PI * 2, 12), C.lemon, { sw: 1.4 }) + cloud(400, 284, 0.42) + part([[312, 312], [370, 296], [430, 310], [488, 296], [488, 338], [312, 338]], C.green, { sw: 1.2 });
   put('bg/north.svg', W, H, o, { id: 911 });
 }
 function bgEast() {
@@ -99,6 +100,10 @@ function bgEast() {
   o += part(rectPts(190, 170, 300, 470), C.wood2, { sw: 2.4, heavy: [1, 2] }) + part(rectPts(204, 184, 272, 442), '#6a4528', { sw: 1.4 });
   for (const y of [290, 410, 530, 626]) o += part(rectPts(198, y, 284, 12), C.wood, { sw: 1.4 });
   for (const y of [290, 410, 530]) { let x = 212; while (x < 460) { const w = rand(16, 28), h = rand(64, 96); o += part(rectPts(x, y - h, w, h), pick([C.cherry, C.ink2, C.mint, C.lemon2, '#4a7aa8']), { sw: 1.2 }); x += w + rand(1, 4); } }
+  // 벽시계와 뒤죽이 할머니 초상화
+  o += wallClock(1000, 150, 46);
+  o += part(rectPts(570, 120, 150, 180), C.wood2, { sw: 2.2, heavy: [1, 2] }) + part(rectPts(582, 132, 126, 156), '#e8dcc8', { sw: 1.2 }) + `<g transform="translate(565 140) scale(0.85)">${batArt('hang').replace(/<path d="[^"]*" fill="#8a6a4a"[^>]*>/, '')}</g>`;
+  o += part(rectPts(560, 470, 220, 40), C.wood, { sw: 1.6 }) + part([[580, 470], [600, 430], [640, 426], [660, 470]], C.rose, { sw: 1.4 }) + part([[680, 470], [690, 440], [740, 440], [750, 470]], C.mint, { sw: 1.4 });
   // 찻잔 선반
   o += part(rectPts(1130, 280, 260, 14), C.wood, { sw: 1.6 });
   for (let i = 0; i < 4; i++) { const x = 1150 + i * 60; o += part([[x, 280], [x + 36, 280], [x + 32, 254], [x + 4, 254]], pick([C.rose, C.mint, C.cream]), { sw: 1.4 }) + line(ellPts(x + 40, 266, 8, 8, -1.4, 1.4, 6), { sw: 1.8, step: 999 }); }
@@ -106,6 +111,11 @@ function bgEast() {
   o += part([[1260, 640], [1340, 640], [1330, 580], [1270, 580]], C.cherry, { sw: 1.8 });
   for (let i = 0; i < 7; i++) o += leaf(1300, 580, rand(60, 90), -Math.PI / 2 + (i - 3) * 0.3, pick([C.leaf, C.leaf2]), { w: 0.3 });
   put('bg/east.svg', W, H, o, { id: 912 });
+}
+function wallClock(cx, cy, r) {
+  let o = part(ellPts(cx, cy, r + 8, r + 8, 0, Math.PI * 2, 20), C.cherry, { sw: 2, heavy: [2, 8] }) + part(ellPts(cx, cy, r, r, 0, Math.PI * 2, 20), C.cream, { sw: 1.6 });
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; o += line([[cx + Math.sin(a) * r * 0.78, cy - Math.cos(a) * r * 0.78], [cx + Math.sin(a) * r * 0.9, cy - Math.cos(a) * r * 0.9]], { sw: 2 }); }
+  return o + line([[cx, cy], [cx + r * 0.4, cy - r * 0.3]], { sw: 3 }) + line([[cx, cy], [cx - r * 0.1, cy - r * 0.7]], { sw: 2 }) + dot(cx, cy, 3, INK);
 }
 function bgSouth() {
   seed(913);
@@ -124,6 +134,10 @@ function bgWest() {
   o += part(rectPts(1106, 166, 268, 268), '#bfe0f0', { sw: 1.4 });
   o += cloud(1180, 240, 0.7) + cloud(1300, 320, 0.55) + dot(1320, 210, 22, C.lemon) + part([[1106, 380], [1200, 350], [1300, 370], [1374, 350], [1374, 434], [1106, 434]], C.green, { sw: 1 });
   o += line([[1240, 166], [1240, 434]], { sw: 6, color: C.cream }) + line([[1106, 300], [1374, 300]], { sw: 6, color: C.cream });
+  // 모자 걸이와 우산 무늬 액자
+  o += part(rectPts(480, 150, 300, 16), C.wood, { sw: 1.6 });
+  for (const [x, c] of [[520, C.cherry], [620, C.ink2], [720, C.lemon2]]) o += line([[x, 166], [x, 186]], { sw: 3, color: C.brass2 }) + part([[x - 40, 236], [x - 30, 200], [x - 14, 186], [x + 14, 186], [x + 30, 200], [x + 40, 236]], c, { sw: 1.6, heavy: [3, 5] }) + part([[x - 50, 236], [x + 50, 236], [x + 46, 246], [x - 46, 246]], c, { sw: 1.4 });
+  o += part(rectPts(500, 290, 160, 120), C.wood2, { sw: 2 }) + part(rectPts(512, 302, 136, 96), '#bfe0f0', { sw: 1 }) + cloud(560, 340, 0.4) + cloud(610, 370, 0.3) + line([[580, 390], [600, 330]], { sw: 2, color: C.ink2 });
   // 화분과 키 큰 식물
   o += part([[230, 640], [330, 640], [318, 560], [242, 560]], C.lemon2, { sw: 1.8 });
   for (let i = 0; i < 9; i++) o += leaf(280, 560, rand(80, 140), -Math.PI / 2 + (i - 4) * 0.24, pick([C.leaf, C.leaf2]), { w: 0.28 });
@@ -291,5 +305,35 @@ door(false); door(true); umbrellaStand(true); umbrellaStand(false); bat('hang');
 sofa(); frame(false); frame(true); note(); keyGlint(false); keyGlint(true);
 safe(false); safe(true); lever('nohandle'); lever('up'); lever('down');
 zoomSafe(false); zoomSafe(true);
+// 레버 단추판 확대: 위에 판, 가운데 레버, 아래 단추 자리 셋 (단추 그림은 따로)
+function zoomLever() {
+  seed(991);
+  let o = fill(rect(0, 0, W, H, { amp: 0 }), C.sky);
+  for (let y = 100; y < H; y += 140) for (let x = 120 + ((y / 140) % 2) * 120; x < W; x += 240) o += cloud(x, y, 1.1, C.cloud, 0.6);
+  o += part(rectPts(420, 60, 760, 800), C.brass, { sw: 4, heavy: [1, 2], shade: [[960, 50], [1190, 50], [1190, 870], [960, 870]], shadeCol: 'rgba(90,60,10,0.25)' });
+  o += part(rectPts(460, 100, 680, 120), C.cream, { sw: 2 });
+  // 새긴 글 대신 그림 문장: 액자 그림 + 아래로 향한 화살표 (위에서부터 차례로)
+  // 거꾸로 걸린 풍경화(언덕이 위, 해가 아래) → 빙글 화살표 → 아래로 1·2·3 : "바로 세운 그림을 위에서부터"
+  o += part(rectPts(486, 112, 112, 96), C.wood2, { sw: 1.6 }) + part(rectPts(496, 122, 92, 76), '#bfe0f0', { sw: 1 });
+  o += part([[498, 124], [520, 124], [536, 144], [556, 132], [586, 124], [586, 150], [498, 150]], C.green, { sw: 1.2 });
+  o += cloud(542, 168, 0.32, C.cloud, 1);
+  o += part(ellPts(542, 190, 8, 8, 0, Math.PI * 2, 10), C.lemon, { sw: 1.2 });
+  o += `<path d="M612 136 A28 28 0 1 1 612 184" fill="none" stroke="${C.cherry}" stroke-width="5" stroke-linecap="round"/><path d="M600 176 L612 194 L624 174Z" fill="${C.cherry}" stroke="${INK}" stroke-width="1.4"/>`;
+  o += line([[690, 124], [690, 196]], { sw: 5, color: C.cherry }) + `<path d="M674 182 L690 204 L706 182Z" fill="${C.cherry}" stroke="${INK}" stroke-width="1.4"/>`;
+  for (let i = 0; i < 3; i++) o += part(ellPts(780 + i * 110, 160, 26, 26, 0, Math.PI * 2, 12), 'none', { sw: 2, stroke: C.brass2 }) + `<text x="${780 + i * 110}" y="172" font-family="Georgia, serif" font-size="34" text-anchor="middle" fill="${C.brass2}">${i + 1}</text>`;
+  o += part(rectPts(770, 260, 60, 330), '#3a2a1e', { sw: 2 });
+  for (let i = 0; i < 3; i++) o += part(ellPts(560 + i * 240, 720, 86, 86, 0, Math.PI * 2, 20), '#6a6870', { sw: 3 });
+  put('zoom/lever.svg', W, H, o, { id: 991, displace: 3 });
+}
+function leverButton(kind, lit) {
+  seed(992);
+  let o = part(ellPts(80, 80, 72, 72, 0, Math.PI * 2, 20), lit ? '#fff3c4' : C.cream, { sw: 3, heavy: [2, 8] });
+  if (lit) o += `<circle cx="80" cy="80" r="76" fill="#ffe9a8" opacity="0.5" filter="url(#blur)"/>`;
+  if (kind === 'sun') o += part(ellPts(80, 80, 26, 26, 0, Math.PI * 2, 12), C.lemon, { sw: 2 }) + [...Array(10)].map((_, i) => { const a = i * Math.PI / 5; return line([[80 + Math.cos(a) * 34, 80 + Math.sin(a) * 34], [80 + Math.cos(a) * 46, 80 + Math.sin(a) * 46]], { sw: 3, color: C.lemon2 }); }).join('');
+  if (kind === 'cloud') o += cloud(80, 90, 0.95);
+  if (kind === 'hill') o += part([[30, 110], [60, 66], [90, 84], [130, 60], [134, 110]], C.green, { sw: 2 });
+  put(`zoom/btn_${kind}${lit ? '_on' : ''}.svg`, 160, 160, o, { id: 992, displace: 1 });
+}
+zoomLever(); for (const k of ['sun', 'cloud', 'hill']) { leverButton(k, false); leverButton(k, true); }
 items();
 console.log('upside assets written, ~' + Math.round(total / 1024) + 'KB');

@@ -18,7 +18,7 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-upside
   await p.waitForTimeout(1500);
   const shot = async (n) => { await p.waitForTimeout(900); await p.screenshot({ path: OUT + n + '.png' }); };
   // 방이 돌아가 있으므로 force 클릭 대신 실제 화면 위치를 누른다 (돌아간 좌표 확인용)
-  const clickObj = async (label) => { await p.click(`[aria-label="${label}"] >> nth=0`); await p.waitForTimeout(450); };
+  const clickObj = async (label) => { await p.click(`[aria-label="${label}"]:visible, [data-id="${label}"]:visible >> nth=0`); await p.waitForTimeout(450); };
   const sel = async (item) => { await p.click(`.slot[data-item="${item}"]`); await p.waitForTimeout(200); };
   const view = async (v) => { await p.evaluate((v) => window.__game.api.go(v), v); await p.waitForTimeout(500); };
   const back = async () => { await p.click('.nav-back'); await p.waitForTimeout(400); };
@@ -28,7 +28,7 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-upside
   for (const v of ['east', 'south', 'west']) { await p.click('.nav-right'); await shot('02-' + v); }
   await p.click('.nav-right');
   // 1. 액자와 쪽지
-  await view('south'); await clickObj('숫자 액자'); await shot('03-frame'); await back();
+  await view('south'); await clickObj('숫자 액자'); await shot('03-frame'); await p.click('.turn-btn'); await shot('03b-frame-turned'); await back();
   await clickObj('쪽지'); await back();
   await (await visible('사과')).click(); await p.waitForTimeout(500);
   // 2. 금고 819
@@ -41,7 +41,12 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-upside
   await sel('tomato'); await (await visible('박쥐 뒤죽이')).click(); await p.waitForTimeout(2200);
   // 4. 레버
   await view('west'); await sel('handle'); await clickObj('뒤집기 레버'); await shot('06a-lever');
-  await clickObj('뒤집기 레버'); await p.waitForTimeout(1200); await shot('06b-flipping'); await p.waitForTimeout(2400); await shot('06c-flipped');
+  await clickObj('뒤집기 레버'); await shot('06a2-lever-zoom');
+  await clickObj('레버 손잡이 당기기'); await p.waitForTimeout(400);
+  await clickObj('구름 단추'); await shot('06a3-wrong');
+  for (const b of ['해 단추', '구름 단추', '언덕 단추']) await clickObj(b);
+  await shot('06a4-panel-ok');
+  await clickObj('레버 손잡이 당기기'); await p.waitForTimeout(1200); await shot('06b-flipping'); await p.waitForTimeout(2400); await shot('06c-flipped');
   // 5. 우산 → 소파 밑 열쇠
   await view('north'); await shot('07-north-upright'); await clickObj('우산꽂이'); await p.waitForTimeout(600);
   await view('south'); await shot('08-south-upright'); await sel('umbrella'); await (await visible('소파 밑 열쇠')).click(); await p.waitForTimeout(700);

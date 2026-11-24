@@ -473,5 +473,24 @@ mirror(false); mirror(true); desk();
 trunk(false); trunk(true); stand(false); stand(true); candleGlow(); ghost('talk'); ghost('happy'); ghost('shy');
 put('props/ghost_icon.svg', 130, 120, ghostIconArt(), { id: 790, displace: 0.8 });
 zoomClock(false); zoomClock(true); zoomMirror(false); zoomMirror(true); zoomGlow(); zoomTrunkLock(); lockParts(); zoomTrunkOpen(); zoomDrawer();
+function extras() {
+  seed(806);
+  // 회중시계: 바늘 두 개, 얼굴(문자판)은 있지만 웃지 않음
+  put('items/watch.svg', 160, 160, line(ellPts(80, 30, 14, 14, Math.PI, Math.PI * 2.05, 10), { sw: 5, color: C.brass2, step: 999 }) + part(ellPts(80, 92, 58, 58, 0, Math.PI * 2, 22), C.brass, { sw: 2.6, heavy: [2, 8] }) + clockFace(80, 92, 46, { h: 10, m: 10, slot: null }) + part(rectPts(72, 26, 16, 12), C.brass2, { sw: 1.4 }), { id: 806, displace: 1 });
+  // 실패와 바늘 (바느질을 할 수 있는 바늘!)
+  put('items/spool.svg', 160, 160, part([[44, 40], [116, 40], [112, 54], [48, 54]], C.wood, { sw: 1.8 }) + part([[52, 54], [108, 54], [108, 112], [52, 112]], '#7a4a8a', { sw: 1.8, heavy: [1, 2] }) + [0, 1, 2, 3, 4, 5].map((k) => line([[54, 62 + k * 8], [106, 60 + k * 8]], { sw: 1, color: '#5a3268', op: 0.8 })).join('') + part([[44, 112], [116, 112], [112, 126], [48, 126]], C.wood, { sw: 1.8 }) + line([[118, 20], [96, 108]], { sw: 3, color: C.grey }) + dot(118, 22, 3, '#fff') + line([[106, 70], [128, 50], [118, 24]], { sw: 1.4, color: '#7a4a8a' }), { id: 807, displace: 1 });
+  put('items/smallkey.svg', 160, 160, `<g transform="rotate(-35 80 80)">${part(ellPts(80, 46, 18, 18, 0, Math.PI * 2, 12), C.copper, { sw: 2 })}${part(ellPts(80, 46, 7, 7, 0, Math.PI * 2, 8), '#2a1e16', { sw: 1 })}${part([[75, 62], [85, 62], [85, 130], [75, 130]], C.copper, { sw: 1.8 })}${part([[85, 112], [98, 112], [98, 120], [85, 120]], C.copper, { sw: 1.2 })}</g>`, { id: 808, displace: 1 });
+  // 작은 열쇠를 거미줄에 매단 거미
+  seed(809);
+  let o = line([[20, 0], [20, 40]], { sw: 1, color: C.web, op: 0.8 });
+  o += part(ellPts(20, 50, 9, 10, 0, Math.PI * 2, 12), '#2a2030', { sw: 1.2 });
+  for (const sx of [-1, 1]) for (let k = 0; k < 4; k++) o += line([[20 + sx * 6, 46 + k * 3], [20 + sx * 14, 40 + k * 6], [20 + sx * 18, 48 + k * 6]], { sw: 1.2 });
+  o += dot(16, 48, 2.2, '#fff') + dot(24, 48, 2.2, '#fff') + dot(16, 48, 1, INK) + dot(24, 48, 1, INK) + line([[17, 54], [20, 56], [23, 54]], { sw: 0.8, color: '#fff' });
+  o += line([[20, 60], [22, 84]], { sw: 1, color: C.web }) + `<g transform="translate(6 76) scale(0.22)">${part(ellPts(80, 46, 18, 18, 0, Math.PI * 2, 12), C.copper, { sw: 6 })}${part([[75, 62], [85, 62], [85, 130], [75, 130]], C.copper, { sw: 5 })}</g>`;
+  put('props/spider_key.svg', 40, 120, o, { id: 809, displace: 0.6 });
+  // 잠긴 책상 서랍 자물쇠판
+  put('props/drawer_lock.svg', 60, 50, part(rectPts(6, 6, 48, 38), C.copper, { sw: 1.6 }) + part(ellPts(30, 22, 6, 6, 0, Math.PI * 2, 8), '#2a1e16', { sw: 1 }) + part([[27, 26], [33, 26], [32, 36], [28, 36]], '#2a1e16', { sw: 0.8 }), { id: 810, displace: 0.6 });
+}
+extras();
 items();
 console.log('clock13 assets written, ~' + Math.round(total / 1024) + 'KB');

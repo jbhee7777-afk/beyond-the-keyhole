@@ -47,6 +47,21 @@ seed(307);
 const petals = [...Array(16)].map((_, i) => { const a = i * Math.PI / 8; return shape(wob([[60 + Math.cos(a) * 30, 60 + Math.sin(a) * 30], [60 + Math.cos(a + 0.18) * 52, 60 + Math.sin(a + 0.18) * 52], [60 + Math.cos(a) * 58, 60 + Math.sin(a) * 58], [60 + Math.cos(a - 0.18) * 52, 60 + Math.sin(a - 0.18) * 52]], { step: 999, amp: 0.6 }), i % 2 ? '#e59d1d' : '#f3bf30', { sw: 1.6 }); }).join('');
 svg(OUT + 'seal.svg', 120, 120, petals + shape(ell(60, 60, 30, 30), '#5a3518', { sw: 2 }) + shape(ell(60, 56, 9, 9), '#1d140c', { sw: 1 }) + shape(wob([[56, 58], [64, 58], [67, 76], [53, 76]]), '#1d140c', { sw: 1 }), { id: 307 });
 
+// 돋보기
+seed(308);
+svg(OUT + 'lens.svg', 120, 120, line([[74, 74], [104, 104]], { sw: 12, color: '#6b4a2a' }) + line([[74, 74], [104, 104]], { sw: 4, color: '#8a6a3a', op: 0.6 }) + shape(ell(52, 52, 32, 32), '#dfeeee', { sw: 4 }) + shape(ell(52, 52, 32, 32), 'none', { sw: 6, stroke: '#c9a24a' }) + line([[36, 44], [46, 32]], { sw: 4, color: '#fff' }), { id: 308 });
+// 단서 수첩
+seed(309);
+svg(OUT + 'notes.svg', 120, 120, shape(wob([[26, 18], [96, 14], [100, 104], [28, 108]]), '#e9d9ae', { sw: 3 }) + shape(wob([[26, 18], [40, 18], [42, 108], [28, 108]]), '#a8402f', { sw: 2 }) + line([[52, 40], [88, 38]], { sw: 2.4, op: 0.7 }) + line([[52, 56], [86, 54]], { sw: 2.4, op: 0.7 }) + line([[52, 72], [80, 70]], { sw: 2.4, op: 0.7 }) + shape(ell(84, 88, 7, 7), '#d4a649', { sw: 1.4 }), { id: 309 });
+// 설정 (톱니)
+seed(310);
+{ const pts = []; for (let i = 0; i < 20; i++) { const a = i * Math.PI / 10; const r = i % 2 ? 44 : 34; pts.push([60 + Math.cos(a) * r, 60 + Math.sin(a) * r]); }
+  svg(OUT + 'gear.svg', 120, 120, shape(wob(pts, { sharp: true, amp: 0.6 }), '#d4a649', { sw: 3 }) + shape(ell(60, 60, 14, 14), '#efe2c2', { sw: 2.4 }), { id: 310 }); }
+// 이야기 열쇠 (표지에서 모은 열쇠를 보여 줌)
+seed(311);
+svg(OUT + 'storykey.svg', 120, 120, `<g transform="rotate(-35 60 60)">${shape(ell(60, 30, 20, 20), '#d4a649', { sw: 3 })}${shape(ell(60, 30, 8, 8), '#2a1e16', { sw: 1.4 })}${shape(wob([[54, 48], [66, 48], [66, 104], [54, 104]], { sharp: true }), '#d4a649', { sw: 2.6 })}${shape(wob([[66, 84], [80, 84], [80, 94], [66, 94]], { sharp: true }), '#d4a649', { sw: 2 })}${shape(wob([[66, 98], [76, 98], [76, 104], [66, 104]], { sharp: true }), '#d4a649', { sw: 1.6 })}</g>`, { id: 311 });
+svg(OUT + 'storykey_empty.svg', 120, 120, `<g transform="rotate(-35 60 60)" opacity="0.35">${shape(ell(60, 30, 20, 20), 'none', { sw: 3, stroke: '#efe2c2' })}${shape(wob([[54, 48], [66, 48], [66, 104], [54, 104]], { sharp: true }), 'none', { sw: 2.6, stroke: '#efe2c2' })}</g>`, { id: 311 });
+
 // 커서: 잉크 손가락 (필터 없이 깔끔하게)
 const hand = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M10 2.5c1.6 0 2.4 1 2.4 2.6v8.2l1.2-.3c.2-1.3 1-2 2.2-2s2 .7 2.2 1.8c.5-.8 1.2-1.1 2.1-1.1 1.2 0 2 .8 2.2 2 .5-.5 1.1-.7 1.8-.7 1.3 0 2.2 1 2.2 2.6v5.2c0 4.6-3 8.2-7.8 8.2h-2.1c-2.6 0-4.4-1-5.9-3.1L6.2 20c-.9-1.3-.7-2.6.3-3.3 1-.7 2.3-.4 3.1.6l-1.9-.1V5.1C7.7 3.5 8.5 2.5 10 2.5z" fill="#f5ead0" stroke="#2a1f16" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
 writeFileSync(OUT + 'cursor_hand.svg', hand);

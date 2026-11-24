@@ -20,7 +20,7 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html');
   await p.click('.chapter');
   await p.waitForTimeout(1500);
   const shot = async (n) => { await p.waitForTimeout(900); await p.screenshot({ path: OUT + n + '.png' }); };
-  const clickObj = async (label) => { await p.click(`[aria-label="${label}"]`, { force: true }); await p.waitForTimeout(450); };
+  const clickObj = async (label) => { await p.click(`[aria-label="${label}"]:visible, [data-id="${label}"]:visible >> nth=0`, { force: true }); await p.waitForTimeout(450); };
   const sel = async (item) => { await p.click(`.slot[data-item="${item}"]`); await p.waitForTimeout(200); };
   const view = async (v) => { await p.evaluate((v) => window.__game.api.go(v), v); await p.waitForTimeout(500); };
 

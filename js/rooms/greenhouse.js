@@ -24,7 +24,7 @@
       if (here) {
         api.lock(2600);
         api.say('씨앗 + 물 + 햇빛! 싹이 트더니… 쑥쑥쑥!', 4200);
-        api.after(30, () => api.anim('flower', 'grow', 2600));
+        api.after(30, () => { api.anim('flower', 'grow', 2600); api.burst('spark', 1110, 300, 30); });
       } else {
         api.say('북쪽 어딘가에서 쑥쑥 자라는 소리가 들려!', 4200);
       }
@@ -81,6 +81,14 @@
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
     isLit: lit,
+    dim: { color: '#22304f', opacity: 0.5 },
+    ambient: (s) => (lit(s) ? 'garden' : 'night'),
+    // 연출 도중 끊겼을 때 중간 상태를 마무리
+    repair(s, fix) {
+      const f = s.flags;
+      if (f.roosterUsed && !f.sun) fix.set('sun');
+      if (f.seeded && f.watered && f.sun && !f.grown) fix.set('grown');
+    },
     guide: { name: '달팽이 정원사 소소', img: 'props/snail' },
     intro: '해님이 잠든 온실에 갇혀 버렸어. 벽마다 무언가 숨어 있을 거야. (화살표로 벽을 돌아볼 수 있어)',
 
@@ -105,6 +113,7 @@
     views: {
       /* ───── 북쪽: 출입문 ───── */
       north: {
+        name: '문 쪽 벽',
         bg: 'bg/north',
         objects: [
           { id: 'cast', img: 'bg/cast_north', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
@@ -159,7 +168,7 @@
           },
           {
             id: 'snail', img: 'props/snail', x: 1250, y: 410, w: 130, h: 106, cls: 'bob', label: '달팽이 정원사',
-            click: (api) => { api.sfx('tap'); window.__game && window.__game.openHint(); },
+            click: (api) => { api.sfx('tap'); api.hint(); },
           },
           { id: 'fg', img: 'bg/fg_north', x: 0, y: 0, w: 1600, h: 900, cls: 'fg' },
         ],
@@ -167,10 +176,11 @@
 
       /* ───── 동쪽: 작업대 ───── */
       east: {
+        name: '작업대 벽',
         bg: 'bg/east',
         objects: [
           { id: 'cast', img: 'bg/cast_east', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
-          { id: 'shelf', img: 'props/shelf', x: 300, y: 160, w: 460, h: 150, hit: [300, 160, 150, 120], look: '선인장과 분홍 꽃 화분. 가운데 화분만 유난히 앞으로 나와 있어.' },
+          { id: 'shelf', img: 'props/shelf', x: 300, y: 160, w: 460, h: 150, hit: [300, 160, 150, 120], look: (s) => (F(s).potTilted ? '선인장과 분홍 꽃 화분. 가운데 화분은 비스듬히 기울어 있어.' : '선인장과 분홍 꽃 화분. 가운데 화분만 유난히 앞으로 나와 있어.') },
           { id: 'shelf2', hit: [610, 160, 150, 120], x: 0, y: 0, w: 0, h: 0, img: '', look: '분홍 꽃이 시들시들해.' },
           {
             id: 'potmid', img: (s) => (F(s).potTilted ? 'props/potmid_tilt' : 'props/potmid'), x: 470, y: 148, w: 110, h: 120, label: '가운데 화분',
@@ -198,6 +208,7 @@
 
       /* ───── 남쪽: 해님 기계 ───── */
       south: {
+        name: '해님 기계 벽',
         bg: 'bg/south',
         objects: [
           { id: 'cast', img: 'bg/cast_south', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
@@ -207,9 +218,9 @@
             look: (s) => (lit(s) ? '해님: “잘 잤다! 깨워 줘서 고마워!”' : '쿨… 쿨… 해님이 수면 모자를 쓰고 깊이 잠들어 있어.'),
             use: {
               rooster_wound: (api) => {
-                api.take('rooster_wound'); api.lock(3200);
+                api.take('rooster_wound'); api.set('roosterUsed'); api.lock(3200);
                 api.sfx('rooster'); api.say('꼬—끼—오——!!', 2400);
-                api.after(1500, () => { api.set('sun'); api.sfx('sunrise'); api.say('해님이 번쩍 눈을 떴어! 온실 가득 햇살이 쏟아져.', 4800); tryGrow(api, false); });
+                api.after(1500, () => { api.set('sun'); api.sfx('sunrise'); api.flash('#fff3c0', 1400); api.burst('spark', 800, 280, 40); api.anim('sun', 'talk', 1600); api.say('해님이 번쩍 눈을 떴어! 온실 가득 햇살이 쏟아져.', 4800); tryGrow(api, false); });
               },
               rooster: (api) => api.say('양철 수탉이 조용해. 태엽을 감아야 울 것 같아.'),
               mirror: (api) => api.say('거울에 해님 얼굴이 비쳐. 그래도 쿨쿨 자고 있어.'),
@@ -223,6 +234,7 @@
 
       /* ───── 서쪽: 빗물통과 새장 ───── */
       west: {
+        name: '빗물통 벽',
         bg: 'bg/west',
         objects: [
           { id: 'cast', img: 'bg/cast_west', x: 0, y: 0, w: 1600, h: 900, show: lit, cls: 'cast' },
@@ -252,10 +264,12 @@
     zooms: {
       note_door: {
         bg: 'zoom/paper',
+        note: ['문에 꽂힌 쪽지', '해님이 깨어나야 꽃이 자라고 문이 열린다. 문 열쇠는 해님을 꼭 닮은 꽃이 지킨다.'],
         text: '<h3>온실에 온 손님에게</h3><p>이 온실의 해님이 그만 깊이 잠들어 버렸어요.</p><p>해님이 깨지 않으면 꽃도 자라지 않고,<br>이 문도 열리지 않는답니다.</p><p>문 열쇠는 <em>해님을 꼭 닮은 꽃</em>이 지키고 있어요.</p><p class="sign">— 달팽이 정원사 소소</p>',
       },
       note_sun: {
         bg: 'zoom/paper',
+        note: ['해님 깨우는 방법', '해님의 알람시계는 누구? 날개가 있지만 멀리 못 날고, 머리에 빨간 왕관을 썼다.'],
         text: '<h3>해님 깨우는 방법</h3><p>우리 해님은 소문난 잠꾸러기예요.</p><p>그래도 매일 아침 <em>이 친구</em>가 노래하면<br>번쩍 눈을 뜬답니다.</p><p class="riddle">수수께끼: 해님의 알람시계는 누구일까요?<br>날개가 있지만 멀리 날지 못하고,<br>머리에 빨간 왕관을 썼어요.</p>',
       },
       plaque: {
@@ -264,7 +278,7 @@
           { id: 'reflect', img: 'zoom/mirror_reflect', x: 1040, y: 150, w: 520, h: 720, show: (s) => !!F(s).mirrorUsed, cls: 'rise', look: '거울 속에서는 숫자가 바르게 보여. 3 · 5 · 2!' },
           { id: 'plaqueHit', x: 0, y: 0, w: 0, h: 0, img: '', hit: [170, 180, 830, 480], label: '액자',
             look: (s) => (F(s).mirrorUsed ? '거울 속 숫자는 3, 5, 2.' : '숫자가 거울에 비친 것처럼 좌우로 뒤집혀 있어. 구석에 작은 손거울 그림이 있네.'),
-            use: { mirror: (api) => { api.set('mirrorUsed'); api.sfx('shine'); api.say('손거울을 비춰 보니… 숫자가 바르게 보여!'); } },
+            use: { mirror: (api) => { api.set('mirrorUsed'); api.sfx('shine'); api.say('손거울을 비춰 보니… 숫자가 바르게 보여! 3 · 5 · 2', 4000); api.note('거울에 비친 액자 숫자', '거울 속에서는 3 · 5 · 2 로 바르게 읽힌다.'); } },
           },
         ],
       },
@@ -292,8 +306,9 @@
             use: {
               magnet_line: (api, n) => {
                 api.sfx('splash'); api.lock(1200);
-                api.say('자석 낚싯줄을 스르르 내렸더니…');
-                api.after(1100, () => { api.set('windkeyTaken'); api.give('windkey', n); api.sfx('clink'); api.say('철컥! 태엽 열쇠가 자석에 붙어 올라왔어.'); });
+                api.set('windkeyTaken'); api.give('windkey', n);
+                api.say('자석 낚싯줄을 스르르 내렸더니… 철컥! 태엽 열쇠가 자석에 붙어 올라왔어.');
+                api.after(600, () => api.sfx('clink'));
               },
               magnet: (api) => api.say('자석만 던지면 물속으로 사라질 거야. 줄에 매달아야 해.'),
               wcan: (api) => { api.swap('wcan', 'wcan_full'); api.sfx('water'); api.say('빗물을 가득 채웠어.'); },

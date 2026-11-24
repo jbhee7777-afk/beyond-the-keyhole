@@ -40,10 +40,10 @@
 
   function postLetter(api, game) {
     api.take('letter_ready'); api.set('posted');
-    api.lock(8400); api.sfx('splash');
+    api.lock(8400); api.sfx('splash'); api.burst('bubble', 1150, 420, 30);
     api.say('쉬이익— 편지가 거품을 타고 유리관 위로 쏙 올라갔어!', 3000);
-    api.after(2600, () => { api.set('whale'); api.sfx('sunrise'); api.say('우우웅— 남쪽 창밖에서 커다란 고래 노랫소리가 들려!', 3200); });
-    api.after(5600, () => { api.set('elevatorOpen'); api.sfx('door'); api.say('팔방이: “고래 택배가 편지를 받아 갔어요! 고마워요. 수면 엘리베이터를 열어 줄게요!”', 4600); });
+    api.after(2600, () => { api.set('whale'); api.sfx('sunrise'); api.burst('bubble', 800, 300, 24); api.say('우우웅— 남쪽 창밖에서 커다란 고래 노랫소리가 들려!', 3200); });
+    api.after(5600, () => { api.set('elevatorOpen'); api.sfx('door'); api.say('팔방이: “고래 택배가 편지를 받아 갔어요! 고마워요. 수면 엘리베이터를 열어 줄게요!”', 4600, { who: 'octo' }); });
   }
 
   Engine.registerRoom({
@@ -55,7 +55,13 @@
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
     isLit: lamps,
-    dim: { color: '#0a2230', opacity: 0.55 },
+    dim: { color: '#0a2230', opacity: 0.42 },
+    ambient: () => 'sea',
+    repair(s, fix) {
+      const f = s.flags;
+      if (f.gotLetter && !f.letterGiven) { f.letterGiven = true; if (!f.posted && !fix.has('letter_addr') && !fix.has('letter_ready')) fix.give('letter'); }
+      if (f.posted) { fix.set('whale'); fix.set('elevatorOpen'); }
+    },
     dimLit: { color: '#123a48', opacity: 0.2 },
     guide: { name: '문어 우체국장 팔방이', img: 'props/octo_icon' },
     intro: '보글보글… 바닷속 우체국이야. 창구에서 문어 우체국장이 손짓하고 있어.',
@@ -75,7 +81,7 @@
     },
     combos: [
       { a: 'address', b: 'letter', result: 'letter_addr', say: '편지에 주소 스티커를 착! 「바다 고등학교 58번」.' },
-      { a: 'stamp_mackerel', b: 'letter_addr', result: 'letter_ready', say: '고등어 우표 착! 고등어는 “고등”학교에 딱이지!' },
+      { a: 'stamp_mackerel', b: 'letter_addr', result: 'letter_ready', say: '고등어 우표 착! 고등어는 “고등”학교에 딱이지! 남은 우표는 서랍에 도로 넣었어.', after: (api) => { api.take('stamp_anchovy'); api.take('stamp_saury'); api.flags.st1 = api.flags.st3 = false; } },
       { a: 'stamp_anchovy', b: 'letter_addr', say: '멸치 우표는 학교 이름이랑 안 어울려. 받는 곳이 어디였지?' },
       { a: 'stamp_saury', b: 'letter_addr', say: '꽁치 우표는 학교 이름이랑 안 어울려. 받는 곳이 어디였지?' },
       { a: 'stamp_mackerel', b: 'letter', say: '우표보다 주소가 먼저야. 어디로 보내는지 모르잖아.' },
@@ -87,6 +93,7 @@
     views: {
       /* ───── 북쪽: 창구, 문어 우체국장, 거품 우편관, 엘리베이터 ───── */
       north: {
+        name: '우체국 창구',
         bg: 'bg/north',
         objects: [
           { id: 'parcels', x: 0, y: 0, w: 0, h: 0, img: '', hit: [200, 220, 460, 96], look: '빨간 끈으로 묶은 소포들. 바다 곳곳으로 갈 거래.' },
@@ -97,9 +104,9 @@
               const f = api.flags, has = (i) => api.s.inv.includes(i);
               api.sfx('whisper');
               if (!f.gotLetter) {
-                f.gotLetter = true; api.lock(5200);
-                api.say('팔방이: “어서 와요! 나는 우체국장 팔방이. 이 거품 편지 좀 봐요, 주소가 물에 번져서 지워졌지 뭐예요.”', 5200);
-                api.after(5200, () => { api.give('letter', n); api.say('팔방이: “받는 사람 목소리는 서쪽 소라 껍데기에 담겨 있대요. 배달해 주면 수면 엘리베이터를 열어 줄게요!”', 6000); });
+                f.gotLetter = true; f.letterGiven = true; api.give('letter', n); api.lock(5200);
+                api.say('팔방이: “어서 와요! 나는 우체국장 팔방이. 이 거품 편지 좀 봐요, 주소가 물에 번져서 지워졌지 뭐예요.”', 5200, { who: 'octo' });
+                api.after(5200, () => api.say('팔방이: “받는 사람 목소리는 서쪽 소라 껍데기에 담겨 있대요. 배달해 주면 수면 엘리베이터를 열어 줄게요!”', 6000, { who: 'octo', note: '팔방이의 부탁' }));
                 return;
               }
               if (f.elevatorOpen) { api.say('팔방이: “고마워요! 엘리베이터를 타면 바다 위로 올라갈 수 있어요.”'); return; }
@@ -138,6 +145,7 @@
 
       /* ───── 동쪽: 우편함 벽과 해파리 등불 ───── */
       east: {
+        name: '우편함 벽',
         bg: 'bg/east',
         objects: [
           { id: 'boxes', x: 0, y: 0, w: 0, h: 0, img: '', hit: [320, 150, 960, 400], zoom: 'boxes', label: '우편함 벽' },
@@ -145,7 +153,7 @@
           { id: 'jellyR', img: (s) => (lamps(s) ? 'props/jelly_on' : 'props/jelly_off'), x: 1290, y: 90, w: 140, h: 230, cls: 'bob', look: (s) => (lamps(s) ? '해파리가 보랏빛으로 은은하게 빛나.' : '병 속 해파리가 잠들어 있어.') },
           {
             id: 'cord', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1330, 330, 60, 130], label: '등불 끈',
-            click: (api) => { if (api.flags.lampsOn) { api.say('해파리 등불이 환하게 켜져 있어.'); return; } api.set('lampsOn'); api.sfx('shine'); api.say('끈을 톡 당기자 해파리들이 깨어나 보랏빛으로 빛나! 우편함 번호가 보여.', 4200); },
+            click: (api) => { if (api.flags.lampsOn) { api.say('해파리 등불이 환하게 켜져 있어.'); return; } api.set('lampsOn'); api.sfx('shine'); api.burst('spark', 1360, 300, 20); api.say('끈을 톡 당기자 해파리들이 깨어나 보랏빛으로 빛나! 우편함 번호가 보여.', 4200); },
           },
           { id: 'glowJ', img: 'bg/jellyglow_east', x: 0, y: 0, w: 1600, h: 900, cls: 'glow', show: lamps },
           { id: 'caustic', img: 'bg/caustics', x: 0, y: 0, w: 1600, h: 900, cls: 'caustic' },
@@ -154,6 +162,7 @@
 
       /* ───── 남쪽: 큰 둥근 창, 산호, 물고기 그림자 ───── */
       south: {
+        name: '둥근 창 벽',
         bg: 'bg/south',
         objects: [
           {
@@ -168,6 +177,7 @@
 
       /* ───── 서쪽: 소라 선반, 낚싯바늘, 미역 줄, 우표 책상 ───── */
       west: {
+        name: '우표 책상 벽',
         bg: 'bg/west',
         objects: [
           { id: 'conch', img: 'props/conch', x: 330, y: 290, w: 160, h: 120, label: '소라 껍데기', click: (api) => { api.set('conchHeard'); api.sfx('whisper'); api.zoom('conch'); } },
@@ -183,7 +193,8 @@
     zooms: {
       conch: {
         bg: 'assets/rooms/greenhouse/zoom/paper.svg',
-        text: '<h3>소라 속 작은 목소리</h3><p>(귀를 대 보니 보글보글 목소리가 들려요)</p><p>“나는 바다 고등학교 우편함지기예요.<br>우리 우편함 번호는<br><em>불가사리 팔 개수</em>, 그다음 <em>문어 다리 개수</em>예요.”</p>',
+        text: '<h3>소라 속 작은 목소리</h3><p>(귀를 대 보니 보글보글 목소리가 들려요)</p><p>“나는 바다 고등학교 우편함지기예요.<br>우리 우편함 번호는 두 자리예요.<br>앞자리에 <em>불가사리 팔 개수</em>,<br>뒷자리에 <em>문어 다리 개수</em>를 나란히 써요.<br>더하면 안 돼요!”</p>',
+        note: ['소라 속 목소리', '우편함 번호 = 앞자리 불가사리 팔 개수, 뒷자리 문어 다리 개수 (나란히 쓰기, 더하지 않기)'],
       },
       boxes: { bg: (s) => (lamps(s) ? 'zoom/boxes' : 'zoom/boxes_dark'), widget: boxesWidget, dimLit: 0.05 },
       box58: {
@@ -245,6 +256,7 @@
       title: '다섯 개의 문을 모두 지나서',
       text: ['고래가 편지를 싣고 바다 위로 헤엄쳐 갔어요. 엘리베이터가 보글보글 거품을 타고 올라가요.', '수면 위로 나오자 햇살이 반짝— 저 멀리 온실 지붕이 보여요. 해님이 손을 흔들고, 모카와 찍찍이, 똑딱이와 뒤죽이, 팔방이가 모두 인사를 해요.', '열쇠 구멍 너머의 다섯 방을 모두 탈출했어요. 정말 멋졌어요!'],
       next: '모든 이야기 끝 · 책장을 덮고 다시 처음부터 놀 수 있어요',
+      image: 'assets/ui/finale.svg',
     },
   });
 })();
