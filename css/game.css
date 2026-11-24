@@ -400,3 +400,6 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 
 /* 숫자 바퀴가 맞는 숫자에 오면 */
 .dial.right span { color: #8f6d28; text-shadow: 0 0 14px rgba(240, 200, 90, 0.9); }
+/* 거꾸로 붙은(rot180) 캐릭터: 말하기 들썩임이 회전 중심을 바꾸지 않게, 눈 깜빡임도 같이 뒤집기 */
+.obj.rot180.talk img { transform-origin: 50% 50%; }
+.obj.rot180 img.blink-lid, .obj.rot180.bob img.blink-lid { transform: rotate(180deg); animation: blinkLid 4.4s steps(1, end) infinite; }
