@@ -31,4 +31,4 @@
 3. 가방 속 물건끼리 합칠 수도 있어요.
 4. 막히면 왼쪽 위 달팽이를 눌러 힌트를 받아요.
 
-👉 지금 해 보기: (여기에 공개 링크)
+👉 지금 해 보기: https://claude.ai/artifact/9Sw81CSoFVUwkWgHcTECQv
