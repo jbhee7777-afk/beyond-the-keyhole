@@ -55,7 +55,7 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .holding .clickable { cursor: crosshair; }
 
 /* ── 빛 ── */
-.dim { background: var(--night); mix-blend-mode: multiply; opacity: var(--dim-op, 0.62); transition: opacity 3.2s ease; }
+.dim { background: var(--night); mix-blend-mode: multiply; opacity: var(--dim-op, 0.62); transition: opacity 3.2s ease, background-color 3.2s ease; }
 .is-lit .dim { opacity: 0; }
 .beams { mix-blend-mode: screen; opacity: 0; transition: opacity 3.6s ease 0.4s; }
 .is-lit .beams { opacity: 1; }
@@ -253,3 +253,18 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .pin-cell img { position: absolute; left: 10px; top: 18px; width: 60px; height: 70px; pointer-events: none; animation: fadeIn 0.2s ease; }
 .rock img { animation: rock 4s ease-in-out infinite; transform-origin: 50% 95%; }
 @keyframes rock { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+
+/* ── 3장: 야광 글씨 · 트렁크 시계 자물쇠 · 시계추 ── */
+.zoom-text.glow { color: #c9ffe9; text-shadow: 0 0 8px rgba(120, 255, 200, 0.9), 0 0 22px rgba(80, 220, 170, 0.6); font-family: var(--f-title); font-size: 46px; line-height: 1.5; text-align: center; left: 300px; width: 1000px; top: 300px; }
+.zoom-text.glow .sign { font-size: 32px; }
+.clock-lock { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.clock-lock .hand { position: absolute; transform-origin: 50% 100%; pointer-events: none; transition: transform 0.25s ease; }
+.clock-lock .knob { position: absolute; width: 150px; height: 150px; border: 0; padding: 0; background: none; cursor: var(--cursor); pointer-events: auto; }
+.clock-lock .knob img { width: 100%; height: 100%; transition: transform 0.25s ease; }
+.clock-lock .knob:hover img { transform: rotate(20deg); }
+.swing img { animation: swing 1.6s ease-in-out infinite; transform-origin: 50% 0; }
+@keyframes swing { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+.float img { animation: float 4.8s ease-in-out infinite; }
+@keyframes float { 50% { transform: translate(6px, -10px) rotate(1.5deg); } }
+.flicker img { animation: flicker 2.2s ease-in-out infinite; }
+@keyframes flicker { 0%, 100% { opacity: 1; } 40% { opacity: 0.86; } 60% { opacity: 0.95; } 80% { opacity: 0.82; } }

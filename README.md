@@ -15,13 +15,19 @@
 |---|---|---|---|
 | ![](screenshots/2-01-north.jpg) | ![](screenshots/2-04b-theater-solved.jpg) | ![](screenshots/2-08b-jbox-pins.jpg) | ![](screenshots/2-09b-awake.jpg) |
 
+**3장 열세 번째 시계**
+
+| 잠긴 다락방 | 달빛과 야광 글씨 | 거울 속 시계 | 그림자 유령 똑딱이 |
+|---|---|---|---|
+| ![](screenshots/3-01-north.jpg) | ![](screenshots/3-03-east-moon.jpg) | ![](screenshots/3-06b-mirror.jpg) | ![](screenshots/3-08b-ghost-riddle.jpg) |
+
 ## 지금 상태
 
 | 장 | 제목 | 분위기 | 상태 |
 |---|---|---|---|
 | 1장 | 햇살이 멈춘 온실 | 밝고 따뜻한 | **플레이 가능** (처음부터 탈출까지) |
 | 2장 | 토끼의 장난감 공방 | 귀엽고 아기자기한 | **플레이 가능** (처음부터 탈출까지) |
-| 3장 | 열세 번째 시계 | 은은하게 오싹한 | 퍼즐 설계만 있음 |
+| 3장 | 열세 번째 시계 | 은은하게 오싹한 | **플레이 가능** (처음부터 탈출까지) |
 | 4장 | 거꾸로 된 세상 | 기발하고 초현실적인 | 퍼즐 설계만 있음 |
 | 5장 | 바닷속 우체국 | 신비롭고 몽환적인 | 퍼즐 설계만 있음 |
 
@@ -56,11 +62,12 @@ js/engine.js            포인트 앤 클릭 엔진 (방 데이터를 읽어서 
 js/audio.js             효과음 (Web Audio 합성, 파일 없음)
 js/rooms/greenhouse.js  1장 방 데이터: 오브젝트 배치, 퍼즐, 힌트
 js/rooms/toyshop.js     2장 방 데이터 (그림자 인형극·오르골 위젯 포함)
+js/rooms/clock13.js     3장 방 데이터 (트렁크 시계 자물쇠 위젯 포함)
 js/main.js              표지·장 선택
 assets/rooms/<방>/      bg(배경) · props(소품) · items(아이템) · zoom(확대 화면)
 assets/ui/              화살표, 꼬리표, 아이콘
 tools/art/*.mjs         SVG 에셋 생성기 (손그림 질감 필터 포함)
-tools/playtest*.js      자동 플레이 테스트 (1장, 2장을 처음부터 탈출까지 클릭)
+tools/playtest*.js      자동 플레이 테스트 (1~3장을 처음부터 탈출까지 클릭)
 docs/                   아트 디렉션, 퍼즐 설계, 에셋 목록, 로드맵
 ```
 
@@ -75,6 +82,10 @@ node tools/art/toyshop.mjs
 ```
 
 ```bash
+node tools/art/clock13.mjs
+```
+
+```bash
 node tools/art/ui.mjs
 ```
 
@@ -82,8 +93,8 @@ node tools/art/ui.mjs
 npm install && npm run playtest
 ```
 
-`playtest`는 Playwright로 1장과 2장을 처음부터 끝까지 실제로 클릭해 보고, 단계별 스크린샷을 `screenshots/playtest/`, `screenshots/playtest-2/`에 남깁니다.
-개발할 때는 `index.html#play-toyshop` 으로 2장에 바로 들어갈 수 있습니다.
+`playtest`는 Playwright로 1~3장을 처음부터 끝까지 실제로 클릭해 보고, 단계별 스크린샷을 `screenshots/playtest/`, `screenshots/playtest-2/`, `screenshots/playtest-3/`에 남깁니다.
+개발할 때는 `index.html#play-toyshop`(2장), `index.html#play-clock13`(3장)으로 바로 들어갈 수 있습니다.
 
 ## 문서
 

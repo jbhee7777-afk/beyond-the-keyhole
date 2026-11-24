@@ -151,6 +151,12 @@
       const lit = this.isLit();
       this.stage.classList.toggle('is-lit', lit);
       this.stage.classList.toggle('is-dark', !lit);
+      // 방마다 어둠 색: dim(어두울 때), dimLit(밝아진 뒤에도 남는 밤빛 등)
+      if (room.dim) {
+        const d = lit ? room.dimLit : room.dim;
+        this.dim.style.background = d ? d.color : room.dim.color;
+        this.dim.style.opacity = d ? d.opacity : 0;
+      }
       this.skyB.style.opacity = lit ? 1 : 0;
       const beamSrc = room.beams && room.beams[s.view] ? this.src(room.beams[s.view]) : '';
       if (this.beams.dataset.src !== beamSrc) { this.beams.dataset.src = beamSrc; this.beams.src = beamSrc || 'data:,'; }
@@ -178,11 +184,11 @@
         this.renderObjects(this.zoomInner, this.zoomNodes, [{ id: '__bg', img: bg, x: 0, y: 0, w: W, h: H, bg: true }, ...(z.objects || [])]);
         if (z.text) {
           let t = this.zoomInner.querySelector('.zoom-text');
-          if (!t) t = el('div', 'zoom-text', this.zoomInner);
+          if (!t) t = el('div', 'zoom-text' + (z.textClass ? ' ' + z.textClass : ''), this.zoomInner);
           t.innerHTML = typeof z.text === 'function' ? z.text(s) : z.text;
         }
         if (z.widget) z.widget(this.zoomInner, this.api, this);
-        this.zoomDim.style.opacity = lit ? 0 : (z.dim ?? 0.38);
+        this.zoomDim.style.opacity = lit ? (z.dimLit ?? 0) : (z.dim ?? 0.38);
       } else if (!this.zoomEl.hidden) {
         this.zoomEl.hidden = true; this.zoomEl.dataset.id = '';
       }
