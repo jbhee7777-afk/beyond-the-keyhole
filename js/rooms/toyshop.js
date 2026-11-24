@@ -39,7 +39,7 @@
       // 그림자
       if (f.lampOn) {
         const sh = document.createElement('img');
-        sh.className = 'shadow-of';
+        sh.className = 'shadow-of' + (f.rot[i] === SOLVE_ROT[i] ? ' fit' : ''); // 맞는 방향이면 그림자가 또렷해진다 (단계적 보상)
         sh.src = game.src(p.img); sh.alt = '';
         sh.style.cssText = `left:${SH.ox + p.sx * SH.s - 450}px;top:${SH.oy + p.sy * SH.s - 50}px;width:${p.w * SH.s}px;height:${p.h * SH.s}px;transform:rotate(${f.rot[i] * 90}deg)`;
         screen.appendChild(sh);
@@ -58,7 +58,7 @@
         if (game.busy) return;
         if (f.shadowSolved) { api.say('토끼 그림자가 완성됐어!'); return; }
         f.rot[i] = (f.rot[i] + 1) % 4;
-        api.sfx('click');
+        api.sfx(f.lampOn && f.rot[i] === SOLVE_ROT[i] ? 'clink' : 'click');
         if (!f.lampOn && !f.toldDark) { f.toldDark = true; api.say('조각이 빙글 돌아갔어. 그런데 너무 어두워서 그림자가 안 보여.'); }
         if (f.lampOn && f.rot.every((r, k) => r === SOLVE_ROT[k])) {
           f.shadowSolved = true;

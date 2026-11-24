@@ -36,10 +36,15 @@
 
 ## 확인
 
-- 바꾼 뒤에는 `npm run playtest`로 1~5장을 끝까지 자동 플레이해서 모두 `won: true`, `errors: none`을 확인한다.
+- 바꾼 뒤에는 `npm run playtest`로 1~5장을 끝까지 자동 플레이해서 모두 `won: true`, `errors: none`, 튼튼함 검사 `fails: none`을 확인한다.
 - 새 방을 만들면 `tools/playtest-<방>.js`도 같이 만든다 (2장 파일이 예시).
 - 방 고유의 특수 UI(다이얼, 그림자 조각, 오르골 핀)는 엔진이 아니라 방 파일의 `widget` 함수로 만든다.
 - 4장처럼 방 전체를 뒤집으려면 `upside(s)`가 true일 때 방 레이어가 180도 돈다. 좌표는 바르게 선 방 기준으로 쓰고, 뒤집힌 화면 자리에 둘 물건은 `U()`와 `cls: 'rot180'`을 쓴다.
 - 조합 실패 안내는 `combos`에 `result` 없이 `say`만 쓴다 (5장 우표).
 - 방마다 어둠 색은 `dim: { color, opacity }`로 정한다. 밝아진 뒤에도 밤빛을 남기려면 `dimLit`을 쓴다 (3장 달빛).
 - 그림을 바꿨다면 `screenshots/playtest/`의 스크린샷을 직접 본다.
+- 연출(`api.after`) 도중 창을 닫아도 끝낼 수 있어야 한다: 아이템·플래그는 연출 **전에** 바로 주고, 끊긴 연출의 마무리는 방의 `repair(s, fix)`에 쓴다. 새 연출을 만들면 `tools/playtest-resilience.js`의 CASES에도 한 줄 넣는다.
+- 저장 형식(플래그 이름 등)을 크게 바꾸면 `engine.js`의 `SAVE_VERSION`을 올린다 (예전 저장은 그 장만 새로 시작).
+- 엔진 도우미: `api.say(글, ms, { who: '말하는 캐릭터 id', note: '수첩 제목' })`, `api.note(제목, 글)`, `api.burst('confetti'|'spark'|'bubble'|'dust', x, y, 개수)`, `api.flash(색, ms)`, `api.anim(id, 클래스, ms)`, `api.hint()`, `api.game`(위젯에서만). 확대 화면 `note: [제목, 글]`은 처음 열 때 수첩에 적힌다. 방에는 `name`(벽 이름, 나침반에 표시), `ambient(s)`(분위기 소리: garden·night·workshop·party·attic·upside·sea)를 준다.
+- 방 파일에서 `window.__game`을 직접 부르지 않는다.
+- 배포용 가벼운 판: `npm run build` → `dist/` (SVG를 WebP로 구움). 글꼴은 `assets/fonts/` 내장.

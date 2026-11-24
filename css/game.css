@@ -1,6 +1,10 @@
 /* 열쇠 구멍 너머 — 화면 스타일
  * 무대(.stage)는 1600x900 고정 좌표. 글자 크기도 무대 픽셀 기준이며 통째로 확대/축소된다.
  * 한 가지 분위기(어두운 극장 + 종이 무대)로 고정된 디자인이라 다크/라이트 전환은 두지 않는다. */
+/* 글꼴은 저장소에 들어 있다 (tools/subset-fonts.py, SIL OFL). 인터넷이 막혀도 같은 글꼴로 보인다. */
+@font-face { font-family: 'Gowun Batang'; src: url('../assets/fonts/GowunBatang-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Gowun Batang'; src: url('../assets/fonts/GowunBatang-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Song Myung'; src: url('../assets/fonts/SongMyung-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 :root {
   color-scheme: dark;
   --ink: #2c2018;
@@ -250,7 +254,8 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .shadow-play, .music-box { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
 .shadow-screen { position: absolute; left: 450px; top: 50px; width: 700px; height: 500px; overflow: hidden; }
 .shadow-screen.on { background: radial-gradient(ellipse 60% 70% at 40% 55%, rgba(255, 244, 196, 0.85), rgba(255, 226, 150, 0.25) 70%, transparent); }
-.shadow-of { position: absolute; filter: brightness(0) blur(1.5px); opacity: 0.68; transition: transform 0.3s ease; }
+.shadow-of { position: absolute; filter: brightness(0) blur(5px); opacity: 0.5; transition: transform 0.3s ease, filter 0.4s ease, opacity 0.4s ease; }
+.shadow-of.fit { filter: brightness(0) blur(1px); opacity: 0.78; }
 .piece { position: absolute; border: 0; padding: 0; background: none; cursor: var(--cursor); pointer-events: auto; filter: drop-shadow(5px 6px 0 rgba(0, 0, 0, 0.28)); }
 .piece img { width: 100%; height: 100%; transition: transform 0.3s ease; pointer-events: none; }
 .piece:hover img { filter: brightness(1.06); }

@@ -53,6 +53,8 @@ GitHub Pages로 공개하려면 저장소 Settings → Pages → Branch: `main` 
 
 ## 조작
 
+- 위쪽 나침반이 지금 보는 벽(북·동·남·서)을 알려 줌
+- 왼쪽 위 도구: 책(표지로) · 달팽이(3단계 힌트) · 돋보기(누를 수 있는 곳이 잠깐 반짝) · 수첩(중요한 대사·단서 다시 보기) · 소리
 - 방 안의 물건을 눌러 조사하거나 줍기
 - 좌우 화살표(또는 키보드 ← →)로 벽 돌기, 확대 화면에서는 아래 화살표(또는 Esc)로 돌아가기
 - 가방(오른쪽 꼬리표)에서 아이템을 하나 고르고 방 안 물건을 누르면 그 아이템을 사용
@@ -75,7 +77,9 @@ js/main.js              표지·장 선택
 assets/rooms/<방>/      bg(배경) · props(소품) · items(아이템) · zoom(확대 화면)
 assets/ui/              화살표, 꼬리표, 아이콘
 tools/art/*.mjs         SVG 에셋 생성기 (손그림 질감 필터 포함)
-tools/playtest*.js      자동 플레이 테스트 (1~5장을 처음부터 탈출까지 클릭)
+tools/playtest*.js      자동 플레이 테스트 (1~5장 탈출 + 튼튼함 검사)
+tools/build-raster.js   배포용 WebP 굽기 (npm run build → dist/)
+assets/fonts/           내장 글꼴 (SIL OFL)
 docs/                   아트 디렉션, 퍼즐 설계, 에셋 목록, 로드맵
 ```
 
@@ -109,7 +113,14 @@ node tools/art/ui.mjs
 npm install && npm run playtest
 ```
 
-`playtest`는 Playwright로 1~5장을 처음부터 끝까지 실제로 클릭해 보고, 단계별 스크린샷을 `screenshots/playtest/`, `screenshots/playtest-2/`, `screenshots/playtest-3/` … `playtest-5/`에 남깁니다.
+```bash
+npm run build
+```
+
+`build`는 모든 SVG를 WebP 그림으로 구워 `dist/`에 가벼운 배포본을 만듭니다 (학교 크롬북·저가 태블릿용). `dist/index.html`을 열거나 `dist` 폴더를 통째로 올리면 됩니다.
+글꼴은 `assets/fonts/`에 들어 있어 인터넷이 막혀도 같은 글꼴로 보입니다 (다시 만들기: `tools/subset-fonts.py`).
+
+`playtest`는 Playwright로 1~5장을 처음부터 끝까지 실제로 클릭해 보고, 단계별 스크린샷을 `screenshots/playtest/`, `screenshots/playtest-2/`, `screenshots/playtest-3/` … `playtest-5/`에 남깁니다. 마지막으로 `playtest-resilience.js`가 연출 도중 새로고침, 가방이 꽉 찬 경우, 휴대폰·태블릿 화면을 검사합니다.
 개발할 때는 `index.html#play-toyshop`(2장), `index.html#play-clock13`(3장), `#play-upside`(4장), `#play-sea`(5장)으로 바로 들어갈 수 있습니다.
 
 ## 문서
