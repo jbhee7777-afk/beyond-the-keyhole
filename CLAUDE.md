@@ -35,5 +35,8 @@
 
 ## 확인
 
-- 바꾼 뒤에는 `npm run playtest`로 1장을 끝까지 자동 플레이해서 `won: true`, `errors: none`을 확인한다.
+- 바꾼 뒤에는 `npm run playtest`로 1장·2장을 끝까지 자동 플레이해서 둘 다 `won: true`, `errors: none`을 확인한다.
+- 새 방을 만들면 `tools/playtest-<방>.js`도 같이 만든다 (2장 파일이 예시).
+- 방 고유의 특수 UI(다이얼, 그림자 조각, 오르골 핀)는 엔진이 아니라 방 파일의 `widget` 함수로 만든다.
+- 방마다 어둠 색은 `dim: { color, opacity }`로 정한다.
 - 그림을 바꿨다면 `screenshots/playtest/`의 스크린샷을 직접 본다.

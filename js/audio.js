@@ -56,7 +56,17 @@
     grow: () => { for (let i = 0; i < 12; i++) tone(300 + i * 70, i * 0.16, 0.25, { type: 'triangle', vol: 0.06 }); },
     win: () => { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, i * 0.14, 0.5, { type: 'triangle', vol: 0.12 })); },
   };
+  // 오르골 음: freqs 배열을 차례로 (null은 쉼표)
+  function notes(freqs, gap = 0.28) {
+    freqs.forEach((f, i) => { if (f) { tone(f, i * gap, 0.9, { type: 'triangle', vol: 0.12 }); tone(f * 2, i * gap, 0.4, { vol: 0.03 }); } });
+  }
+  S.squeak = () => { tone(1800, 0, 0.08, { vol: 0.08, glide: 600 }); tone(2200, 0.1, 0.08, { vol: 0.07, glide: 500 }); };
+  S.pop = () => { noise(0, 0.15, { vol: 0.3, freq: 1500 }); tone(300, 0, 0.3, { type: 'square', vol: 0.06, glide: 600 }); };
+  S.click = () => noise(0, 0.05, { vol: 0.25, freq: 2000, q: 2 });
+  S.rip = () => { for (let i = 0; i < 6; i++) noise(i * 0.06, 0.04, { vol: 0.15, freq: 3000, q: 3 }); };
+  S.jar = () => { noise(0, 0.25, { vol: 0.12, freq: 600, q: 4 }); tone(900, 0.25, 0.15, { type: 'triangle', vol: 0.08 }); };
   window.Sfx = {
+    notes(f, gap) { if (!muted) try { notes(f, gap); } catch (e) { /* noop */ } },
     get muted() { return muted; },
     play(n) { if (muted || !S[n]) return; try { S[n](); } catch (e) { /* 소리 실패는 무시 */ } },
     toggle() { muted = !muted; try { localStorage.setItem('btk.muted', muted ? '1' : '0'); } catch (e) { /* noop */ } if (!muted) S.tap(); },

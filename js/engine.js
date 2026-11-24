@@ -46,6 +46,7 @@
       this.frame = el('div', 'frame', app);
       const st = (this.stage = el('div', 'stage', this.frame));
       st.dataset.room = this.room.id;
+      if (this.room.dim) { st.style.setProperty('--night', this.room.dim.color); st.style.setProperty('--dim-op', this.room.dim.opacity); }
       this.skyA = el('img', 'layer sky', st); this.skyA.src = this.src(this.room.sky[0]); this.skyA.alt = '';
       this.skyB = el('img', 'layer sky sky-lit', st); this.skyB.src = this.src(this.room.sky[1]); this.skyB.alt = '';
       this.viewEl = el('div', 'layer view', st);

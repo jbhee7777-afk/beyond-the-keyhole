@@ -55,7 +55,7 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .holding .clickable { cursor: crosshair; }
 
 /* ── 빛 ── */
-.dim { background: var(--night); mix-blend-mode: multiply; opacity: 0.62; transition: opacity 3.2s ease; }
+.dim { background: var(--night); mix-blend-mode: multiply; opacity: var(--dim-op, 0.62); transition: opacity 3.2s ease; }
 .is-lit .dim { opacity: 0; }
 .beams { mix-blend-mode: screen; opacity: 0; transition: opacity 3.6s ease 0.4s; }
 .is-lit .beams { opacity: 1; }
@@ -73,6 +73,8 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 @keyframes zoomIn { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
 .zoom-inner { position: absolute; inset: 0; }
 .zoom-dim { transition: opacity 3s ease; }
+.obj.glow { mix-blend-mode: screen; }
+.obj.glow.appear { animation: fadeIn 0.8s ease both; }
 .zoom-text {
   position: absolute; left: 470px; top: 160px; width: 670px; color: var(--ink);
   font-size: 30px; line-height: 1.62; pointer-events: none; z-index: 50;
@@ -237,3 +239,17 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* ── 2장: 그림자 인형극 · 오르골 원통 ── */
+.shadow-play, .music-box { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.shadow-screen { position: absolute; left: 450px; top: 50px; width: 700px; height: 500px; overflow: hidden; }
+.shadow-screen.on { background: radial-gradient(ellipse 60% 70% at 40% 55%, rgba(255, 244, 196, 0.85), rgba(255, 226, 150, 0.25) 70%, transparent); }
+.shadow-of { position: absolute; filter: brightness(0) blur(1.5px); opacity: 0.68; transition: transform 0.3s ease; }
+.piece { position: absolute; border: 0; padding: 0; background: none; cursor: var(--cursor); pointer-events: auto; filter: drop-shadow(5px 6px 0 rgba(0, 0, 0, 0.28)); }
+.piece img { width: 100%; height: 100%; transition: transform 0.3s ease; pointer-events: none; }
+.piece:hover img { filter: brightness(1.06); }
+.pin-cell { position: absolute; width: 80px; height: 112px; border: 0; padding: 0; background: none; cursor: var(--cursor); pointer-events: auto; }
+.pin-cell:hover { background: rgba(255, 240, 200, 0.14); }
+.pin-cell img { position: absolute; left: 10px; top: 18px; width: 60px; height: 70px; pointer-events: none; animation: fadeIn 0.2s ease; }
+.rock img { animation: rock 4s ease-in-out infinite; transform-origin: 50% 95%; }
+@keyframes rock { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }

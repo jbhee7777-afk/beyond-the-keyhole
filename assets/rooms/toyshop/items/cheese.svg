@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160"><defs>
+<filter id="art" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="2" seed="602" result="w"/>
+<feDisplacementMap in="SourceGraphic" in2="w" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.007" numOctaves="3" seed="609" result="t"/>
+<feColorMatrix in="t" type="matrix" values="0.3 0 0 0 0.85  0.3 0 0 0 0.85  0.3 0 0 0 0.85  0 0 0 0 1" result="tw"/>
+<feBlend in="d" in2="tw" mode="multiply" result="m"/>
+<feComposite in="m" in2="d" operator="in"/>
+</filter>
+<filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>
+<filter id="blur2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.5"/></filter>
+<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="6" stroke="#33261c" stroke-width="1.2"/></pattern>
+<pattern id="hatch2" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-48)"><line x1="0" y1="0" x2="0" y2="5" stroke="#33261c" stroke-width="1"/></pattern>
+<pattern id="hatchw" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><line x1="0" y1="0" x2="0" y2="7" stroke="#fff8e0" stroke-width="1.3"/></pattern>
+</defs><g filter="url(#art)"><path d="M21.2 118.6C22.1 121.1 41.4 116.1 51.2 114.6C61 113.1 70.1 111.7 80 109.4C89.9 107.1 100.8 103.2 110.8 100.9C120.7 98.5 136.5 101.1 139.7 95.4C142.8 89.8 133.2 76.1 129.7 66.8C126.2 57.6 124.8 41.1 118.7 39.9C112.7 38.7 101.7 52.8 93.6 59.7C85.5 66.6 78 74.5 70 81.1C62.1 87.7 54 93.3 45.9 99.5C37.8 105.8 20.3 116.1 21.2 118.6Z" fill="#f4d98b" stroke="#33261c" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M19.9 118.8C24.9 114.6 40.1 116.4 49.9 114.7C59.8 113.1 69.2 110.8 79.2 108.6C89.2 106.5 99.8 103.7 109.8 101.8C119.8 99.8 134.3 93.3 139.2 97C144.1 100.8 143.9 119 139 124.2C134.2 129.4 119.8 127.1 110 128.4C100.1 129.7 89.9 130.6 79.8 131.9C69.7 133.2 59.4 134.9 49.4 136.2C39.4 137.6 24.6 142.8 19.7 139.9C14.8 137 14.8 122.9 19.9 118.8Z" fill="#e3bf62" stroke="#33261c" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="80.0" cy="96.0" r="9" fill="#e3bf62"/><circle cx="108.0" cy="78.0" r="6" fill="#e3bf62"/><circle cx="56.0" cy="124.0" r="5" fill="#c99a3a"/><path d="M88.6 105.2C92.9 99.8 107.6 100.1 116.2 98.8C124.7 97.4 136.1 92.7 140.1 97.1C144 101.5 144 120.5 139.7 125.3C135.4 130.2 122.5 125.2 114.3 126.1C106.1 127.1 94.7 134.5 90.5 131C86.2 127.5 84.4 110.6 88.6 105.2Z" fill="url(#hatch)" opacity="0.3"/></g></svg>
