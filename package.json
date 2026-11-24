@@ -1,0 +1,14 @@
+{
+  "name": "beyond-the-keyhole",
+  "version": "0.1.0",
+  "private": true,
+  "description": "열쇠 구멍 너머 — 손그림 포인트 앤 클릭 방탈출 게임",
+  "scripts": {
+    "art": "node tools/art/greenhouse.mjs && node tools/art/ui.mjs",
+    "playtest": "node tools/playtest.js screenshots/playtest",
+    "serve": "npx serve ."
+  },
+  "devDependencies": {
+    "playwright": "1.48.2"
+  }
+}
