@@ -1,5 +1,6 @@
 // 1장 「햇살이 멈춘 온실」 그래픽 에셋 생성기
 // node tools/art/greenhouse.mjs  → assets/rooms/greenhouse/** 에 SVG를 다시 그린다.
+import { snailArt } from './chars.mjs';
 import { seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, vine, svg } from './ink.mjs';
 
 const OUT = new URL('../../assets/rooms/greenhouse/', import.meta.url).pathname;
@@ -414,27 +415,7 @@ function basket(full) {
 }
 function snail() {
   seed(61);
-  const w = 130, h = 96;
-  let o = fill(ell(64, 92, 56, 5), INK, 0.2);
-  // 몸
-  o += shape(wob([[10, 90], [24, 70], [34, 46], [30, 26], [40, 18], [52, 28], [52, 62], [120, 78], [124, 90]]), '#efd9b4');
-  // 더듬이
-  o += line([[38, 22], [30, 4]], { sw: 2 }) + line([[46, 22], [50, 2]], { sw: 2 });
-  o += `<circle cx="30" cy="4" r="4" fill="${INK}"/><circle cx="50" cy="2" r="4" fill="${INK}"/>`;
-  o += `<circle cx="38" cy="38" r="2.4" fill="${INK}"/><circle cx="48" cy="38" r="2.4" fill="${INK}"/>`;
-  o += line([[38, 46], [43, 49], [48, 46]], { sw: 1.6 });
-  o += `<ellipse cx="34" cy="44" rx="4" ry="2.4" fill="#e9967a" opacity="0.6"/>`;
-  // 껍데기 소용돌이
-  o += shape(ell(84, 52, 34, 32), '#8aa35e');
-  const sp = [];
-  for (let i = 0; i < 40; i++) { const a = i * 0.42, r = 30 - i * 0.7; sp.push([84 + Math.cos(a) * r, 52 + Math.sin(a) * r]); }
-  o += line(sp, { sw: 2.2, color: C.leafD, step: 999 });
-  o += hatch(ell(94, 62, 22, 18), 0.3);
-  // 밀짚모자
-  o += shape(ell(42, 16, 22, 6), '#e3c378');
-  o += shape(wob([[30, 16], [32, 2], [52, 2], [54, 16]]), '#e3c378');
-  o += line([[31, 12], [53, 12]], { sw: 2.4, color: C.red });
-  put('props/snail.svg', w, h, o, { id: 61, vb: '0 -10 130 106' });
+  put('props/snail.svg', 130, 106, snailArt(C), { id: 61, displace: 1, vb: '0 -10 130 106' });
 }
 
 /* ───────────── 동쪽: 작업대 쪽 소품 ───────────── */

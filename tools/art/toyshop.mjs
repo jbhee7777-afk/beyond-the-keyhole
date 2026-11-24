@@ -3,6 +3,7 @@
 // 분위기: 딸기우유·버터·민트, 원목. 귀엽고 아기자기하지만 유아용 그림체는 피한다.
 import { seed, rand, pick, INK, wob, rect, rectPts, ell, ellPts, rot, shape, fill, line, hatch, leaf, svg } from './ink.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
+import { mochaArt, mouseArt, mousePeekArt } from './chars.mjs';
 
 const OUT = new URL('../../assets/rooms/toyshop/', import.meta.url).pathname;
 const W = 1600, H = 900;
@@ -247,56 +248,7 @@ function bgWest() {
 /* ───────────── 북쪽 소품 ───────────── */
 function mocha(awake) {
   seed(awake ? 521 : 522);
-  const w = 400, h = 440;
-  let o = fill(ell(200, 432, 180, 10), INK, 0.2);
-  // 안락의자
-  o += shape(wob([[40, 300], [40, 70], [80, 30], [200, 18], [320, 30], [360, 70], [360, 300]], { step: 30 }), C.rose, { sw: 2.8 });
-  for (const [x, y] of [[120, 90], [200, 80], [280, 90], [160, 160], [240, 160], [120, 230], [280, 230]]) o += dot(x, y, 4, C.rose2) + line([[x - 10, y - 8], [x, y]], { sw: 1, op: 0.4 });
-  o += hatch(wob([[270, 40], [320, 30], [360, 70], [360, 300], [290, 300]]), 0.3);
-  // 모카
-  const b = awake ? 0 : 6;
-  o += shape(ell(200, 250 + b, 84, 86), C.fur, { sw: 2.4 });
-  o += shape(wob([[136, 230 + b], [264, 230 + b], [270, 320], [130, 320]]), C.mint, { sw: 2 });
-  o += shape(rect(176, 252 + b, 48, 30), C.mint2, { sw: 1.6 });
-  o += line([[150, 230 + b], [176, 180 + b]], { sw: 2.4, color: C.mint2 }) + line([[250, 230 + b], [224, 180 + b]], { sw: 2.4, color: C.mint2 });
-  // 귀: 왼쪽은 쫑긋, 오른쪽은 접힘
-  o += shape(wob(rot(ellPts(0, 0, 22, 66, 0, Math.PI * 2, 16), -0.2 - (awake ? 0 : 0.25), 166, 64)), C.fur, { sw: 2.2 }) + fill(wob(rot(ellPts(0, 0, 11, 48, 0, Math.PI * 2, 12), -0.2 - (awake ? 0 : 0.25), 166, 68)), C.pink);
-  o += shape(wob([[226, 96 + b], [252, 40], [300, 34], [318, 70], [296, 84], [262, 74], [246, 110 + b]]), C.fur, { sw: 2.2 }) + fill(wob([[256, 56], [294, 48], [306, 66], [266, 66]]), C.pink);
-  // 머리
-  o += shape(ell(200, 140 + b, 66, 60), C.fur, { sw: 2.4 });
-  o += hatch(ell(236, 160 + b, 30, 34), 0.18);
-  // 안경 (이마 위)
-  o += shape(ell(178, 100 + b, 14, 12), 'none', { sw: 2.4, stroke: C.brass2 }) + shape(ell(222, 100 + b, 14, 12), 'none', { sw: 2.4, stroke: C.brass2 }) + line([[192, 100 + b], [208, 100 + b]], { sw: 2, color: C.brass2 });
-  // 얼굴
-  if (awake) {
-    o += dot(178, 138, 7, INK) + dot(222, 138, 7, INK) + dot(180, 135, 2.4, '#fff') + dot(224, 135, 2.4, '#fff');
-    o += shape(wob([[190, 162], [210, 162], [204, 176], [196, 176]]), '#c4574e', { sw: 1.6 });
-  } else {
-    o += line([[166, 140], [178, 146], [190, 140]], { sw: 2.6 }) + line([[210, 140], [222, 146], [234, 140]], { sw: 2.6 });
-    o += line([[196, 170 + b], [200, 173 + b], [204, 170 + b]], { sw: 1.8 });
-  }
-  o += shape(wob([[194, 152 + b], [206, 152 + b], [200, 160 + b]]), '#e8888f', { sw: 1.4 });
-  o += dot(158, 162 + b, 10, '#f0a0a4', 0.6) + dot(242, 162 + b, 10, '#f0a0a4', 0.6);
-  for (const s of [-1, 1]) { o += line([[200 + s * 16, 160 + b], [200 + s * 52, 152 + b]], { sw: 1.2, op: 0.7 }); o += line([[200 + s * 16, 164 + b], [200 + s * 50, 168 + b]], { sw: 1.2, op: 0.7 }); }
-  // 팔과 당근 인형
-  if (awake) {
-    o += shape(ell(140, 262, 22, 18), C.fur, { sw: 2 });
-    o += shape(wob(rot(ellPts(0, 0, 20, 40, 0, Math.PI * 2, 12), 0.5, 290, 180)), C.fur, { sw: 2 });
-    o += line([[316, 120], [330, 110]], { sw: 2, op: 0.6 }) + line([[322, 140], [340, 136]], { sw: 2, op: 0.6 });
-  } else {
-    o += carrot(138, 284, 130, -0.32, { plush: true });
-    o += shape(ell(160, 270, 22, 18), C.fur, { sw: 2 }) + shape(ell(246, 250, 22, 18), C.fur, { sw: 2 });
-    o += `<g fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"><path d="M280 70h18l-18 18h18"/><path d="M312 40h13l-13 13h13"/></g>`;
-  }
-  // 발
-  o += shape(ell(160, 330, 32, 18), C.fur, { sw: 2 }) + fill(ell(160, 334, 14, 8), C.pink) + shape(ell(240, 330, 32, 18), C.fur, { sw: 2 }) + fill(ell(240, 334, 14, 8), C.pink);
-  // 팔걸이와 쿠션 앞면 (모카 앞)
-  o += shape(wob([[10, 200], [80, 190], [96, 230], [96, 360], [14, 360]]), C.rose, { sw: 2.6 }) + shape(wob([[390, 200], [320, 190], [304, 230], [304, 360], [386, 360]]), C.rose, { sw: 2.6 });
-  o += hatch(wob([[330, 196], [390, 200], [386, 360], [320, 360]]), 0.35);
-  o += shape(rect(60, 340, 280, 50, { sharp: true }), C.rose2, { sw: 2.4 });
-  for (let x = 74; x < 340; x += 22) o += line([[x, 380], [x + 6, 390]], { sw: 1.2, color: C.cream });
-  for (const x of [40, 340]) o += shape(wob([[x, 388], [x + 22, 388], [x + 18, 430], [x + 4, 430]]), C.woodD);
-  put(`props/mocha_${awake ? 'awake' : 'sleep'}.svg`, w, h, o, { id: awake ? 521 : 522 });
+  put(`props/mocha_${awake ? 'awake' : 'sleep'}.svg`, 400, 480, mochaArt(awake, C), { id: awake ? 521 : 522, displace: 1.6, vb: '0 -40 400 480' });
 }
 function sideTable() {
   seed(523);
@@ -436,46 +388,9 @@ function theater(state) {
   put(`props/theater_${state}.svg`, w, h, o, { id: 543 });
 }
 function mouseFig(state) {
-  // peek (구멍에서 빼꼼) | hungry (확대: 배고픈 얼굴, 등 뒤에 태엽 손잡이) | happy (치즈 먹는 중)
   seed(551);
-  let o = '';
-  const body = (x, y, s) => {
-    let g = shape(ell(x, y, 40 * s, 34 * s), C.grey, { sw: 2.2 });
-    g += shape(ell(x - 30 * s, y - 32 * s, 18 * s, 18 * s), C.grey, { sw: 2 }) + fill(ell(x - 30 * s, y - 32 * s, 10 * s, 10 * s), C.pink);
-    g += shape(ell(x + 30 * s, y - 32 * s, 18 * s, 18 * s), C.grey, { sw: 2 }) + fill(ell(x + 30 * s, y - 32 * s, 10 * s, 10 * s), C.pink);
-    g += dot(x, y + 8 * s, 4 * s, '#e8888f');
-    for (const sd of [-1, 1]) g += line([[x + sd * 10 * s, y + 8 * s], [x + sd * 40 * s, y + 2 * s]], { sw: 1.2, op: 0.7 }) + line([[x + sd * 10 * s, y + 11 * s], [x + sd * 38 * s, y + 15 * s]], { sw: 1.2, op: 0.7 });
-    return g;
-  };
-  if (state === 'peek') {
-    o += body(42, 44, 0.9) + dot(30, 38, 3, INK) + dot(54, 38, 3, INK) + dot(31, 37, 1, '#fff') + dot(55, 37, 1, '#fff');
-    put('props/mouse_peek.svg', 84, 80, o, { id: 551 });
-    return;
-  }
-  const w = 300, h = 320;
-  o += fill(ell(150, 306, 100, 10), INK, 0.25);
-  // 몸통
-  o += shape(ell(150, 220, 80, 86), C.grey, { sw: 2.4 }) + fill(ell(150, 240, 50, 56), '#cfcacb');
-  o += line([[220, 270], [262, 290], [280, 260]], { sw: 4, color: '#e8a0a8' });
-  if (state === 'hungry') {
-    // 등 뒤로 숨긴 태엽 손잡이 (조금 보인다)
-    o += line([[216, 160], [256, 150], [256, 118]], { sw: 7, color: C.brass2 }) + dot(256, 114, 9, C.rose);
-    o += shape(ell(116, 226, 18, 14), C.grey, { sw: 1.8 }) + shape(ell(184, 226, 18, 14), C.grey, { sw: 1.8 });
-  } else {
-    o += shape(wob([[110, 210], [190, 196], [176, 250]]), C.butter, { sw: 2 }) + dot(150, 216, 5, C.butter2) + dot(166, 226, 4, C.butter2);
-    o += shape(ell(108, 222, 16, 14), C.grey, { sw: 1.8 }) + shape(ell(192, 214, 16, 14), C.grey, { sw: 1.8 });
-  }
-  o += body(150, 120, 1.8);
-  if (state === 'hungry') {
-    o += dot(126, 104, 9, INK) + dot(174, 104, 9, INK) + dot(129, 100, 3, '#fff') + dot(177, 100, 3, '#fff');
-    o += line([[136, 152], [150, 146], [164, 152]], { sw: 2.2 });
-    o += line([[110, 90], [134, 82]], { sw: 2.4 }) + line([[190, 90], [166, 82]], { sw: 2.4 });
-  } else {
-    o += line([[114, 106], [126, 98], [138, 106]], { sw: 2.6 }) + line([[162, 106], [174, 98], [186, 106]], { sw: 2.6 });
-    o += shape(wob([[136, 146], [164, 146], [150, 162]]), '#c4574e', { sw: 1.6 });
-    o += dot(104, 132, 10, '#f0a0a4', 0.6) + dot(196, 132, 10, '#f0a0a4', 0.6);
-  }
-  put(`zoom/mouse_${state}.svg`, w, h, o, { id: 551, vb: '0 0 300 320' });
+  if (state === 'peek') { put('props/mouse_peek.svg', 84, 80, mousePeekArt(C), { id: 551, displace: 1 }); return; }
+  put(`zoom/mouse_${state}.svg`, 300, 320, mouseArt(state, C), { id: 551, displace: 1.6 });
 }
 
 /* ───────────── 남쪽 소품 ───────────── */

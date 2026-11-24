@@ -165,7 +165,7 @@
         objects: [
           { id: 'portrait', x: 0, y: 0, w: 0, h: 0, img: '', hit: [286, 140, 150, 170], label: '모카 그림', look: '모카의 옆모습 그림. 귀는 쫑긋 위로, 코는 오른쪽, 동그란 꼬리는 왼쪽!' },
           {
-            id: 'mocha', img: (s) => (awake(s) ? 'props/mocha_awake' : 'props/mocha_sleep'), x: 170, y: 260, w: 400, h: 440, cls: 'breathe',
+            id: 'mocha', img: (s) => (awake(s) ? 'props/mocha_awake' : 'props/mocha_sleep'), x: 170, y: 220, w: 400, h: 480, cls: 'breathe',
             hit: [210, 300, 330, 300], label: '모카',
             look: (s) => (awake(s) ? (s.inv.includes('carrot') ? '모카: “당근 인형을 잘 살펴봐. 등에 바느질 자국이 있지?”' : '모카: “공방에서 재미있게 놀았니?”') : '새근새근… 모카가 당근 인형을 꼭 안고 낮잠을 자. 흔들어도 안 깨.'),
           },
