@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 200" width="220" height="200"><defs>
+<filter id="art" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="2" seed="9" result="w"/>
+<feDisplacementMap in="SourceGraphic" in2="w" scale="0.6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.007" numOctaves="3" seed="16" result="t"/>
+<feColorMatrix in="t" type="matrix" values="0.3 0 0 0 0.85  0.3 0 0 0 0.85  0.3 0 0 0 0.85  0 0 0 0 1" result="tw"/>
+<feBlend in="d" in2="tw" mode="multiply" result="m"/>
+<feComposite in="m" in2="d" operator="in"/>
+</filter>
+<filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>
+<filter id="blur2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.5"/></filter>
+<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="6" stroke="#33261c" stroke-width="1.2"/></pattern>
+<pattern id="hatch2" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-48)"><line x1="0" y1="0" x2="0" y2="5" stroke="#33261c" stroke-width="1"/></pattern>
+<pattern id="hatchw" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><line x1="0" y1="0" x2="0" y2="7" stroke="#fff8e0" stroke-width="1.3"/></pattern>
+</defs><g filter="url(#art)"><path d="M37 54.2C37 55.2 36.7 56.2 36.2 57C35.7 57.9 34.8 58.8 33.9 59.3C33.1 59.8 32 60.1 31 60.1C30 60.1 28.8 59.8 27.9 59.3C27.1 58.7 26.4 57.8 25.9 56.9C25.4 56 24.9 55 24.8 54C24.8 53 25.2 51.8 25.7 50.9C26.2 50.1 27.2 49.2 28 48.7C28.9 48.3 30 48 31 48C32 48.1 33.1 48.4 33.9 49C34.8 49.5 35.6 50.3 36.1 51.2C36.6 52.1 37 53.2 37 54.2Z" fill="#d3e3f2"/><path d="M25.2 53.7C26.2 54.2 29.2 56.7 31.1 56.7C33 56.7 35.8 54.1 36.7 53.6" fill="none" stroke="#33261c" stroke-width="1.2" stroke-linecap="round"/></g></svg>

@@ -238,6 +238,8 @@
         const d = lit ? room.dimLit : room.dim;
         this.dim.style.background = d ? d.color : room.dim.color;
         this.dim.style.opacity = d ? d.opacity : 0;
+        // room.dimFade: 어둠이 바뀌는 시간(초). 스위치처럼 바로 바뀌어야 하는 방은 짧게
+        if (room.dimFade != null) this.dim.style.transitionDuration = room.dimFade + 's';
       }
       this.skyB.style.opacity = lit ? 1 : 0;
       const beamSrc = room.beams && room.beams[s.view] ? this.src(room.beams[s.view]) : '';

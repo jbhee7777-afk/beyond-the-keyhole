@@ -238,12 +238,12 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .chapters { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
 .chapter {
   width: 100%; display: grid; grid-template-columns: 64px 1fr; grid-template-rows: auto auto; column-gap: 12px; text-align: left;
-  padding: 9px 6px 9px; border: 0; border-bottom: 1.5px dashed rgba(44, 32, 24, 0.4); background: transparent; color: var(--ink); cursor: var(--cursor);
+  padding: 5px 6px 5px; border: 0; border-bottom: 1.5px dashed rgba(44, 32, 24, 0.4); background: transparent; color: var(--ink); cursor: var(--cursor);
 }
 .chapter:hover:not(.locked) { background: rgba(212, 166, 73, 0.22); }
 .ch-n { grid-row: span 2; font-family: var(--f-title); font-size: 26px; color: var(--ember); padding-top: 4px; }
-.ch-t { font-family: var(--f-title); font-size: 30px; line-height: 1.2; }
-.ch-m { font-size: 19px; color: #6b5338; }
+.ch-t { font-family: var(--f-title); font-size: 28px; line-height: 1.15; }
+.ch-m { font-size: 18px; color: #6b5338; }
 .chapter.locked { cursor: default; }
 .chapter.locked .ch-t, .chapter.locked .ch-n { opacity: 0.45; }
 
@@ -404,3 +404,8 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 /* 거꾸로 붙은(rot180) 캐릭터: 말하기 들썩임이 회전 중심을 바꾸지 않게, 눈 깜빡임도 같이 뒤집기 */
 .obj.rot180.talk img { transform-origin: 50% 50%; }
 .obj.rot180 img.blink-lid, .obj.rot180.bob img.blink-lid { transform: rotate(180deg); animation: blinkLid 4.4s steps(1, end) infinite; }
+
+/* 6장: 책 더미 꼭대기에서 내려다본 거대한 연필 글씨 */
+.zoom-text.giant-writing { left: 180px; top: 170px; width: 1000px; text-align: center; transform: rotate(-4deg); }
+.zoom-text.giant-writing p { font-family: var(--f-title); font-size: 120px; line-height: 1.15; color: rgba(70, 70, 82, 0.82); text-shadow: 3px 3px 0 rgba(140, 140, 150, 0.45); letter-spacing: 0.04em; margin: 0; }
+.big-text .zoom-text.giant-writing p { font-size: 120px; }

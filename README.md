@@ -40,6 +40,7 @@
 | 3장 | 열세 번째 시계 | 은은하게 오싹한 | **플레이 가능** (처음부터 탈출까지) |
 | 4장 | 거꾸로 된 세상 | 기발하고 초현실적인 | **플레이 가능** (처음부터 탈출까지) |
 | 5장 | 바닷속 우체국 | 신비롭고 몽환적인 | **플레이 가능** (처음부터 탈출까지) |
+| 6장 | 거인의 책상 | 아기자기하고 놀라운 (내가 작아졌다!) | **플레이 가능** (처음부터 탈출까지) |
 
 ## 실행하기
 
@@ -82,6 +83,7 @@ js/rooms/toyshop.js     2장 방 데이터 (그림자 인형극·오르골 위�
 js/rooms/clock13.js     3장 방 데이터 (트렁크 시계 자물쇠 위젯 포함)
 js/rooms/upside.js      4장 방 데이터 (방 전체가 180도 뒤집힘)
 js/rooms/sea.js         5장 방 데이터 (우편함 번호 위젯 포함)
+js/rooms/desk.js        6장 방 데이터 (작아진 나, 그림자 X, 종이배)
 js/main.js              표지·장 선택
 assets/rooms/<방>/      bg(배경) · props(소품) · items(아이템) · zoom(확대 화면)
 assets/ui/              화살표, 꼬리표, 아이콘
@@ -119,6 +121,10 @@ node tools/art/ui.mjs
 ```
 
 ```bash
+node tools/art/desk.mjs
+```
+
+```bash
 node tools/art/frames.mjs
 ```
 
@@ -138,7 +144,7 @@ npm run build
 글꼴은 `assets/fonts/`에 들어 있어 인터넷이 막혀도 같은 글꼴로 보입니다 (다시 만들기: `tools/subset-fonts.py`).
 
 `playtest`는 Playwright로 1~5장을 처음부터 끝까지 실제로 클릭해 보고, 단계별 스크린샷을 `screenshots/playtest/`, `screenshots/playtest-2/`, `screenshots/playtest-3/` … `playtest-5/`에 남깁니다. 마지막으로 `playtest-resilience.js`가 연출 도중 새로고침, 가방이 꽉 찬 경우, 휴대폰·태블릿 화면을 검사합니다.
-개발할 때는 `index.html#play-toyshop`(2장), `index.html#play-clock13`(3장), `#play-upside`(4장), `#play-sea`(5장)으로 바로 들어갈 수 있습니다.
+개발할 때는 `index.html#play-toyshop`(2장), `index.html#play-clock13`(3장), `#play-upside`(4장), `#play-sea`(5장), `#play-desk`(6장)으로 바로 들어갈 수 있습니다.
 
 ## 문서
 

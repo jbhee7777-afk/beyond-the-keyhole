@@ -9,6 +9,7 @@
     { id: 'clock13', n: '3장', title: '열세 번째 시계', mood: '은은하게 오싹한' },
     { id: 'upside', n: '4장', title: '거꾸로 된 세상', mood: '기발하고 엉뚱한' },
     { id: 'sea', n: '5장', title: '바닷속 우체국', mood: '신비롭고 몽환적인' },
+    { id: 'desk', n: '6장', title: '거인의 책상', mood: '아기자기하고 놀라운' },
   ];
   const cleared = (id) => { try { return !!localStorage.getItem('btk.cleared.' + id); } catch (e) { return false; } };
   // 앞 장을 탈출해야 다음 장이 열린다 (설정에서 모두 열 수 있음)
@@ -38,10 +39,10 @@
       <div class="layer grain"></div>
       <div class="book">
         <img class="book-seal" src="assets/ui/seal.svg" alt="">
-        <p class="book-kicker">종이 책 속 다섯 개의 방</p>
+        <p class="book-kicker">종이 책 속 이상한 방들</p>
         <h1>PAPERDOOR</h1>
-        <p class="book-sub">페이퍼도어 · 다섯 개의 문</p>
-        <p class="book-lede">다락방에서 찾은 낡은 종이 책을 펼쳤더니, 책장 사이 작은 종이 문이 덜컥 열렸어요! 다섯 방에서 <b>이야기 열쇠</b>를 모두 모아야 집으로 돌아갈 수 있어요.</p>
+        <p class="book-sub">페이퍼도어 · 종이 문 너머</p>
+        <p class="book-lede">다락방에서 찾은 낡은 종이 책을 펼쳤더니, 책장 사이 작은 종이 문이 덜컥 열렸어요! 방마다 <b>이야기 열쇠</b>를 모아 이 책을 만든 사람을 찾아가요.</p>
         <div class="key-row" aria-label="모은 이야기 열쇠">${keys}</div>
         <ol class="chapters"></ol>
       </div>
