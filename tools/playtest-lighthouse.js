@@ -48,8 +48,12 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-lighth
   await sel('ink_green'); await clickObj('잉크 통');
   await p.evaluate(() => window.__game.openHint()); await shot('09-hint'); await p.keyboard.press('Escape');
   await clickObj('등불 손잡이'); await p.waitForTimeout(1600); await shot('10-lamp-on');
-  // 4. 징검다리
-  await view('east'); await shot('11-east-lit'); await view('west'); await shot('12-stones');
+  // 4. 처음엔 렌즈가 동쪽을 향해서 징검다리가 안 보인다 → 받침대를 돌려 서쪽으로
+  await view('west'); await shot('10b-west-wrong-dir');
+  await expect(async () => !(await p.$('[aria-label="빛나는 징검다리"]:visible')), '방향이 틀렸는데 징검다리가 보임');
+  await view('north'); for (let i = 0; i < 2; i++) await clickObj('렌즈 받침대 손잡이');
+  await expect(async () => (await flags()).dir === 3, '렌즈가 서쪽을 향하지 않음');
+  await view('east'); await shot('11-east-lit'); await view('south'); await clickObj('바다 지도'); await view('west'); await shot('12-stones');
   await clickObj('빛나는 징검다리'); await p.waitForTimeout(2200); await shot('13-ending');
   const f = await flags();
   console.log('won:', !!f.__won);

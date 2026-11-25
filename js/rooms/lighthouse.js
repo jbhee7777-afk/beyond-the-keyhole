@@ -10,6 +10,9 @@
 (function () {
   const F = (s) => s.flags;
   const lamp = (s) => !!F(s).lampOn;
+  const DIRS = ['북', '동', '남', '서'];
+  const dir = (s) => (F(s).dir == null ? 1 : F(s).dir); // 렌즈가 바라보는 방향 (처음엔 동쪽)
+  const westLit = (s) => lamp(s) && dir(s) === 3;
   const NAMES = { ink_red: '빨강', ink_blue: '파랑', ink_yellow: '노랑', ink_black: '검정' };
   // 동행하는 접이: 지금 상황에 맞는 혼잣말 힌트 (2편 내내 함께 다닌다)
   const companion = (lines, place) => ({
@@ -20,7 +23,7 @@
   const CRANE_LINES = {
     talk: '등대지기 아저씨한테 물어보자.', rag: '렌즈를 닦을 천이 있어야 해.', wet: '마른 천으론 먹물이 번지기만 할 거야. 물이 있으면…', wipe: '젖은 걸레로 렌즈를 닦자!',
     scope: '기차역에서 무슨 색을 원하는지 망원경으로 보자.', mix: '초록 잉크가 없네. 물감처럼 두 색을 섞으면 어때?', yellow: '등잔 밑이 어둡다… 등대 등불 바로 밑을 볼까?', mix2: '파랑이랑 노랑을 섞으면…!',
-    pour: '초록 잉크를 렌즈 옆 잉크 통에!', switch: '이제 불을 켜 보자!', go: '징검다리가 보여! 봄이도 이 돌을 밟았겠지?',
+    pour: '초록 잉크를 렌즈 옆 잉크 통에!', switch: '이제 불을 켜 보자!', aim: '빛이 엉뚱한 데를 비춰! 기차역은 발코니 쪽, 서쪽이었지?', go: '징검다리가 보여! 봄이도 이 돌을 밟았겠지?',
   };
 
   function keeperTalk(api) {
@@ -34,6 +37,7 @@
       api.lock(11400);
       return;
     }
+    if (f.lampOn && dir(api.game.s) !== 3) { api.say('까망이: “불은 켜졌는데 빛이 엉뚱한 바다를 비추네! 렌즈 받침대를 돌려서 기차역 쪽으로 맞춰 줘.”', 0, { who: 'keeper' }); return; }
     if (f.lampOn) { api.say('까망이: “고마워! 저 징검다리를 건너면 기차역이야. 곰 역장님은 겨울잠 중일 테니 살살 깨워.”', 0, { who: 'keeper' }); return; }
     if (!f.scopeSeen) { api.say('까망이: “발코니 망원경으로 기차역을 봐 줘. 무슨 색 불을 원하는지 알려 줄 거야.”', 0, { who: 'keeper' }); return; }
     api.say('까망이: “빛 잉크는 원하는 색을 섞어서 렌즈 옆 잉크 통에 부으면 돼. 렌즈도 닦아야 하고!”', 0, { who: 'keeper' });
@@ -48,26 +52,25 @@
     chapter: '8장',
     title: '잉크 등대',
     assets: 'assets/rooms/lighthouse/',
-    sky: ['assets/rooms/lighthouse/bg/north.svg', 'assets/rooms/lighthouse/bg/north.svg'],
-    frame: 'bg/frame',
+    sky: ['assets/rooms/lighthouse/bg/north.webp', 'assets/rooms/lighthouse/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
     isLit: lamp,
-    dim: { color: '#0c1430', opacity: 0.45 },
-    dimLit: { color: '#123a30', opacity: 0.12 },
+    dim: { color: '#0c1430', opacity: 0.22 },
+    dimLit: { color: '#123a30', opacity: 0.05 },
     dimFade: 1.2,
     ambient: (s) => (lamp(s) ? 'sea' : 'night'),
-    guide: { name: '등대지기 까망이', img: 'props/penguin_happy' },
+    guide: { name: '등대지기 까망이', img: 'props/penguin_happy.webp' },
     intro: '무지개 다리 끝은 밤바다 위 등대 꼭대기였어. 큰 등불이 꺼져서 바다가 깜깜해.',
 
     items: {
-      rag: { name: '마른 걸레', img: 'items/rag', desc: '낡은 천 걸레. 바싹 말라서 먹물이 잘 안 닦일 것 같아.' },
-      wetrag: { name: '젖은 걸레', img: 'items/wetrag', desc: '빗물에 적신 걸레. 먹물도 쓱쓱 닦이겠어.' },
-      ink_red: { name: '빨강 잉크', img: 'items/ink_red', desc: '빨간 빛 잉크.' },
-      ink_blue: { name: '파랑 잉크', img: 'items/ink_blue', desc: '파란 빛 잉크.' },
-      ink_yellow: { name: '노랑 잉크', img: 'items/ink_yellow', desc: '노란 빛 잉크.' },
-      ink_black: { name: '검정 잉크', img: 'items/ink_black', desc: '새까만 먹물. 빛이 하나도 안 나.' },
-      ink_green: { name: '초록 잉크', img: 'items/ink_green', desc: '파랑과 노랑을 섞은 초록 빛 잉크. 병 속에서 반딧불처럼 반짝여.' },
+      rag: { name: '마른 걸레', img: 'items/rag.webp', desc: '낡은 천 걸레. 바싹 말라서 먹물이 잘 안 닦일 것 같아.' },
+      wetrag: { name: '젖은 걸레', img: 'items/wetrag.webp', desc: '빗물에 적신 걸레. 먹물도 쓱쓱 닦이겠어.' },
+      ink_red: { name: '빨강 잉크', img: 'items/ink_red.webp', desc: '빨간 빛 잉크.' },
+      ink_blue: { name: '파랑 잉크', img: 'items/ink_blue.webp', desc: '파란 빛 잉크.' },
+      ink_yellow: { name: '노랑 잉크', img: 'items/ink_yellow.webp', desc: '노란 빛 잉크.' },
+      ink_black: { name: '검정 잉크', img: 'items/ink_black.webp', desc: '새까만 먹물. 빛이 하나도 안 나.' },
+      ink_green: { name: '초록 잉크', img: 'items/ink_green.webp', desc: '파랑과 노랑을 섞은 초록 빛 잉크. 병 속에서 반딧불처럼 반짝여.' },
     },
     combos: [
       { a: 'ink_blue', b: 'ink_yellow', result: 'ink_green', say: '파랑에 노랑을 섞으니… 초록! 병 속에서 초록빛이 반짝반짝.' },
@@ -80,26 +83,35 @@
     ],
 
     views: {
-      /* ───── 북쪽: 커다란 등불 렌즈, 잉크 통, 등불 손잡이 ───── */
+      /* ───── 북쪽: 커다란 등불 렌즈, 잉크 통, 등불 손잡이, 렌즈 방향 받침대 ───── */
       north: {
         name: '등불 방',
-        bg: 'bg/north',
+        bg: (s) => (lamp(s) ? 'bg/north_lit.webp' : 'bg/north.webp'),
         objects: [
-          { id: 'lampglow', img: 'bg/lampglow', x: 0, y: 0, w: 1600, h: 900, cls: 'glow', show: lamp },
-          { id: 'windowsN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [110, 90, 280, 420], label: '창문', look: '창밖은 별이 총총한 밤바다야.' },
+          { id: 'windowsN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [20, 100, 220, 500], label: '창문', look: '창밖은 별이 총총한 밤바다야.' },
+          { id: 'windowsN2', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1250, 90, 290, 520], label: '창문', look: '창밖은 별이 총총한 밤바다야.' },
           {
-            id: 'lens', x: 0, y: 0, w: 0, h: 0, img: '', hit: [600, 100, 400, 440], label: '등대 렌즈',
-            click: (api) => api.say(api.flags.lensClean ? '렌즈가 맑게 반짝여. 계단처럼 겹친 유리가 빛을 멀리 보내 줘.' : '커다란 유리 렌즈에 먹물이 잔뜩 튀었어. 이대로는 불을 켜도 빛이 못 빠져나갈 거야.'),
+            id: 'lens', x: 0, y: 0, w: 0, h: 0, img: '', hit: [490, 20, 590, 580], label: '등대 렌즈',
+            click: (api) => api.say(api.flags.lensClean ? `렌즈가 맑게 반짝여. 지금은 ${DIRS[dir(api.game.s)]}쪽 바다를 향하고 있어.` : '커다란 유리 렌즈에 먹물이 잔뜩 튀었어. 이대로는 불을 켜도 빛이 못 빠져나갈 거야.'),
             use: {
-              wetrag: (api) => { api.take('wetrag'); api.set('lensClean'); api.sfx('scrape'); api.burst('spark', 800, 320, 24); api.say('젖은 걸레로 쓱쓱 닦았더니 먹물이 싹 지워졌어! 렌즈가 반짝반짝.'); },
+              wetrag: (api) => { api.take('wetrag'); api.set('lensClean'); api.sfx('scrape'); api.burst('spark', 790, 300, 24); api.say('젖은 걸레로 쓱쓱 닦았더니 먹물이 싹 지워졌어! 렌즈가 반짝반짝.'); },
               rag: (api) => api.say('마른 걸레로 문질러도 먹물이 번지기만 해. 물에 적시면 잘 닦일 텐데.'),
             },
           },
-          { id: 'yellowUnder', img: 'props/bottle_yellow', x: 996, y: 552, w: 62, h: 94, cls: 'under', show: (s) => !F(s).took_yellow, label: '받침대 밑 잉크병',
-            click: (api, n) => { api.set('took_yellow'); api.give('ink_yellow', n); api.say('등불 받침대 바로 밑 그늘에 노랑 잉크가! 정말 ‘등잔 밑이 어둡다’네.', 5000); } },
-          { id: 'lensInk', img: 'props/lens_ink', x: 610, y: 110, w: 380, h: 420, show: (s) => !F(s).lensClean },
+          { id: 'lensInk', img: 'props/lens_ink.webp', x: 0, y: 0, w: 1600, h: 900, show: (s) => !F(s).lensClean },
           {
-            id: 'reservoir', x: 0, y: 0, w: 0, h: 0, img: '', hit: [420, 430, 130, 220], label: '잉크 통',
+            id: 'turn', x: 0, y: 0, w: 0, h: 0, img: '', hit: [470, 600, 620, 110], label: '렌즈 받침대 손잡이',
+            click: (api) => {
+              const f = api.flags; f.dir = (dir(api.game.s) + 1) % 4; api.sfx('creak');
+              const msg = `끼릭끼릭… 받침대를 돌려 렌즈가 ${DIRS[f.dir]}쪽 바다를 향하게 했어.`;
+              api.say(lamp(api.game.s) ? msg + (f.dir === 3 ? ' 초록 빛줄기가 바다 건너 기차역 쪽을 쓸고 지나가!' : ' 빛줄기가 텅 빈 바다만 비추네.') : msg);
+            },
+          },
+          { id: 'yellowUnder', img: 'props/bottle_yellow.webp', x: 740, y: 742, w: 60, h: 84, cls: 'under', show: (s) => !F(s).took_yellow, label: '받침대 밑 잉크병',
+            click: (api, n) => { api.set('took_yellow'); api.give('ink_yellow', n); api.say('등불 받침대 바로 밑 그늘에 노랑 잉크가! 정말 ‘등잔 밑이 어둡다’네.', 5000); } },
+          { id: 'resGreen', img: 'props/reservoir_green.webp', x: 240, y: 350, w: 195, h: 410, show: (s) => !!F(s).inkIn && !lamp(s) },
+          {
+            id: 'reservoir', x: 0, y: 0, w: 0, h: 0, img: '', hit: [245, 355, 185, 400], label: '잉크 통',
             click: (api) => api.say(api.flags.inkIn ? '잉크 통에 초록 잉크가 찰랑찰랑.' : '렌즈로 이어진 유리 잉크 통이야. 텅 비었어. 여기에 빛 잉크를 붓나 봐.'),
             use: {
               ink_green: (api) => { api.take('ink_green'); api.set('inkIn'); api.sfx('water'); api.say('초록 잉크를 잉크 통에 꼴꼴꼴 부었어.'); },
@@ -107,16 +119,15 @@
               ink_black: (api) => api.say('먹물을 부으면 빛 대신 어둠이 나올 거야!'),
             },
           },
-          { id: 'resGreen', img: 'props/reservoir_green', x: 431, y: 440, w: 110, h: 200, show: (s) => !!F(s).inkIn },
           {
-            id: 'switch', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1080, 390, 130, 260], label: '등불 손잡이',
+            id: 'switch', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1075, 375, 175, 425], label: '등불 손잡이',
             click: (api) => {
               const f = api.flags;
-              if (f.lampOn) { api.say('등불이 빙글빙글 돌고 있어.'); return; }
+              if (f.lampOn) { api.say('등불이 환하게 켜져 있어.'); return; }
               if (!f.inkIn) { api.sfx('locked'); api.say('철컥… 잉크 통이 비어서 불이 안 붙어.'); return; }
               if (!f.lensClean) { api.sfx('nope'); api.say('불은 붙었는데 렌즈에 튄 먹물 때문에 빛이 하나도 못 빠져나가. 렌즈를 닦아야 해.'); return; }
-              api.set('lampOn'); api.sfx('sunrise'); api.flash('#d8ffe0', 1000); api.burst('spark', 800, 330, 40);
-              api.say('철컥! 초록 등불이 환하게 켜지고 빙글빙글 돌기 시작했어! 바다 쪽에서 무언가 반짝여.', 5200);
+              api.set('lampOn'); api.sfx('sunrise'); api.flash('#d8ffe0', 1000); api.burst('spark', 790, 300, 40);
+              api.say(dir(api.game.s) === 3 ? '철컥! 초록 등불이 환하게 켜졌어! 빛줄기가 서쪽 바다를 비춰.' : `철컥! 초록 등불이 켜졌어! 그런데 빛줄기가 ${DIRS[dir(api.game.s)]}쪽 바다만 비추고 있어. 기차역은 그쪽이 아닌데…`, 5600);
             },
           },
         ],
@@ -125,15 +136,16 @@
       /* ───── 동쪽: 등대지기 까망이, 책상과 일지 ───── */
       east: {
         name: '등대지기 책상',
-        bg: 'bg/east',
+        bg: 'bg/east.webp',
         objects: [
-          { id: 'log', x: 0, y: 0, w: 0, h: 0, img: '', hit: [240, 470, 290, 70], zoom: 'log', label: '등대 일지' },
-          { id: 'oil', x: 0, y: 0, w: 0, h: 0, img: '', hit: [550, 450, 70, 70], label: '작은 기름 램프', look: '작은 램프 하나로 버티는 중이야. 이걸로는 바다 건너까지 빛이 안 닿아.' },
-          { id: 'buoy', x: 0, y: 0, w: 0, h: 0, img: '', hit: [700, 120, 200, 200], label: '구명 튜브', look: '빨강·하양 구명 튜브. 등대지기의 필수품!' },
-          { id: 'windowE', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1060, 90, 360, 440], label: '바다 창', look: (s) => (lamp(s) ? '초록 불빛이 바다를 쓸며 지나가.' : '깜깜한 바다… 파도 소리만 들려.') },
-          companion(CRANE_LINES, { x: 1230, y: 400, w: 176, h: 160 }),
+          { id: 'log', x: 0, y: 0, w: 0, h: 0, img: '', hit: [280, 420, 230, 80], zoom: 'log', label: '등대 일지' },
+          { id: 'oil', x: 0, y: 0, w: 0, h: 0, img: '', hit: [195, 265, 85, 210], label: '작은 기름 램프', look: '작은 램프 하나로 버티는 중이야. 이걸로는 바다 건너까지 빛이 안 닿아.' },
+          { id: 'buoy', x: 0, y: 0, w: 0, h: 0, img: '', hit: [695, 165, 215, 260], label: '구명 튜브', look: '빨강·하양 구명 튜브. 등대지기의 필수품!' },
+          { id: 'ship', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1300, 490, 270, 280], label: '병 속의 배', look: '유리병 속에 작은 돛단배가 들어 있어. 어떻게 넣었을까?' },
+          { id: 'windowE', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1060, 80, 330, 450], label: '동쪽 창', look: (s) => (lamp(s) && dir(s) === 1 ? '초록 빛줄기가 동쪽 바다를 쓸고 있어. 그런데 이쪽엔 아무것도 없어.' : '동쪽은 끝없는 바다뿐이야. 섬도 기차역도 안 보여.') },
+          companion(CRANE_LINES, { x: 470, y: 290, w: 210, h: 191 }),
           {
-            id: 'keeper', img: (s) => (lamp(s) ? 'props/penguin_happy' : 'props/penguin_worried'), x: 640, y: 250, w: 400, h: 457, cls: 'bob', blink: (s) => (lamp(s) ? null : 'props/penguin_worried_blink'), hit: [720, 270, 250, 430], label: '등대지기 까망이',
+            id: 'keeper', img: (s) => (lamp(s) && dir(s) === 3 ? 'props/penguin_happy.webp' : 'props/penguin_worried.webp'), x: 800, y: 330, w: 460, h: 520, cls: 'bob', hit: [870, 350, 330, 480], label: '등대지기 까망이',
             click: keeperTalk,
             use: {
               ink_green: (api) => api.say('까망이: “바로 그 색이야! 렌즈 옆 잉크 통에 부어 줘.”', 0, { who: 'keeper' }),
@@ -145,43 +157,48 @@
         ],
       },
 
-      /* ───── 남쪽: 잉크병 선반, 걸레, 바다 지도, 나선 계단 ───── */
+      /* ───── 남쪽: 잉크병 선반, 걸레 걸이, 바다 지도, 나선 계단 ───── */
       south: {
         name: '잉크 선반 벽',
-        bg: 'bg/south',
+        bg: 'bg/south.webp',
         objects: [
-          { id: 'map', x: 0, y: 0, w: 0, h: 0, img: '', hit: [980, 80, 460, 200], label: '바다 지도', look: '등대에서 기차역까지 바위가 점점이 이어져 있어. 밤에는 등불이 비춰야 보이는 징검다리래.' },
-          { id: 'stairs', x: 0, y: 0, w: 0, h: 0, img: '', hit: [560, 620, 480, 200], label: '나선 계단', look: '빙글빙글 아래로 내려가는 계단. 아래는 깜깜한 바다뿐이래.' },
-          ...[['red', 190], ['blue', 300], ['black', 410]].map(([c, x]) => ({
-            id: 'b_' + c, img: `props/bottle_${c}`, x, y: 330, w: 90, h: 136, show: (s) => !F(s)['took_' + c], label: `${NAMES['ink_' + c]} 잉크병`,
+          { id: 'books', x: 0, y: 0, w: 0, h: 0, img: '', hit: [240, 130, 360, 120], label: '낡은 책들', look: '바다 이야기, 별자리 책, 등대 수리법… 빛 잉크 섞는 법이 적힌 페이지가 접혀 있어: “빛은 물감처럼 섞인다.”' },
+          { id: 'map', x: 0, y: 0, w: 0, h: 0, img: '', hit: [895, 120, 385, 280], label: '바다 지도', look: '등대에서 기차역까지 바위가 점점이 이어져 있어. 지도 귀퉁이 나침반을 보니 기차역은 등대의 서쪽이야. 밤에는 등불이 비춰야 보이는 징검다리래.' },
+          { id: 'anchor', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1040, 410, 165, 250], label: '닻', look: '녹슨 커다란 닻. 무거워서 꿈쩍도 안 해.' },
+          { id: 'stairs', x: 0, y: 0, w: 0, h: 0, img: '', hit: [475, 490, 550, 350], label: '나선 계단', look: '빙글빙글 아래로 내려가는 계단. 아래는 깜깜한 바다뿐이래.' },
+          ...[['red', 262], ['blue', 352], ['black', 442]].map(([c, x]) => ({
+            id: 'b_' + c, img: `props/bottle_${c}.webp`, x, y: 292, w: 72, h: 100, show: (s) => !F(s)['took_' + c], label: `${NAMES['ink_' + c]} 잉크병`,
             click: (api, n) => { api.set('took_' + c); api.give('ink_' + c, n); api.say(`${NAMES['ink_' + c]} 잉크병을 챙겼어.`); },
           })),
-          { id: 'rag', img: 'props/rag', x: 1150, y: 310, w: 140, h: 160, show: (s) => !F(s).ragTaken, label: '걸레', click: (api, n) => { api.set('ragTaken'); api.give('rag', n); api.say('걸이에 걸린 걸레를 챙겼어. 바싹 말랐네.'); } },
+          { id: 'rag', img: 'props/rag.webp', x: 615, y: 265, w: 140, h: 124, show: (s) => !F(s).ragTaken, label: '걸레', click: (api, n) => { api.set('ragTaken'); api.give('rag', n); api.say('걸이에 걸린 걸레를 챙겼어. 바싹 말랐네.'); } },
         ],
       },
 
       /* ───── 서쪽: 발코니, 밤바다, 빗물통, 망원경 ───── */
       west: {
         name: '바다 발코니',
-        bg: 'bg/west',
+        bg: (s) => (westLit(s) ? 'bg/west_lit.webp' : 'bg/west.webp'),
         objects: [
-          { id: 'sea', x: 0, y: 0, w: 0, h: 0, img: '', hit: [140, 60, 900, 340], label: '밤바다', look: (s) => (lamp(s) ? '등불이 바다를 비추자 바위들이 금빛으로 줄줄이! 기차역까지 이어진 징검다리야.' : '깜깜한 바다… 바위가 있는 것 같은데 잘 안 보여. 저 멀리 아주 작은 초록 불빛이 하나.') },
+          { id: 'sea', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 300, 1600, 160], label: '밤바다', look: (s) => (westLit(s) ? '등불이 바다를 비추자 바위들이 금빛으로 줄줄이! 기차역까지 이어진 징검다리야.' : lamp(s) ? '등대 불은 켜졌는데 빛줄기가 이쪽 바다를 안 비춰. 렌즈 방향을 돌려야 해.' : '깜깜한 바다… 바위가 있는 것 같은데 잘 안 보여. 저 멀리 아주 작은 초록 불빛이 하나.') },
           {
-            id: 'barrel', x: 0, y: 0, w: 0, h: 0, img: '', hit: [160, 480, 240, 250], label: '빗물통',
+            id: 'barrel', x: 0, y: 0, w: 0, h: 0, img: '', hit: [100, 530, 370, 330], label: '빗물통',
             click: (api) => api.say('빗물이 가득 찬 나무통이야.'),
             use: { rag: (api, n) => { api.take('rag'); api.give('wetrag', n); api.sfx('splash'); api.say('걸레를 빗물에 푹 적셨어.'); } },
           },
-          { id: 'stones', img: 'props/stones_lit', x: 0, y: 0, w: 1600, h: 900, hit: [460, 420, 840, 170], show: lamp, label: '빛나는 징검다리', click: (api) => { api.sfx('step'); api.win(); } },
-          { id: 'scope', img: 'props/telescope', x: 1080, y: 420, w: 400, h: 320, hit: [1110, 460, 300, 130], zoom: 'scope', label: '망원경' },
+          { id: 'stones', x: 0, y: 0, w: 0, h: 0, img: '', hit: [430, 320, 740, 250], show: westLit, label: '빛나는 징검다리', click: (api) => { api.sfx('step'); api.win(); } },
+          { id: 'scope', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1180, 270, 330, 600], zoom: 'scope', label: '망원경' },
         ],
       },
     },
 
     zooms: {
       scope: {
-        bg: 'zoom/scope',
-        note: ['망원경으로 본 기차역', '기차역 승강장에 초록 등불. 그림 표지판: 초록 불 → 등대. "초록 불을 보내 줘!"'],
-        objects: [{ id: 'station', x: 0, y: 0, w: 0, h: 0, img: '', hit: [560, 360, 460, 250], label: '먼 기차역', click: (api) => { api.set('scopeSeen'); api.say('기차역 승강장에 초록 등불이 켜져 있어. 표지판 그림은 초록 불 → 등대. “초록 불을 보내 줘!”라는 뜻이야.', 5600); } }],
+        bg: 'zoom/scope.webp',
+        note: ['망원경으로 본 기차역', '서쪽 바다 건너 기차역 승강장에 초록 등불. 그림 표지판: 초록 불 → 등대. "초록 불을 보내 줘!"'],
+        objects: [
+          { id: 'sign', x: 0, y: 0, w: 0, h: 0, img: '', hit: [610, 380, 215, 120], label: '그림 표지판', click: (api) => { api.set('scopeSeen'); api.say('표지판 그림은 초록 동그라미 → 등대. 초록 불을 보내 달라는 뜻이야!', 5000); } },
+          { id: 'station', x: 0, y: 0, w: 0, h: 0, img: '', hit: [520, 200, 760, 360], label: '먼 기차역', click: (api) => { api.set('scopeSeen'); api.say('서쪽 바다 건너 기차역 승강장에 초록 등불이 켜져 있어. 표지판 그림은 초록 불 → 등대. “초록 불을 보내 줘!”라는 뜻이야.', 5600); } },
+        ],
       },
       log: {
         bg: 'assets/rooms/greenhouse/zoom/paper.svg',
@@ -192,6 +209,7 @@
 
     hints(s) {
       const f = s.flags, has = (i) => s.inv.includes(i);
+      if (f.lampOn && dir(s) !== 3) return { key: 'aim', steps: ['등불은 켜졌는데 징검다리가 안 보여요. 빛줄기가 어디를 비추고 있죠?', '기차역은 어느 쪽이었나요? 망원경이 있는 발코니, 그리고 바다 지도의 나침반을 떠올려 봐요.', '북쪽 렌즈 받침대 손잡이를 눌러 렌즈가 서쪽을 향하게 하세요.'] };
       if (f.lampOn) return { key: 'go', steps: ['징검다리가 나타났어요!', '서쪽 발코니에서 바다를 보세요.', '빛나는 징검다리를 누르세요.'] };
       if (!f.talked) return { key: 'talk', steps: ['등대지기에게 말을 걸어 봐요.', '동쪽 책상 옆 펭귄이에요.', '까망이를 누르세요.'] };
       if (!f.lensClean) {
