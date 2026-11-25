@@ -1,0 +1,90 @@
+{
+ "style_ref_canva_media": "MAHb5Z0ioYU",
+ "items": [
+  {
+   "file": "11-01-north.png",
+   "kind": "배경",
+   "edit_of": "",
+   "prompt": "Same moonlit attic bookbindery as the reference image: same ink line art with wobbly pen strokes, cross-hatching, warm watercolor washes on textured paper, amber, umber, deep teal and candle gold. Front view of the bindery's main wall. Center: a heavy wooden bookbinding workbench. On it: a cast-iron book press whose big screw has NO handle (an empty socket on top of the screw), a small wooden sewing frame with vertical cords, a lump of yellow beeswax on a saucer, and one finished leather book lying flat with its spine facing us. Above the bench: wall racks with bone folders, awls and brushes. A tall candle in a brass holder on the right end of the bench. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+  },
+  {
+   "file": "11-02-north-done.png",
+   "kind": "배경",
+   "edit_of": "11-01",
+   "prompt": "Edit this image. Keep everything exactly the same (same bench, press, sewing frame, beeswax, candle, racks, same composition). Change only this: the book press now has its iron T-handle fitted on the screw and clamps a brand-new thick book with a dark teal cover stamped with a small golden moth and three tiny golden stars. The loose finished book is gone from the bench. No text."
+  },
+  {
+   "file": "11-03-east.png",
+   "kind": "배경",
+   "edit_of": "",
+   "prompt": "Same moonlit attic bookbindery as the reference image: same ink line art with wobbly pen strokes, cross-hatching, warm watercolor washes on textured paper, amber, umber, deep teal and candle gold. Another wall: a big round window in the center, but a thick dark cloud outside covers the moon, so the window is dim grey-blue. Strung across the wall in front of the window: a long drying line with six folded paper signatures (bundles of folded pages) hanging over it with wooden clips, spread evenly. A small reading stand below the window, empty. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+  },
+  {
+   "file": "11-04-east-moon.png",
+   "kind": "배경",
+   "edit_of": "11-03",
+   "prompt": "Edit this image. Keep everything exactly the same (same window, wall, line, clips, reading stand, composition). Change only this: the cloud has blown away and a huge bright full moon shines through the round window, silver moonlight pours into the room, and the six paper bundles are gone from the line (empty clips). No text."
+  },
+  {
+   "file": "11-05-south.png",
+   "kind": "배경",
+   "edit_of": "",
+   "prompt": "Same moonlit attic bookbindery as the reference image: same ink line art with wobbly pen strokes, cross-hatching, warm watercolor washes on textured paper, amber, umber, deep teal and candle gold. Another wall: a tall wooden type cabinet with many small drawers; on its top a wooden tray holding twelve small metal printing type blocks standing upright (each carrying a small raised picture, not letters). Next to it, a pair of old leather fireplace bellows hanging on a hook, a small stove with a little pot for heating, a sheet of gold leaf in a paper booklet, and a fat pincushion shaped like a hedgehog stuck full of pins. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+  },
+  {
+   "file": "11-06-west.png",
+   "kind": "배경",
+   "edit_of": "",
+   "prompt": "Same moonlit attic bookbindery as the reference image: same ink line art with wobbly pen strokes, cross-hatching, warm watercolor washes on textured paper, amber, umber, deep teal and candle gold. Another wall: a thick wooden ceiling beam crosses high up, and from it hang several pale silk moth cocoons on threads, one large empty cocoon with loose shining silk at the far right end, clearly out of reach. Below: a tall bookcase full of old books filling the right half, and a low shelf of thread spools and a ball of thick red wool on the left. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+  },
+  {
+   "file": "11-07-west-open.png",
+   "kind": "배경",
+   "edit_of": "11-06",
+   "prompt": "Edit this image. Keep everything exactly the same. Change only this: the tall bookcase has swung open like a door, revealing a narrow glowing passage made of the backs of giant pages, with a single silver thread running into the light. No text."
+  },
+  {
+   "file": "11-08-mori.png",
+   "kind": "캐릭터",
+   "edit_of": "",
+   "prompt": "Character sheet, transparent background: a gentle moth bookbinder named Mori, large feathery antennae, soft fluffy fur collar like a scarf, tiny round spectacles, cream and dusty-brown wings with delicate patterns folded behind, small leather apron, standing on two legs, full body. Three poses side by side with big gaps: worried (inner eyebrow ends raised, hands clasped), surprised (eyes wide, antennae straight up), happy (wings opened wide, smiling). Same art style as the reference. No text."
+  },
+  {
+   "file": "11-09-props.png",
+   "kind": "소품",
+   "edit_of": "",
+   "prompt": "Game prop sheet, transparent background, objects far apart and not touching: an iron T-shaped screw handle; a hooked iron rod; a lump of yellow beeswax; a hank of shimmering raw silk thread; the same silk thread now waxed and neatly wound on a small card; a sewing needle with a long eye; a steel pin without eye; six folded paper signatures stacked loosely; a sheet of blank cream cover paper; a booklet of gold leaf; a thick red wool ball. Same art style. No text."
+  },
+  {
+   "file": "11-10-spine.png",
+   "kind": "확대 화면",
+   "edit_of": "",
+   "prompt": "Same moonlit attic bookbindery as the reference image: same ink line art with wobbly pen strokes, cross-hatching, warm watercolor washes on textured paper, amber, umber, deep teal and candle gold. Close-up: the spine of a finished hand-sewn book seen straight on, filling the frame vertically in the center: you can see six stacked page bundles, and on each bundle's folded edge a small black square printed mark; the marks step down diagonally from top-left to bottom-right like a staircase. Warm candle light. Landscape. No text, no numbers."
+  },
+  {
+   "file": "11-11-signatures.png",
+   "kind": "소품",
+   "edit_of": "",
+   "prompt": "Transparent background: six separate folded paper signatures (thick bundles of folded pages) seen from their folded spine edge, all the same size, spaced apart in a row, each with one small black square mark on the spine at a DIFFERENT height: bundle 1 mark at the very top, bundle 2 slightly lower, and so on, bundle 6 at the bottom. Arrange them in a shuffled order left to right (3, 6, 1, 5, 2, 4) and do not draw any numbers. Same art style. No text."
+  },
+  {
+   "file": "11-12-hedgehog.png",
+   "kind": "확대 화면",
+   "edit_of": "",
+   "prompt": "Same moonlit attic bookbindery as the reference image: same ink line art with wobbly pen strokes, cross-hatching, warm watercolor washes on textured paper, amber, umber, deep teal and candle gold. Close-up: a fat fabric pincushion shaped like a hedgehog filling the frame, with seven long pins stuck in its back at different angles; six are plain pins with round coloured heads, exactly one is a sewing needle with a visible long eye and no head. Landscape. No text."
+  },
+  {
+   "file": "11-13-watermark.png",
+   "kind": "확대 화면",
+   "edit_of": "",
+   "prompt": "Same moonlit attic bookbindery as the reference image: same ink line art with wobbly pen strokes, cross-hatching, warm watercolor washes on textured paper, amber, umber, deep teal and candle gold. Close-up: a sheet of blank cream paper held up against a bright full moon in a round window, the moonlight shining through it reveals a faint watermark inside the paper: a small moth shape with three small stars in a row beneath it. Landscape. No text."
+  },
+  {
+   "file": "11-14-type.png",
+   "kind": "소품",
+   "edit_of": "",
+   "prompt": "Transparent background: twelve small metal printing type blocks seen from the printing face, arranged in a 6 by 2 grid with gaps, each face carrying one raised picture: a moth, a star, a moon, a book, a key, a feather, a candle, a leaf, a spiral, a crown, a fish, a bell. All pictures are drawn MIRRORED (left-right reversed) as real printing type would be. Same art style. No text."
+  }
+ ],
+ "canva_media": {}
+}
