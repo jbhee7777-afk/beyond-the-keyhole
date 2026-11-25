@@ -8,8 +8,9 @@
  */
 (function () {
   const F = (s) => s.flags;
-  const ICONS = ['desk', 'cloud', 'light', 'train'];
-  const NAMES = { desk: '책상', cloud: '구름', light: '등대', train: '기차' };
+  // 다섯째 그림(집)은 미끼: 지도의 마지막 칸이지만 자물쇠는 네 칸뿐이라 '집'까지 가기 전 네 곳만 넣어야 한다
+  const ICONS = ['desk', 'cloud', 'light', 'train', 'house'];
+  const NAMES = { desk: '책상', cloud: '구름', light: '등대', train: '기차', house: '집' };
 
   function tinWidget(container, api, game) {
     const f = api.flags;
@@ -29,7 +30,7 @@
       b.onclick = (e) => {
         e.stopPropagation();
         if (game.busy) return;
-        f.slots[i] = (f.slots[i] + 1) % 4; im.src = game.src(`zoom/ic_${ICONS[f.slots[i]]}.webp`); label();
+        f.slots[i] = (f.slots[i] + 1) % ICONS.length; im.src = game.src(`zoom/ic_${ICONS[f.slots[i]]}.webp`); label();
         api.sfx('click');
         if (f.slots.every((s, k) => s === k)) {
           f.tinOpen = true; game.busy = true;
@@ -70,6 +71,7 @@
     sky: ['assets/rooms/studio/bg/north.webp', 'assets/rooms/studio/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
+    hintWait: 25, // 2편: 다음 힌트까지 조금 더 오래 생각하게
     isLit: () => true,
     ambient: (s) => (F(s).bookDone ? 'party' : 'garden'),
     guide: { name: '종이학 접이', img: 'assets/rooms/desk/props/crane_happy.webp' },

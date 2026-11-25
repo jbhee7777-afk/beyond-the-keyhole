@@ -82,6 +82,7 @@
     sky: ['assets/rooms/desk/bg/north.webp', 'assets/rooms/desk/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
+    hintWait: 25, // 2편: 다음 힌트까지 조금 더 오래 생각하게
     isLit: lit,
     dim: { color: '#1c1626', opacity: 0.66 },
     dimFade: 0.4,

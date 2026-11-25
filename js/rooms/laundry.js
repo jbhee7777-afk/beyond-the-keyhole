@@ -73,6 +73,7 @@
     sky: ['assets/rooms/laundry/bg/north.webp', 'assets/rooms/laundry/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
+    hintWait: 25, // 2편: 다음 힌트까지 조금 더 오래 생각하게
     isLit: sun,
     dim: { color: '#4a5a7a', opacity: 0.38 },
     ambient: (s) => (F(s).rainHung && sun(s) ? 'party' : sun(s) ? 'garden' : 'workshop'),

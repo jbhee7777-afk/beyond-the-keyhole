@@ -55,6 +55,7 @@
     sky: ['assets/rooms/lighthouse/bg/north.webp', 'assets/rooms/lighthouse/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
+    hintWait: 25, // 2편: 다음 힌트까지 조금 더 오래 생각하게
     isLit: lamp,
     dim: { color: '#0c1430', opacity: 0.22 },
     dimLit: { color: '#123a30', opacity: 0.05 },

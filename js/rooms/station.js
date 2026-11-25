@@ -45,6 +45,7 @@
     sky: ['assets/rooms/station/bg/north.webp', 'assets/rooms/station/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
+    hintWait: 25, // 2편: 다음 힌트까지 조금 더 오래 생각하게
     isLit: warm,
     dim: { color: '#3a5080', opacity: 0.12 },
     ambient: (s) => (warm(s) ? 'workshop' : 'night'),

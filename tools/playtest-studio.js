@@ -48,7 +48,7 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-studio
   // 3. 여행 지도 → 반짇고리 그림 자물쇠
   await view('west'); await clickObj('봄이의 여행 지도'); await shot('09-map'); await clickObj('반짇고리'); await shot('10a-tin');
   const want = ['책상', '구름', '등대', '기차'];
-  for (let i = 0; i < 4; i++) { for (let k = 0; k < 4; k++) { const lab = await p.evaluate((i) => document.querySelectorAll('.tin-slot')[i]?.getAttribute('aria-label') || '', i); if (lab.includes(want[i])) break; await p.click(`.tin-slot >> nth=${i}`); await p.waitForTimeout(250); } }
+  for (let i = 0; i < 4; i++) { for (let k = 0; k < 5; k++) { const lab = await p.evaluate((i) => document.querySelectorAll('.tin-slot')[i]?.getAttribute('aria-label') || '', i); if (lab.includes(want[i])) break; await p.click(`.tin-slot >> nth=${i}`); await p.waitForTimeout(250); } }
   await p.waitForTimeout(900); await shot('10b-tin-open'); await clickObj('반짇고리');
   await p.evaluate(() => window.__game.openHint()); await shot('11-hint'); await p.keyboard.press('Escape');
   // 4. 책 완성 → 바닥 문

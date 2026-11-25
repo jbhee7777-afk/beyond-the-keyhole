@@ -619,7 +619,7 @@
       const h = this.room.hints(this.s);
       if (this.s.hint.key !== h.key) this.s.hint = { key: h.key, level: 0, at: Date.now() };
       const box = this.hintEl;
-      const WAIT = 12000; // 다음 힌트까지 잠깐 생각할 시간
+      const WAIT = (this.room.hintWait || 12) * 1000; // 다음 힌트까지 잠깐 생각할 시간 (방마다 hintWait 초로 바꿀 수 있다)
       clearInterval(this.hintTick);
       const draw = () => {
         box.innerHTML = '';
