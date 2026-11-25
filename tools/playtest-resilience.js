@@ -21,6 +21,8 @@ const CASES = [
   { room: 'station', flags: { warm: true, awake: true }, inv: [], expectInv: ['ticket'] },
   { room: 'desk', flags: { craneTalked: true, memoTaken: true, boatMade: true }, inv: [], expectInv: ['boat'] },
   { room: 'sea', flags: { gotLetter: true, letterGiven: true, hatchOpen: true, posted: true }, inv: [], expectFlags: ['whale', 'whaleWrote'] },
+  { room: 'bindery', flags: { talked: true, pressed: true, moriDone: true }, inv: [], expectFlags: ['opened'] },
+  { room: 'bindery', flags: { talked: true, typeSet: true }, inv: [], expectInv: ['typeset'] },
 ];
 
 (async () => {

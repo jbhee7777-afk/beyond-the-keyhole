@@ -16,9 +16,16 @@
     { id: 'lighthouse', part: 2, n: '8장', title: '잉크 등대', mood: '고요한 밤바다' },
     { id: 'station', part: 2, n: '9장', title: '겨울잠 기차역', mood: '포근하고 조용한' },
     { id: 'studio', part: 2, n: '10장', title: '봄이의 작업실', mood: '따뜻하고 아련한' },
+    // 3편 「종이의 뒷면」 — 어른 난이도. 책의 뒷면 세계를 묶어 두는 다섯 가지를 되찾는다
+    { id: 'bindery', part: 3, n: '11장', title: '한밤의 제본소', mood: '고요하고 신비로운' },
+    { id: 'teahouse', part: 3, n: '12장', title: '김 서린 찻집', mood: '따스하고 촉촉한' },
+    { id: 'observatory', part: 3, n: '13장', title: '태엽 천문대', mood: '반짝이는 밤하늘' },
+    { id: 'shadow', part: 3, n: '14장', title: '그림자 인형극장', mood: '아슬아슬 신비한' },
+    { id: 'foldhouse', part: 3, n: '15장', title: '접히는 집', mood: '새벽처럼 고요한' },
   ];
   const PARTS = {
     1: { kicker: '1편 · 종이 책 속 다섯 개의 방', sub: '페이퍼도어 · 다섯 개의 문', lede: '다락방에서 찾은 낡은 종이 책을 펼쳤더니, 책장 사이 작은 종이 문이 덜컥 열렸어요! 다섯 방에서 <b>이야기 열쇠</b>를 모아 집으로 돌아가요.' },
+    3: { kicker: '3편 · 종이의 뒷면 (어른도 어려운 방)', sub: '페이퍼도어 · 종이의 뒷면', lede: '완성된 책의 마지막 장 뒤에서 잉크가 <b>거꾸로</b> 배어 나와요. 책의 뒷면 세계를 묶어 두는 다섯 가지가 사라지고 있어요. 진짜 세상의 원리로 풀어요.' },
     2: { kicker: '2편 · 같은 책, 다음 장', sub: '페이퍼도어 · 봄을 찾아서', lede: '다섯 개의 문을 지났는데 책장이 한 장 더 펄럭! 스케치북 구석의 이름 <b>“봄”</b>. 종이학 접이와 함께 이 책을 만든 사람을 찾아가요.' },
   };
   let part = 1;
@@ -54,7 +61,7 @@
       <div class="layer grain"></div>
       <div class="book">
         <img class="book-seal" src="assets/ui/seal.svg" alt="">
-        <div class="part-tabs" role="tablist">${[1, 2].map((k) => `<button class="part-tab${k === part ? ' on' : ''}" data-part="${k}" role="tab" aria-selected="${k === part}">${k}편</button>`).join('')}</div>
+        <div class="part-tabs" role="tablist">${[1, 2, 3].map((k) => `<button class="part-tab${k === part ? ' on' : ''}" data-part="${k}" role="tab" aria-selected="${k === part}">${k}편</button>`).join('')}</div>
         <p class="book-kicker">${P.kicker}</p>
         <h1>PAPERDOOR</h1>
         <p class="book-sub">${P.sub}</p>
