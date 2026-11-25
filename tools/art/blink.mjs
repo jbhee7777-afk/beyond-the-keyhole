@@ -19,6 +19,7 @@ const list = [
   ['greenhouse/props/snail_blink.svg', 130, 106, '0 -10 130 106', [[29, 1, 6.2, 6.2], [57, -4, 6.2, 6.2]], '#eedcbb', 1.4],
   ['upside/props/bat_hang_blink.svg', 160, 230, null, [[64, 166, 10, 11], [96, 166, 10, 11]], '#6a5a8a', 1.6],
   ['sea/props/octopus_work_blink.svg', 420, 440, null, [[166, 172, 18, 22], [234, 172, 18, 22]], '#e98a72', 2.4],
+  ['laundry/props/sheep_worried_blink.svg', 300, 300, null, [[128, 150, 9, 10], [172, 150, 9, 10]], '#5a5f78', 1.6],
   ['desk/props/crane_idle_blink.svg', 220, 200, null, [[31, 54, 6, 6]], '#d3e3f2', 1.2],
   ['clock13/props/ghost_shy_blink.svg', 360, 380, '0 -10 360 380', [[150, 190, 7, 6], [214, 190, 7, 6]], '#66626a', 0],
   ['clock13/props/ghost_talk_blink.svg', 360, 380, '0 -10 360 380', [[152, 170, 14, 17], [212, 170, 14, 17]], '#66626a', 0],

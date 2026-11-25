@@ -414,3 +414,16 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .zoom-text.giant-writing { left: 180px; top: 170px; width: 1000px; text-align: center; transform: rotate(-4deg); }
 .zoom-text.giant-writing p { font-family: var(--f-title); font-size: 120px; line-height: 1.15; color: rgba(70, 70, 82, 0.82); text-shadow: 3px 3px 0 rgba(140, 140, 150, 0.45); letter-spacing: 0.04em; margin: 0; }
 .big-text .zoom-text.giant-writing p { font-size: 120px; }
+
+/* 표지: 1편 / 2편 책갈피 꼬리표 (책 위쪽으로 삐죽) */
+.part-tabs { position: absolute; top: -46px; left: 64px; display: flex; gap: 10px; }
+.part-tab {
+  font-family: var(--f-title); font-size: 26px; padding: 8px 26px 14px; border: 2.5px solid var(--ink); border-bottom: 0;
+  background: var(--paper-lo); color: rgba(44, 32, 24, 0.7); cursor: var(--cursor); transform: translateY(8px);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+.part-tab:hover { background: #ead9ae; }
+.part-tab.on { background: var(--paper); color: var(--ink); transform: translateY(2px); }
+.part-tab.on::after { content: ''; display: block; height: 3px; margin: 6px -4px -10px; background: var(--ember); }
+/* 7장 세탁기 통이 도는 동안 */
+.obj.drum img[src*="drum_spin"] { animation: spin 0.9s linear infinite; }

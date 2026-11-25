@@ -509,3 +509,50 @@ export function craneArt(state = 'idle') {
   for (let y = 108; y < 150; y += 9) o += strokeP(O([[76, y], [146, y + 2]], 0.3), 0.6, '#6f8fb0', 0.25);
   return o;
 }
+
+/* ───────────── 뭉게 (털이 구름인 양, 7장 구름 세탁소 주인) ───────────── */
+// 300x300. 털은 동그라미를 겹치지 않고 울퉁불퉁한 한 줄 윤곽 + 안쪽 털 뭉치 곡선.
+// state: worried(안쪽 끝이 올라간 눈썹) | happy(웃는 반달 눈). 눈: (128,150) (172,150)
+export function sheepArt(state = 'worried') {
+  uid = 8000 + (state === 'happy' ? 100 : 0);
+  const wool = '#fbfaf4', woolS = 'rgba(120,130,170,0.22)', face = '#5a5f78', faceL = '#767c98', pink = '#f0b0b8';
+  let o = `<path d="${S([[60, 286], [244, 286], [232, 296], [72, 296]])}" fill="${INK}" opacity="0.16"/>`;
+  // 다리 (짧고 통통, 발굽)
+  for (const x of [104, 136, 170, 200]) {
+    o += part([[x - 11, 236], [x + 11, 236], [x + 10, 276], [x - 10, 276]], face, { sw: 1.6, heavy: [1, 2] });
+    o += part([[x - 11, 270], [x + 11, 270], [x + 12, 284], [x - 12, 284]], '#3a3e50', { sw: 1.4 });
+  }
+  // 몸통 털: 울퉁불퉁한 구름 윤곽 (점을 손으로 찍어 이은 것)
+  const body = []; const N = 26;
+  for (let i = 0; i < N; i++) { const a = i / N * Math.PI * 2; const bump = i % 2 ? 1 : 1.12; body.push([152 + Math.cos(a) * 112 * bump, 176 + Math.sin(a) * 76 * bump]); }
+  o += part(body, wool, { heavy: [3, 10], sw: 2, hw: 3.4, shade: [[120, 210], [280, 170], [280, 280], [60, 280]], shadeCol: woolS, light: [[80, 140], [130, 110], [170, 120], [110, 150]] });
+  // 털 결: 작은 C자 곡선들
+  for (let k = 0; k < 22; k++) { const a = k * 2.4, r = 30 + (k % 5) * 14; const x = 152 + Math.cos(a) * r * 1.4, y = 180 + Math.sin(a) * r * 0.8; o += strokeP(O([[x - 8, y], [x - 4, y - 7], [x + 4, y - 6], [x + 7, y + 1]], 0.2), 1.2, '#9aa0c0', 0.6); }
+  // 머리 (몸 앞쪽, 길쭉한 얼굴 + 머리 위 털뭉치)
+  const head = [[118, 118], [150, 104], [182, 118], [192, 152], [184, 190], [166, 210], [134, 210], [116, 190], [108, 152]];
+  o += part(head, face, { heavy: [3, 6], sw: 2, shade: [[160, 110], [200, 110], [200, 214], [160, 214]], shadeCol: 'rgba(20,20,40,0.25)', hatch: false, light: [[124, 128], [140, 118], [132, 150]] });
+  // 귀 (옆으로 처진)
+  o += part([[110, 138], [76, 130], [70, 146], [104, 156]], faceL, { sw: 1.6 }) + `<path d="${S([[104, 142], [82, 138], [80, 146], [102, 150]], 0.2)}" fill="${pink}"/>`;
+  o += part([[190, 138], [224, 130], [230, 146], [196, 156]], faceL, { sw: 1.6 }) + `<path d="${S([[196, 142], [218, 138], [220, 146], [198, 150]], 0.2)}" fill="${pink}"/>`;
+  // 머리 위 구름 털뭉치
+  const top = []; for (let i = 0; i <= 10; i++) { const a = Math.PI + i / 10 * Math.PI; top.push([150 + Math.cos(a) * 46 * (i % 2 ? 0.88 : 1), 114 + Math.sin(a) * 30 * (i % 2 ? 0.86 : 1)]); }
+  o += part([...top, [196, 120], [104, 120]], wool, { sw: 1.8, heavy: [6, 10] });
+  // 눈 + 눈썹 + 주둥이
+  if (state === 'happy') {
+    for (const ex of [128, 172]) o += strokeP(O([[ex - 9, 152], [ex, 143], [ex + 9, 152]], 0.1), 2.6, '#fbfaf4');
+    o += strokeP(O([[140, 186], [150, 194], [160, 186]], 0.2), 2.2, '#fbfaf4');
+  } else {
+    for (const sx of [-1, 1]) {
+      const ex = 150 + sx * 22, ey = 150;
+      o += `<path d="${S([[ex - 7, ey], [ex - 5, ey - 7], [ex + 1, ey - 9], [ex + 7, ey - 5], [ex + 7, ey + 2], [ex + 1, ey + 7], [ex - 5, ey + 5]], 0.2)}" fill="#fbfaf4"/>` + dot(ex + 1, ey, 3.4, INK) + dot(ex + 2.2, ey - 1.6, 1.1, '#fff');
+      // 걱정 눈썹: 안쪽 끝이 올라간다
+      o += strokeP(O([[ex + 10 * sx, ey - 12], [ex - 6 * sx, ey - 18]], 0.1), 2.2, '#fbfaf4');
+    }
+    o += strokeP(O([[142, 192], [150, 188], [158, 192]], 0.2), 2, '#fbfaf4');
+  }
+  o += `<path d="${S([[143, 176], [157, 176], [150, 182]], 0.1)}" fill="${pink}" stroke="${INK}" stroke-width="1"/>`;
+  o += blush(124, 172, '#f0a0b0') + blush(176, 172, '#f0a0b0');
+  // 세탁소 앞치마 끈 (하늘색)
+  o += strokeP(O([[96, 214], [150, 230], [208, 214]], 0.3), 5, '#8ec6e0');
+  return o;
+}

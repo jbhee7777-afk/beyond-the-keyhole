@@ -442,7 +442,8 @@
       } else if (s.sel === id) { this.inspect(id); }
       else {
         const c = this.room.combos.find((c) => (c.a === s.sel && c.b === id) || (c.a === id && c.b === s.sel));
-        if (c && !c.result) { this.say(c.say); sfx('nope'); s.sel = null; this.renderInv(); return; }
+        // result 없는 조합: 실패 안내(say만) 또는 아이템은 그대로 두고 무언가를 알아내는 조합(after 있음, 예: 돋보기로 꼬리표 보기)
+        if (c && !c.result) { this.say(c.say); s.sel = null; if (c.after) { sfx('tap'); c.after(this.api); this.save(); this.render(); } else { sfx('nope'); this.renderInv(); } return; }
         if (c) {
           s.inv = s.inv.filter((x) => x !== c.a && x !== c.b);
           s.inv.push(c.result); s.sel = null;

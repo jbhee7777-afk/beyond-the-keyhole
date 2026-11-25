@@ -4,16 +4,29 @@
 (function () {
   const app = document.getElementById('app');
   const CHAPTERS = [
-    { id: 'greenhouse', n: '1장', title: '햇살이 멈춘 온실', mood: '밝고 따뜻한' },
-    { id: 'toyshop', n: '2장', title: '토끼의 장난감 공방', mood: '귀엽고 아기자기한' },
-    { id: 'clock13', n: '3장', title: '열세 번째 시계', mood: '은은하게 오싹한' },
-    { id: 'upside', n: '4장', title: '거꾸로 된 세상', mood: '기발하고 엉뚱한' },
-    { id: 'sea', n: '5장', title: '바닷속 우체국', mood: '신비롭고 몽환적인' },
-    { id: 'desk', n: '6장', title: '거인의 책상', mood: '아기자기하고 놀라운' },
+    // 1편 「다섯 개의 문」
+    { id: 'greenhouse', part: 1, n: '1장', title: '햇살이 멈춘 온실', mood: '밝고 따뜻한' },
+    { id: 'toyshop', part: 1, n: '2장', title: '토끼의 장난감 공방', mood: '귀엽고 아기자기한' },
+    { id: 'clock13', part: 1, n: '3장', title: '열세 번째 시계', mood: '은은하게 오싹한' },
+    { id: 'upside', part: 1, n: '4장', title: '거꾸로 된 세상', mood: '기발하고 엉뚱한' },
+    { id: 'sea', part: 1, n: '5장', title: '바닷속 우체국', mood: '신비롭고 몽환적인' },
+    // 2편 「봄을 찾아서」 — 같은 세계, 책을 만든 사람 "봄"의 흔적을 따라간다
+    { id: 'desk', part: 2, n: '6장', title: '거인의 책상', mood: '아기자기하고 놀라운' },
+    { id: 'laundry', part: 2, n: '7장', title: '구름 세탁소', mood: '몽글몽글 상쾌한' },
+    { id: 'lighthouse', part: 2, n: '8장', title: '잉크 등대', mood: '고요한 밤바다' },
+    { id: 'station', part: 2, n: '9장', title: '겨울잠 기차역', mood: '포근하고 조용한' },
+    { id: 'studio', part: 2, n: '10장', title: '봄이의 작업실', mood: '따뜻하고 아련한' },
   ];
+  const PARTS = {
+    1: { kicker: '1편 · 종이 책 속 다섯 개의 방', sub: '페이퍼도어 · 다섯 개의 문', lede: '다락방에서 찾은 낡은 종이 책을 펼쳤더니, 책장 사이 작은 종이 문이 덜컥 열렸어요! 다섯 방에서 <b>이야기 열쇠</b>를 모아 집으로 돌아가요.' },
+    2: { kicker: '2편 · 같은 책, 다음 장', sub: '페이퍼도어 · 봄을 찾아서', lede: '다섯 개의 문을 지났는데 책장이 한 장 더 펄럭! 스케치북 구석의 이름 <b>“봄”</b>. 종이학 접이와 함께 이 책을 만든 사람을 찾아가요.' },
+  };
+  let part = 1;
+  try { part = +(localStorage.getItem('btk.part') || 1) || 1; } catch (e) { /* noop */ }
   const cleared = (id) => { try { return !!localStorage.getItem('btk.cleared.' + id); } catch (e) { return false; } };
   // 앞 장을 탈출해야 다음 장이 열린다 (설정에서 모두 열 수 있음)
-  const unlocked = (i) => Engine.settings.unlockAll || i === 0 || cleared(CHAPTERS[i - 1].id);
+  // 편마다 첫 장은 처음부터 열려 있다 (2편만 해도 된다)
+  const unlocked = (i) => Engine.settings.unlockAll || i === 0 || CHAPTERS[i - 1].part !== CHAPTERS[i].part || cleared(CHAPTERS[i - 1].id);
   let game = null;
   let fitFn = null;
 
@@ -29,7 +42,9 @@
   function cover() {
     if (game) { game.destroy(); game = null; window.__game = null; }
     const st = stageShell('cover');
-    const keys = CHAPTERS.map((c) => `<img src="assets/ui/${cleared(c.id) ? 'storykey' : 'storykey_empty'}.svg" alt="${c.n} ${cleared(c.id) ? '열쇠 얻음' : '아직'}">`).join('');
+    const list = CHAPTERS.filter((c) => c.part === part);
+    const P = PARTS[part];
+    const keys = list.map((c) => `<img src="assets/ui/${cleared(c.id) ? 'storykey' : 'storykey_empty'}.svg" alt="${c.n} ${cleared(c.id) ? '열쇠 얻음' : '아직'}">`).join('');
     st.innerHTML = `
       <img class="layer cover-sky" src="assets/rooms/greenhouse/bg/sky_day.svg" alt="">
       <img class="layer cover-room" src="assets/rooms/greenhouse/bg/north.svg" alt="">
@@ -39,24 +54,28 @@
       <div class="layer grain"></div>
       <div class="book">
         <img class="book-seal" src="assets/ui/seal.svg" alt="">
-        <p class="book-kicker">종이 책 속 이상한 방들</p>
+        <div class="part-tabs" role="tablist">${[1, 2].map((k) => `<button class="part-tab${k === part ? ' on' : ''}" data-part="${k}" role="tab" aria-selected="${k === part}">${k}편</button>`).join('')}</div>
+        <p class="book-kicker">${P.kicker}</p>
         <h1>PAPERDOOR</h1>
-        <p class="book-sub">페이퍼도어 · 종이 문 너머</p>
-        <p class="book-lede">다락방에서 찾은 낡은 종이 책을 펼쳤더니, 책장 사이 작은 종이 문이 덜컥 열렸어요! 방마다 <b>이야기 열쇠</b>를 모아 이 책을 만든 사람을 찾아가요.</p>
+        <p class="book-sub">${P.sub}</p>
+        <p class="book-lede">${P.lede}</p>
         <div class="key-row" aria-label="모은 이야기 열쇠">${keys}</div>
         <ol class="chapters"></ol>
       </div>
       <div class="cover-tools"><button class="tool tool-gear" aria-label="설정" title="설정"></button></div>`;
     const ol = st.querySelector('.chapters');
-    CHAPTERS.forEach((c, i) => {
-      const ready = !!Engine.rooms[c.id] && unlocked(i);
+    st.querySelectorAll('.part-tab').forEach((t) => { t.onclick = () => { part = +t.dataset.part; try { localStorage.setItem('btk.part', part); } catch (e) { /* noop */ } window.Sfx && window.Sfx.play('step'); cover(); }; });
+    list.forEach((c) => {
+      const i = CHAPTERS.indexOf(c);
+      const made = !!Engine.rooms[c.id];
+      const ready = made && unlocked(i);
       const done = cleared(c.id);
       const saved = Engine.store.get('btk.save.' + c.id);
       const li = document.createElement('li');
       const b = document.createElement('button');
       b.className = 'chapter' + (ready ? '' : ' locked');
       b.disabled = !ready;
-      const state = !ready ? `${CHAPTERS[i - 1].n}을 탈출하면 열려요` : done ? '탈출 완료 · 다시 하기' : saved && saved.v === Engine.SAVE_VERSION ? '이어서 하기' : c.mood + ' 방';
+      const state = !made ? '만드는 중이에요' : !ready ? `${CHAPTERS[i - 1].n}을 탈출하면 열려요` : done ? '탈출 완료 · 다시 하기' : saved && saved.v === Engine.SAVE_VERSION ? '이어서 하기' : c.mood + ' 방';
       b.innerHTML = `<span class="ch-n">${c.n}</span><span class="ch-t">${c.title}</span><span class="ch-m">${state}</span>`;
       if (ready) b.onclick = () => { window.Sfx && window.Sfx.play('step'); start(c.id, done && saved && saved.flags && saved.flags.__won); };
       li.appendChild(b); ol.appendChild(li);
@@ -97,6 +116,7 @@
     window.onresize = null;
     if (fresh) Engine.store.del('btk.save.' + id);
     const i = CHAPTERS.findIndex((c) => c.id === id);
+    if (CHAPTERS[i]) { part = CHAPTERS[i].part; try { localStorage.setItem('btk.part', part); } catch (e) { /* noop */ } }
     const next = CHAPTERS[i + 1];
     game = new Engine.Game(app, Engine.rooms[id], {
       onExit: cover,
