@@ -156,14 +156,19 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 
 /* ── 자막 ── */
 .subtitle {
-  position: absolute; z-index: 40; left: 50%; bottom: 34px; transform: translate(-50%, 14px); max-width: 1060px;
+  position: absolute; z-index: 40; left: 50%; bottom: 14px; transform: translate(-50%, 14px); max-width: 1240px; width: max-content;
   opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none;
 }
 .subtitle.show { pointer-events: auto; cursor: var(--cursor); }
 .subtitle.show { opacity: 1; transform: translate(-50%, 0); }
-.zooming .subtitle { bottom: 124px; }
+/* 화면 아래쪽 물건을 눌렀을 때는 위쪽에 (나침반 아래) */
+.subtitle.top { top: 92px; bottom: auto; transform: translate(-50%, -14px); }
+.subtitle.top.show { transform: translate(-50%, 0); }
+/* 마우스를 올리면 옅어져서 아래 그림이 보인다 (누르면 닫히고 아래 물건도 눌린다) */
+.subtitle.show:hover { opacity: 0.22; }
+.zooming .subtitle { bottom: 112px; }
 .subtitle p {
-  margin: 0; padding: 16px 40px 18px; font-size: 30px; line-height: 1.45; color: var(--ink); text-align: center; text-wrap: balance;
+  margin: 0; padding: 10px 36px 12px; font-size: 27px; line-height: 1.4; color: var(--ink); text-align: center; text-wrap: balance;
   background: var(--paper);
   clip-path: polygon(0.6% 8%, 12% 0, 31% 5%, 52% 1%, 74% 6%, 92% 0, 99.6% 10%, 100% 88%, 88% 100%, 63% 95%, 40% 100%, 18% 94%, 1% 100%, 0 60%);
   filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.3));
@@ -344,7 +349,7 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .notes-empty { font-size: 26px; color: #6b5338; }
 
 /* ── 큰 글씨 설정 ── */
-.big-text .subtitle p { font-size: 38px; }
+.big-text .subtitle p { font-size: 34px; }
 .big-text .zoom-text { font-size: 36px; }
 .big-text .tip p, .big-text .hint-line, .big-text .notes-list li { font-size: 31px; }
 

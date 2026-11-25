@@ -415,6 +415,8 @@
     onObj(o, n) {
       if (this.busy) return;
       this.lastAction = Date.now();
+      // 방금 누른 곳의 높이를 기억해 두었다가, 자막이 그 물건을 가리지 않는 쪽에 뜨게 한다
+      this.focus = { y: o.hit ? o.hit[1] + o.hit[3] / 2 : o.y + o.h / 2, at: Date.now(), zoom: !!this.s.zoom };
       const s = this.s, api = this.api;
       if (s.sel) {
         const f = o.use && o.use[s.sel];
@@ -520,12 +522,22 @@
       this.sub.innerHTML = '';
       const p = el('p', '', this.sub);
       p.textContent = text;
+      this.sub.classList.toggle('top', this.subtitleOnTop(opts));
       this.sub.classList.remove('show'); void this.sub.offsetWidth; this.sub.classList.add('show');
       const slow = Engine.settings.slowText ? 1.7 : 1;
       const dur = Math.max(ms || 0, 3800 + text.length * 120) * slow;
       this.subT = setTimeout(() => this.sub.classList.remove('show'), dur);
       if (opts.note) this.note(opts.note, text);
       if (opts.who) this.anim(opts.who, 'talk', 1600);
+    }
+    // 자막 자리: 말하는 캐릭터나 방금 누른 물건이 화면 아래쪽이면 자막은 위에 띄운다
+    subtitleOnTop(opts) {
+      if (this.s.zoom || (this.tipEl && !this.tipEl.hidden)) return false;
+      let y = null;
+      const n = opts.who && (this.nodes.get(opts.who) || null);
+      if (n) y = parseFloat(n.style.top) + parseFloat(n.style.height) / 2;
+      else if (this.focus && !this.focus.zoom && Date.now() - this.focus.at < 2500) y = this.focus.y;
+      return y != null && y > 470;
     }
     // 단서 수첩: 같은 제목은 한 번만
     note(title, text) {
