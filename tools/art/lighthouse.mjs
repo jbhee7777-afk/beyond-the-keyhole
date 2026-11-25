@@ -110,6 +110,13 @@ function bgEast() {
   // 벽의 구명튜브와 밧줄
   o += part(ellPts(800, 220, 90, 90, 0, Math.PI * 2, 22), '#f4ecd8', { sw: 2.6, heavy: [6, 14] }) + part(ellPts(800, 220, 46, 46, 0, Math.PI * 2, 18), C.wall, { sw: 2 });
   for (const a of [0.4, 2, 3.6, 5.2]) o += part([[800 + Math.cos(a) * 52, 220 + Math.sin(a) * 52], [800 + Math.cos(a + 0.3) * 52, 220 + Math.sin(a + 0.3) * 52], [800 + Math.cos(a + 0.3) * 88, 220 + Math.sin(a + 0.3) * 88], [800 + Math.cos(a) * 88, 220 + Math.sin(a) * 88]], C.red, { sw: 1.4 });
+  o += part(rectPts(150, 150, 230, 170), C.plank2, { sw: 2.2, heavy: [1, 2] }) + part(rectPts(164, 164, 202, 142), '#bcd4e8', { sw: 1.2 });
+  o += `<path d="${S([[180, 270], [350, 270], [330, 296], [200, 296]], 0.4)}" fill="#8a5a3a" stroke="${INK}" stroke-width="1.6"/>` + part([[262, 270], [262, 186], [320, 262]], '#f4ecd8', { sw: 1.4 }) + part([[256, 270], [256, 200], [208, 262]], '#f4ecd8', { sw: 1.4 });
+  o += line([[560, 40], [560, 150]], { sw: 2 }) + part([[536, 150], [584, 150], [580, 220], [540, 220]], C.brass, { sw: 1.8, heavy: [1, 2] }) + dot(560, 186, 10, C.lamp, 0.8);
+  // 바닥 앞쪽: 밧줄 뭉치, 나무 상자와 유리병 속 배
+  for (let r = 70; r > 10; r -= 12) o += `<path d="${O(ellPts(200, 800, r * 1.6, r * 0.6, 0, Math.PI * 2, 18), 0.6)}" fill="none" stroke="${C.rope}" stroke-width="9"/>` + `<path d="${O(ellPts(200, 800, r * 1.6, r * 0.6, 0, Math.PI * 2, 18), 0.6)}" fill="none" stroke="#8a6a3a" stroke-width="1.4"/>`;
+  o += part([[1240, 860], [1460, 856], [1450, 700], [1250, 704]], C.plank2, { sw: 2.4, heavy: [1, 2] }) + line([[1250, 780], [1452, 776]], { sw: 2, op: 0.6 }) + line([[1246, 704], [1456, 858]], { sw: 2, op: 0.4 });
+  o += part([[1280, 700], [1420, 700], [1424, 640], [1400, 620], [1300, 620], [1276, 640]], '#cfe6ee', { sw: 2 }) + `<path d="${S([[1300, 680], [1400, 680], [1390, 692], [1310, 692]], 0.3)}" fill="#8a5a3a"/>` + part([[1350, 680], [1350, 640], [1380, 676]], '#f4ecd8', { sw: 1 });
   put('bg/east.svg', W, H, o, { id: 1821 });
 }
 function keeper(state) { seed(1822); put(`props/penguin_${state}.svg`, 280, 320, penguinArt(state), { id: 1822, displace: 0.8 }); }
@@ -135,6 +142,9 @@ function bgSouth() {
   o += `<path d="${S([[1000, 220], [1100, 200], [1200, 230], [1300, 200], [1420, 230], [1420, 270], [1000, 270]], 1)}" fill="#bcd4e8"/>`;
   o += part([[1020, 200], [1030, 140], [1040, 200]], C.red, { sw: 1.4 }) + part([[1380, 190], [1420, 190], [1420, 170], [1380, 170]], '#5a5a6a', { sw: 1.2 }) + dot(1400, 160, 5, C.green);
   for (let i = 0; i < 8; i++) o += dot(1060 + i * 40, 214 + Math.sin(i) * 8, 4, '#7a6a5a');
+  o += line([[800, 90], [800, 300]], { sw: 10, color: '#5a5a66' }) + line([[740, 140], [860, 140]], { sw: 10, color: '#5a5a66' }) + `<path d="${O([[700, 260], [740, 330], [800, 350], [860, 330], [900, 260]], 0.5)}" fill="none" stroke="#5a5a66" stroke-width="12"/>` + part(ellPts(800, 80, 18, 18, 0, Math.PI * 2, 12), 'none', { sw: 6, stroke: '#5a5a66' });
+  o += `<path d="${O([[700, 120], [660, 260], [700, 400], [650, 520]], 1)}" fill="none" stroke="${C.rope}" stroke-width="8"/>`;
+  for (const [x, w] of [[60, 200], [1350, 190]]) { o += part([[x, 880], [x + w, 880], [x + w - 14, 700], [x + 14, 700]], C.plank2, { sw: 2.4, heavy: [1, 2] }); for (const y of [740, 840]) o += line([[x + 8, y], [x + w - 8, y]], { sw: 6, color: '#5a5a66' }); o += part(ellPts(x + w / 2, 700, w / 2 - 14, 18, 0, Math.PI * 2, 16), C.plank, { sw: 1.8 }); }
   put('bg/south.svg', W, H, o, { id: 1831 });
 }
 function bottle(col, name) {

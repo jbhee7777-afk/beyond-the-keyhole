@@ -11,6 +11,17 @@
   const F = (s) => s.flags;
   const lamp = (s) => !!F(s).lampOn;
   const NAMES = { ink_red: '빨강', ink_blue: '파랑', ink_yellow: '노랑', ink_black: '검정' };
+  // 동행하는 접이: 지금 상황에 맞는 혼잣말 힌트 (2편 내내 함께 다닌다)
+  const companion = (lines, place) => ({
+    id: 'crane', img: 'assets/rooms/desk/props/crane_idle.svg', ...place, cls: 'bob', blink: 'assets/rooms/desk/props/crane_idle_blink.svg', label: '종이학 접이',
+    click: (api) => { const h = api.game.room.hints(api.game.s); api.say('접이: “' + (lines[h.key] || '같이 찾아보자! 구석구석 눌러 봐.') + '”', 0, { who: 'crane' }); },
+    wrong: '접이: “그건 나한테 말고 다른 데 써 봐!”',
+  });
+  const CRANE_LINES = {
+    talk: '등대지기 아저씨한테 물어보자.', rag: '렌즈를 닦을 천이 있어야 해.', wet: '마른 천으론 먹물이 번지기만 할 거야. 물이 있으면…', wipe: '젖은 걸레로 렌즈를 닦자!',
+    scope: '기차역에서 무슨 색을 원하는지 망원경으로 보자.', mix: '초록 잉크가 없네. 물감처럼 두 색을 섞으면 어때?', mix2: '파랑이랑 노랑을 섞으면…!',
+    pour: '초록 잉크를 렌즈 옆 잉크 통에!', switch: '이제 불을 켜 보자!', go: '징검다리가 보여! 봄이도 이 돌을 밟았겠지?',
+  };
 
   function keeperTalk(api) {
     const f = api.flags;
@@ -116,8 +127,9 @@
           { id: 'oil', x: 0, y: 0, w: 0, h: 0, img: '', hit: [550, 450, 70, 70], label: '작은 기름 램프', look: '작은 램프 하나로 버티는 중이야. 이걸로는 바다 건너까지 빛이 안 닿아.' },
           { id: 'buoy', x: 0, y: 0, w: 0, h: 0, img: '', hit: [700, 120, 200, 200], label: '구명 튜브', look: '빨강·하양 구명 튜브. 등대지기의 필수품!' },
           { id: 'windowE', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1060, 90, 360, 440], label: '바다 창', look: (s) => (lamp(s) ? '초록 불빛이 바다를 쓸며 지나가.' : '깜깜한 바다… 파도 소리만 들려.') },
+          companion(CRANE_LINES, { x: 1230, y: 400, w: 176, h: 160 }),
           {
-            id: 'keeper', img: (s) => (lamp(s) ? 'props/penguin_happy' : 'props/penguin_worried'), x: 690, y: 310, w: 340, h: 388, cls: 'bob', blink: (s) => (lamp(s) ? null : 'props/penguin_worried_blink'), hit: [760, 330, 210, 360], label: '등대지기 까망이',
+            id: 'keeper', img: (s) => (lamp(s) ? 'props/penguin_happy' : 'props/penguin_worried'), x: 640, y: 250, w: 400, h: 457, cls: 'bob', blink: (s) => (lamp(s) ? null : 'props/penguin_worried_blink'), hit: [720, 270, 250, 430], label: '등대지기 까망이',
             click: keeperTalk,
             use: {
               ink_green: (api) => api.say('까망이: “바로 그 색이야! 렌즈 옆 잉크 통에 부어 줘.”', 0, { who: 'keeper' }),

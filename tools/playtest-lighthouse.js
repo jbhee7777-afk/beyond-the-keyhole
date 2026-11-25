@@ -32,6 +32,7 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-lighth
   // 1. 까망이
   await view('east'); await clickObj('등대지기 까망이'); await p.waitForTimeout(5400); await shot('03-keeper');
   await clickObj('등대 일지'); await shot('04-log'); await back();
+  await clickObj('종이학 접이'); await shot('04b-crane');
   // 손잡이부터 당겨 보기 (잉크 없음)
   await view('north'); await clickObj('등불 손잡이'); await expect(async () => !(await flags()).lampOn, '잉크 없이 등불이 켜짐');
   // 2. 걸레 → 빗물 → 렌즈

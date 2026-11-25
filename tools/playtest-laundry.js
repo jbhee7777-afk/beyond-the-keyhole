@@ -49,6 +49,10 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-laundr
   await shot('08b-washing'); await p.waitForTimeout(2800); await back();
   await sel('mitten'); await clickObj('구름 양 뭉게'); await p.waitForTimeout(600);
   // 6. 서쪽 빨랫줄에 빗구름 → 무지개
+  // 해를 마주 보는 동쪽 줄에 널면 무지개가 안 뜬다
+  await view('east'); await sel('raincloud'); await clickObj('이불 구름'); await shot('08c-east-wrong');
+  await expect(async () => !(await flags()).rainHung, '동쪽에 널었는데 걸림');
+  await view('north'); await clickObj('종이학 접이'); await shot('08d-crane');
   await view('west'); await sel('raincloud'); await clickObj('빨랫줄'); await shot('09-rainbow');
   await p.evaluate(() => window.__game.openHint()); await shot('10-hint'); await p.keyboard.press('Escape');
   await view('north'); await shot('11-north-happy'); await view('west');

@@ -3,7 +3,7 @@
 // 분위기: 해 질 녘 할머니 집 다락방. 어린 봄이가 종이 책을 만들던 작업실. 따뜻한 주황 햇살, 먼지가 반짝.
 // 구도: 화면 전체가 "펼친 책 한 쪽" 안에 있다 (앞쪽 틀 = 책장 가장자리와 가운데 접힌 골).
 import { seed, rand, pick, INK, wob, rect, rectPts, ellPts, fill, line, hatch, svg } from './ink.mjs';
-import { part, S, O, craneArt, sheepArt, penguinArt, bearArt } from './chars.mjs';
+import { part, S, O, craneArt, sheepArt, penguinArt, bearArt, grandmaArt } from './chars.mjs';
 
 const OUT = new URL('../../assets/rooms/studio/', import.meta.url).pathname;
 const UI = new URL('../../assets/ui/', import.meta.url).pathname;
@@ -63,6 +63,8 @@ function bgNorth() {
   // 실타래 바구니, 종이 더미
   o += part([[1120, 640], [1260, 640], [1240, 580], [1140, 580]], '#c9a06a', { sw: 2 }) + part(ellPts(1170, 576, 22, 18, 0, Math.PI * 2, 10), C.red, { sw: 1.4 }) + part(ellPts(1214, 572, 20, 16, 0, Math.PI * 2, 10), C.blue, { sw: 1.4 });
   for (let k = 0; k < 5; k++) o += part([[380, 640 - k * 10], [500, 636 - k * 10], [504, 646 - k * 10], [384, 650 - k * 10]], k % 2 ? C.paper : C.paper2, { sw: 1.2 });
+  o += `<path d="${S(ellPts(800, 790, 380, 70, 0, Math.PI * 2, 24), 2)}" fill="#c4704a" stroke="${INK}" stroke-width="2.2"/>` + `<path d="${S(ellPts(800, 790, 300, 54, 0, Math.PI * 2, 22), 2)}" fill="#e8c070" stroke="${INK}" stroke-width="1.6"/>` + `<path d="${S(ellPts(800, 790, 200, 36, 0, Math.PI * 2, 20), 2)}" fill="#7aa0b8" stroke="${INK}" stroke-width="1.6"/>`;
+  for (const [x, y, w, h] of [[60, 700, 220, 170], [90, 600, 170, 110]]) o += part(rectPts(x, y, w, h), '#c9a06a', { sw: 2.2, heavy: [1, 2] }) + line([[x, y + 20], [x + w, y + 20]], { sw: 1.6, op: 0.6 }) + part(ellPts(x + w / 2, y + h / 2 + 10, 20, 14, 0, Math.PI * 2, 10), C.pink, { sw: 1 });
   put('bg/north.svg', W, H, o, { id: 2011 });
 }
 // 펼친 종이 책 (600x380): 왼쪽 면엔 지금까지의 그림, 오른쪽 면은 비었거나/문 페이지/완성
@@ -107,6 +109,9 @@ function bgEast() {
   o += part([[1020, 140], [1360, 134], [1364, 340], [1024, 346]], C.paper, { sw: 2.2, heavy: [1, 2] });
   const steps = [(x, y) => part([[x - 20, y - 14], [x + 4, y - 18], [x + 22, y + 4], [x - 6, y + 16]], C.paper2, { sw: 1.4 }), (x, y) => part([[x - 22, y - 6], [x + 22, y - 6], [x + 18, y + 16], [x - 18, y + 16]], C.wood, { sw: 1.4 }) + line([[x - 18, y - 2], [x + 18, y - 2]], { sw: 3, color: C.water }), (x, y) => part(rectPts(x - 20, y - 16, 40, 32), 'none', { sw: 2.4 }) + line([[x - 16, y], [x + 16, y]], { sw: 1, op: 0.6 }) + line([[x, y - 12], [x, y + 12]], { sw: 1, op: 0.6 }), (x, y) => line([[x - 26, y - 14], [x + 26, y - 14]], { sw: 2 }) + part(rectPts(x - 14, y - 12, 28, 26), C.paper, { sw: 1.4 }) + part(ellPts(x + 22, y - 26, 8, 8, 0, Math.PI * 2, 8), C.sun, { sw: 1 })];
   steps.forEach((f, i) => { const x = 1070 + i * 82, y = 240; o += f(x, y); if (i < 3) o += `<path d="M${x + 30} ${y} L${x + 50} ${y}" stroke="${INK}" stroke-width="2.4"/><path d="M${x + 50} ${y - 6} L${x + 58} ${y} L${x + 50} ${y + 6}Z" fill="${INK}"/>`; });
+  for (const [x, y, c] of [[420, 760, '#e8a0a8'], [520, 800, '#9ac0e8'], [360, 830, '#f3cf5a'], [800, 850, '#a8d0a0']]) o += `<path d="${S(ellPts(x, y, 34, 12, 0, Math.PI * 2, 10), 3)}" fill="${c}" opacity="0.8"/>`;
+  o += part([[700, 820], [860, 820], [850, 680], [710, 680]], C.wood2, { sw: 2.2, heavy: [1, 2] }) + part(ellPts(780, 680, 80, 18, 0, Math.PI * 2, 16), C.wood, { sw: 2 });
+  o += part([[740, 640], [820, 640], [824, 676], [736, 676]], '#f6eedc', { sw: 1.6 }) + line([[750, 650], [810, 650]], { sw: 1, op: 0.5 });
   put('bg/east.svg', W, H, o, { id: 2021 });
 }
 function tub(state) {
@@ -150,6 +155,10 @@ function bgSouth() {
   // 흔들의자와 뜨개 담요 (할머니 의자)
   o += part([[180, 640], [200, 420], [300, 400], [320, 640]], '#9a6a40', { sw: 2.4, heavy: [1, 2] }) + part([[170, 560], [360, 560], [360, 600], [170, 600]], C.pink, { sw: 2 });
   o += `<path d="${O([[150, 660], [260, 690], [370, 660]], 0.5)}" fill="none" stroke="${C.wood2}" stroke-width="6"/>`;
+  o += `<path d="${S(ellPts(1290, 780, 240, 60, 0, Math.PI * 2, 22), 2)}" fill="${C.pink}" stroke="${INK}" stroke-width="2"/>` + `<path d="${S(ellPts(1290, 780, 160, 40, 0, Math.PI * 2, 20), 2)}" fill="#f6eedc" stroke="${INK}" stroke-width="1.4"/>`;
+  o += part([[1200, 760], [1380, 760], [1360, 660], [1220, 660]], '#c9a06a', { sw: 2.2, heavy: [1, 2] });
+  for (const [x, c] of [[1250, C.red], [1300, C.blue], [1344, '#f3cf5a']]) o += part(ellPts(x, 652, 26, 22, 0, Math.PI * 2, 12), c, { sw: 1.6 });
+  o += line([[1300, 652], [1420, 560]], { sw: 3, color: '#a8a8b8' }) + line([[1310, 656], [1440, 590]], { sw: 3, color: '#a8a8b8' });
   put('bg/south.svg', W, H, o, { id: 2031 });
 }
 function floorDoor(open) {
@@ -203,6 +212,9 @@ function bgWest() {
   o += part(rectPts(1000, 160, 220, 260), C.wood2, { sw: 2.4, heavy: [1, 2] }) + part(rectPts(1014, 174, 192, 232), '#e8d8b8', { sw: 1.4 });
   o += part([[1080, 406], [1080, 300], [1110, 270], [1140, 300], [1140, 406]], '#b89a78', { sw: 1.4 }) + part(ellPts(1110, 250, 24, 26, 0, Math.PI * 2, 12), '#b89a78', { sw: 1.4 });
   o += part([[1150, 230], [1180, 200], [1196, 226], [1168, 236]], '#bcd4ea', { sw: 1.2 });
+  o += part([[260, 860], [560, 856], [552, 660], [268, 664]], '#c9a06a', { sw: 2.4, heavy: [1, 2] }) + part([[268, 664], [552, 660], [580, 620], [240, 626]], '#d8b480', { sw: 2 });
+  for (let k = 0; k < 4; k++) o += part([[300 + k * 40, 650 - k * 4], [360 + k * 40, 646 - k * 4], [362 + k * 40, 600 - k * 4], [302 + k * 40, 604 - k * 4]], k % 2 ? C.paper : C.paper2, { sw: 1.2 });
+  o += part(rectPts(320, 720, 180, 80), C.paper, { sw: 1.6 }) + part(ellPts(410, 760, 24, 20, 0, Math.PI * 2, 10), '#bcd4ea', { sw: 1.2 });
   put('bg/west.svg', W, H, o, { id: 2041 });
 }
 function tin(open) {
@@ -255,13 +267,20 @@ function frame() {
 // 2편 마지막 엔딩 그림: 다락방 창가에 모인 2편 친구들
 function finale2() {
   seed(2080);
+  // 할머니 집 부엌 창가: 가운데 봄 할머니, 둘레에 2편 친구들, 위로 날아오르는 접이
   let o = sunsetSky(0, 0, 1000, 600);
-  o += part([[0, 470], [1000, 460], [1000, 600], [0, 600]], C.floor, { sw: 2 });
-  o += `<g transform="translate(60 230) scale(0.62)">${bearArt('awake')}</g>`;
-  o += `<g transform="translate(300 260) scale(0.6)">${sheepArt('happy')}</g>`;
-  o += `<g transform="translate(520 250) scale(0.62)">${penguinArt('happy')}</g>`;
-  o += `<g transform="translate(720 300) scale(0.8)">${craneArt('happy')}</g>`;
-  o += `<g filter="url(#blur)"><ellipse cx="500" cy="300" rx="480" ry="260" fill="#fff3c0" opacity="0.25"/></g>`;
+  o += part([[-10, 440], [1010, 430], [1010, 610], [-10, 610]], C.floor, { sw: 2 });
+  for (let k = 0; k < 9; k++) o += line([[k * 120, 436], [k * 120 - 60, 610]], { sw: 1.4, color: C.floorD, op: 0.6 });
+  // 식탁과 쿠키 접시
+  o += part([[340, 470], [660, 466], [664, 492], [336, 496]], C.wood, { sw: 2 }) + part(ellPts(500, 462, 70, 14, 0, Math.PI * 2, 16), '#f6eedc', { sw: 1.6 });
+  for (let i = 0; i < 5; i++) o += part(ellPts(452 + i * 24, 456, 11, 7, 0, Math.PI * 2, 10), '#d8a060', { sw: 1.2 });
+  o += `<g transform="translate(20 250) scale(0.6)">${bearArt('awake')}</g>`;
+  o += `<g transform="translate(220 300) scale(0.5)">${sheepArt('happy')}</g>`;
+  o += `<g transform="translate(372 70) scale(0.95)">${grandmaArt()}</g>`;
+  o += `<g transform="translate(650 270) scale(0.6)">${penguinArt('happy')}</g>`;
+  o += `<g transform="translate(800 60) scale(0.8)">${craneArt('happy')}</g>`;
+  o += `<g filter="url(#blur)"><ellipse cx="500" cy="260" rx="460" ry="240" fill="#fff3c0" opacity="0.22"/></g>`;
+  for (let i = 0; i < 14; i++) o += dot(rand(40, 960), rand(30, 400), rand(2, 4), '#fff6d0', 0.8);
   svg(UI + 'finale2.svg', 1000, 600, o, { id: 2080, displace: 1.2 });
 }
 

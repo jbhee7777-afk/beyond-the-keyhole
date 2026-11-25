@@ -12,6 +12,17 @@
   const F = (s) => s.flags;
   const warm = (s) => !!F(s).warm;
   const pos = (s) => F(s).lever || 1;
+  // 동행하는 접이: 지금 상황에 맞는 혼잣말 힌트 (2편 내내 함께 다닌다)
+  const companion = (lines, place) => ({
+    id: 'crane', img: 'assets/rooms/desk/props/crane_idle.svg', ...place, cls: 'bob', blink: 'assets/rooms/desk/props/crane_idle_blink.svg', label: '종이학 접이',
+    click: (api) => { const h = api.game.room.hints(api.game.s); api.say('접이: “' + (lines[h.key] || '같이 찾아보자! 구석구석 눌러 봐.') + '”', 0, { who: 'crane' }); },
+    wrong: '접이: “그건 나한테 말고 다른 데 써 봐!”',
+  });
+  const CRANE_LINES = {
+    shovel: '곰 역장님을 깨우려면 방을 따뜻하게 해야 한대. 난로 연료가 어디 있을까?', dig: '눈 더미를 삽으로 파 보자!', coal: '석탄이다! 꺼내 가자.', stove: '난로에 석탄을 넣자.',
+    flower: '따뜻해졌으니 창가 꽃이 피었을지도!', wake: '꽃 냄새로 봄이 온 걸 알려 주자.', lever: '다락방은 몇 번 선로일까? 기차표 그림이랑 창밖 시간표를 비교해 봐.',
+    whistle: '곰곰이 아저씨가 기적을 불어 줄 거야.', board: '기차다! 다락방으로 가자!',
+  };
 
   function bearClick(api) {
     const f = api.flags;
@@ -110,6 +121,7 @@
               api.set('flowerTaken'); api.give('flower', n); api.say('따뜻해지니 꽃이 활짝 피었어! 한 송이 똑. 달콤한 봄 냄새.');
             },
           },
+          companion(CRANE_LINES, { x: 470, y: 430, w: 176, h: 160 }),
           { id: 'coat', x: 0, y: 0, w: 0, h: 0, img: '', hit: [60, 160, 160, 270], label: '역장 외투', look: '두툼한 역장 외투. 주머니에 사탕 껍질만 있어.' },
         ],
       },
@@ -151,7 +163,12 @@
           { id: 'shovel', img: 'props/shovel', x: 1150, y: 290, w: 130, h: 420, show: (s) => !F(s).shovelTaken, label: '눈삽', click: (api, n) => { api.set('shovelTaken'); api.give('shovel', n); api.say('벽에 기대 둔 눈삽을 챙겼어.'); } },
           {
             id: 'lever', img: (s) => `props/lever_${pos(s)}`, x: 880, y: 320, w: 220, h: 340, label: '선로 전환기',
-            click: (api) => { const f = api.flags; f.lever = (pos(api.game.s) % 3) + 1; api.sfx('creak'); api.say(`선로 전환기를 ${f.lever}번으로 철컥 돌렸어.`); },
+            click: (api) => {
+              const f = api.flags; f.lever = (pos(api.game.s) % 3) + 1; api.sfx('creak');
+              // 곰곰이가 깨어 있으면 3번에 맞추는 순간 바로 기적이 울린다 (맞혔다는 반응이 즉시 오게)
+              if (f.lever === 3 && f.awake && !f.trainHere) { f.trainHere = true; api.sfx('rooster'); api.say('철컥, 3번! 역장실 쪽에서 “삐익—!” 기적 소리가 울려. 다락방행 별빛 열차가 승강장으로 들어온다!', 5600); return; }
+              api.say(`선로 전환기를 ${f.lever}번으로 철컥 돌렸어.`);
+            },
           },
           { id: 'door', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 260, 180, 440], label: '역 문', look: '역장실로 들어가는 문이야.' },
         ],

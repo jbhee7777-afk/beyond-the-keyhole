@@ -12,6 +12,18 @@
   const F = (s) => s.flags;
   const sun = (s) => !!F(s).sunOpen;
   const ORDER = ['drop', 'wind', 'sun'];
+  // 동행하는 접이: 지금 상황에 맞는 혼잣말 힌트 (2편 내내 함께 다닌다)
+  const companion = (lines, place) => ({
+    id: 'crane', img: 'assets/rooms/desk/props/crane_idle.svg', ...place, cls: 'bob', blink: 'assets/rooms/desk/props/crane_idle_blink.svg', label: '종이학 접이',
+    click: (api) => { const h = api.game.room.hints(api.game.s); api.say('접이: “' + (lines[h.key] || '같이 찾아보자! 구석구석 눌러 봐.') + '”', 0, { who: 'crane' }); },
+    wrong: '접이: “그건 나한테 말고 다른 데 써 봐!”',
+  });
+  const CRANE_LINES = {
+    talk: '저 양한테 말 걸어 볼까? 여기 주인 같아.', crank: '잃어버린 물건은 어디 모아 둘까? 바깥에 바구니가 있던데.', pulley: '저 도르래에 손잡이를 끼우면 이불을 걷을 수 있겠어!',
+    grey: '먼지투성이 구름이 빨래 바구니에 있었어.', mag: '꼬리표 글씨가 너무 작아… 돋보기 같은 거 없나?', label: '돋보기로 꼬리표를 들여다보자!',
+    in: '먼지 구름을 세탁기에 넣어 보자.', wash: '꼬리표에 그려진 순서대로 단추를 누르는 거야.', hang: '안내판에 해님을 등지고 서야 무지개가 보인다고 했지?',
+    sun: '빗구름만으론 안 돼. 햇빛도 있어야 해!', go: '무지개 다리야! 건너가자!',
+  };
 
   function sheepTalk(api) {
     const f = api.flags;
@@ -110,6 +122,7 @@
               raincloud: (api) => api.say('이미 깨끗해. 또 빨면 쪼그라들 거야.'),
             },
           },
+          companion(CRANE_LINES, { x: 1060, y: 96, w: 176, h: 160 }),
           { id: 'drum', img: (s) => (F(s).washing ? 'props/drum_spin' : F(s).cloudIn && !F(s).washed ? 'props/drum_grey' : 'props/drum_empty'), x: 918, y: 378, w: 264, h: 264, cls: 'drum' },
           {
             id: 'basket', img: (s) => (F(s).greyTaken ? 'props/basket' : 'props/basket_cloud'), x: 1230, y: 560, w: 232, h: 210, label: '빨래 바구니',
@@ -131,6 +144,8 @@
           {
             id: 'blanket', img: (s) => (sun(s) ? 'props/blanket_open' : 'props/blanket'), x: 350, y: 40, w: 900, h: 600, hit: [360, 60, 880, 560], label: '이불 구름',
             look: (s) => (sun(s) ? '둥근 창으로 해님이 환하게 웃고 있어.' : '커다란 이불 구름이 빨랫줄에 널려서 둥근 창을 꽁꽁 가렸어. 너무 무거워서 손으로는 못 걷겠어.'),
+            // 해를 마주 보는 쪽 빨랫줄: 여기 널면 무지개가 안 보인다 (안내판 규칙을 실제로 고르게)
+            use: { raincloud: (api) => api.say(api.flags.sunOpen ? '창 앞 빨랫줄에 널어 봤는데… 해님을 마주 보니 눈이 부셔서 무지개가 하나도 안 보여. 안내판에 해님을 등지고 서야 한댔지? 반대쪽에 널자.' : '여긴 이불 구름이 차지하고 있어.', 5600) },
           },
           {
             id: 'pulley', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1290, 320, 120, 130], label: '도르래 손잡이 구멍',

@@ -104,7 +104,7 @@
               paper: (api) => api.say('그냥 종이보다… 마지막 장은 특별해야지. 접이가 접어 준다고 했어.'),
             },
           },
-          { id: 'crane', img: (s) => (F(s).bookDone ? 'props/crane_happy' : 'props/crane'), x: 190, y: 250, w: 220, h: 200, cls: 'bob', blink: (s) => (F(s).bookDone ? null : 'props/crane_blink'), label: '종이학 접이',
+          { id: 'crane', img: (s) => (F(s).bookDone ? 'props/crane_happy' : 'props/crane'), x: 160, y: 200, w: 290, h: 264, cls: 'bob', blink: (s) => (F(s).bookDone ? null : 'props/crane_blink'), label: '종이학 접이',
             click: craneTalk,
             use: {
               paper: (api, n) => { api.take('paper'); api.set('folded'); api.give('doorpage', n); api.sfx('rip'); api.say('접이: “마지막 장은 이거야! 착, 착, 착… 펼치면 문이 톡 일어서는 문 페이지 완성!”', 5600, { who: 'crane' }); },

@@ -246,7 +246,10 @@ function rainHung() {
   seed(1742);
   let o = '';
   for (let i = 0; i < 22; i++) { const x = rand(60, 520); o += line([[x, 180], [x - 10, 300 + rand(0, 60)]], { sw: 2.4, color: '#7fb0e0', op: 0.75 }); }
-  o += part(cloudPts(290, 120, 250, 90, 16), C.rain, { sw: 2.6, heavy: [3, 8], shade: [[40, 140], [540, 140], [540, 230], [40, 230]], shadeCol: 'rgba(20,30,70,0.3)', light: [[120, 80], [220, 50], [300, 70], [180, 100]] });
+  const rc = []; const bumps = [[60, 150, 70], [140, 90, 80], [250, 60, 90], [360, 76, 84], [460, 110, 74], [520, 160, 54]];
+  for (let i = 0; i <= 40; i++) { const t = i / 40; const x = 40 + t * 500; let y = 180; for (const [bx, by, br] of bumps) { const d = Math.abs(x - bx); if (d < br) y = Math.min(y, by + 40 - Math.sqrt(br * br - d * d) * 0.9); } rc.push([x, y]); }
+  rc.push([540, 200], [300, 214], [40, 200]);
+  o += part(rc, C.rain, { sw: 2.6, heavy: [10, 30], shade: [[40, 150], [540, 150], [540, 220], [40, 220]], shadeCol: 'rgba(20,30,70,0.3)', light: [[120, 100], [220, 50], [300, 60], [200, 100]] });
   for (const x of [160, 420]) o += peg(x, 40, C.pink);
   put('props/rain_hung.svg', 580, 380, o, { id: 1742, displace: 1.4 });
 }
