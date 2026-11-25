@@ -3,7 +3,7 @@
 // - 그늘 쪽 윤곽은 굵게, 빛 쪽은 가늘게 (선 굵기 변화)
 // - 몸의 둥근 형태를 따라가는 그늘 + 빗금
 // - 털 뭉치, 눈꺼풀, 눈썹, 주둥이 모양
-import { wob, smooth, INK } from './ink.mjs';
+import { wob, smooth, INK, ellPts } from './ink.mjs';
 
 const f1 = (n) => Math.round(n * 10) / 10;
 let uid = 0;
@@ -554,5 +554,48 @@ export function sheepArt(state = 'worried') {
   o += blush(124, 172, '#f0a0b0') + blush(176, 172, '#f0a0b0');
   // 세탁소 앞치마 끈 (하늘색)
   o += strokeP(O([[96, 214], [150, 230], [208, 214]], 0.3), 5, '#8ec6e0');
+  return o;
+}
+
+/* ───────────── 까망이 (늙은 등대지기 펭귄, 8장) ───────────── */
+// 280x320. 털모자와 목도리, 둥근 안경을 이마에 올렸다. state: worried | happy. 눈: (122,128) (158,128)
+export function penguinArt(state = 'worried') {
+  uid = 9000 + (state === 'happy' ? 100 : 0);
+  const blk = '#2e3040', blkL = '#4a4e62', belly = '#f4f0e4', beak = '#f0a040', red = '#c4473a', red2 = '#9a3028';
+  let o = `<path d="${S([[60, 306], [220, 306], [208, 316], [72, 316]])}" fill="${INK}" opacity="0.18"/>`;
+  // 발
+  for (const x of [112, 168]) o += part([[x - 22, 300], [x - 8, 290], [x + 8, 290], [x + 22, 300], [x + 10, 306], [x - 10, 306]], beak, { sw: 1.6, heavy: [3, 5] });
+  // 몸 (물방울 모양 한 줄 윤곽) + 날개
+  const body = [[140, 70], [180, 84], [206, 130], [216, 200], [208, 260], [180, 296], [100, 296], [72, 260], [64, 200], [74, 130], [100, 84]];
+  o += part(body, blk, { heavy: [2, 6], sw: 2, shade: [[170, 80], [220, 80], [220, 300], [170, 300]], shadeCol: 'rgba(0,0,0,0.3)', hatch: false, light: [[90, 120], [110, 96], [100, 150]] });
+  o += part([[140, 120], [176, 140], [188, 200], [180, 260], [158, 286], [122, 286], [100, 260], [92, 200], [104, 140]], belly, { sw: 1.6, shade: [[150, 200], [190, 200], [190, 290], [150, 290]], shadeCol: 'rgba(80,70,50,0.15)', hatch: false });
+  const wingL = state === 'happy' ? [[74, 150], [36, 110], [30, 124], [62, 200]] : [[74, 150], [46, 210], [52, 236], [80, 210]];
+  const wingR = state === 'happy' ? [[206, 150], [244, 110], [250, 124], [218, 200]] : [[206, 150], [234, 210], [228, 236], [200, 210]];
+  o += part(wingL, blkL, { sw: 1.8, heavy: [1, 2] }) + part(wingR, blkL, { sw: 1.8, heavy: [1, 2] });
+  // 목도리 (빨간 줄무늬, 한쪽 끝이 늘어짐)
+  o += part([[86, 160], [140, 176], [196, 160], [200, 180], [140, 198], [80, 180]], red, { sw: 1.8, heavy: [3, 5] });
+  o += part([[168, 186], [190, 184], [196, 244], [176, 248]], red, { sw: 1.6 });
+  for (let k = 0; k < 4; k++) o += strokeP(O([[96 + k * 26, 172 + (k % 2) * 4], [104 + k * 26, 186]], 0.2), 2.4, red2, 0.7);
+  // 털모자 (방울 대신 털실 뭉치 윤곽)
+  o += part([[90, 96], [100, 54], [140, 38], [180, 54], [190, 96], [140, 104]], '#6a8ab0', { sw: 1.8, heavy: [3, 5] });
+  o += part([[86, 96], [194, 96], [194, 112], [86, 112]], '#f4ecd8', { sw: 1.6 });
+  for (let x = 96; x < 190; x += 12) o += strokeP(O([[x, 98], [x + 2, 110]], 0.1), 1, INK, 0.4);
+  const pom = []; for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; pom.push([140 + Math.cos(a) * (i % 2 ? 13 : 16), 32 + Math.sin(a) * (i % 2 ? 11 : 14)]); }
+  o += part(pom, '#f4ecd8', { sw: 1.4 });
+  // 이마 위 둥근 안경
+  o += `<path d="${O(ellPts(120, 116, 14, 10, 0, Math.PI * 2, 14), 0.2)}" fill="#dff1fa" fill-opacity="0.5" stroke="${'#c9a24a'}" stroke-width="2.2"/><path d="${O(ellPts(160, 116, 14, 10, 0, Math.PI * 2, 14), 0.2)}" fill="#dff1fa" fill-opacity="0.5" stroke="#c9a24a" stroke-width="2.2"/>` + strokeP(O([[134, 116], [146, 116]], 0.1), 2, '#c9a24a');
+  // 눈·눈썹
+  if (state === 'happy') {
+    for (const ex of [122, 158]) o += strokeP(O([[ex - 8, 134], [ex, 126], [ex + 8, 134]], 0.1), 2.6, '#f4f0e4');
+  } else {
+    for (const sx of [-1, 1]) {
+      const ex = 140 + sx * 18, ey = 132;
+      o += `<path d="${S([[ex - 6, ey], [ex - 4, ey - 6], [ex + 1, ey - 8], [ex + 6, ey - 4], [ex + 6, ey + 2], [ex + 1, ey + 6], [ex - 4, ey + 4]], 0.2)}" fill="#f4f0e4"/>` + dot(ex + 1, ey, 2.8, INK) + dot(ex + 2, ey - 1.2, 1, '#fff');
+      o += strokeP(O([[ex + 9 * sx, ey - 12], [ex - 6 * sx, ey - 16]], 0.1), 2, '#f4f0e4');
+    }
+  }
+  // 부리 (아래로 살짝 처진 삼각) + 볼
+  o += part([[128, 146], [152, 146], [140, 164]], beak, { sw: 1.6, heavy: [1, 2] });
+  o += blush(112, 150, '#e98a9a') + blush(168, 150, '#e98a9a');
   return o;
 }
