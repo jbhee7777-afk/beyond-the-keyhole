@@ -437,3 +437,7 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .tin-slot img { width: 100%; height: 100%; }
 /* 8장: 등불 받침대 밑 그늘 속 물건 (어둡게) */
 .obj.under img { filter: brightness(0.55) saturate(0.7); }
+/* 6장 필통 구슬 자물쇠 */
+.bead-lock { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.bead-lock .bead { position: absolute; pointer-events: auto; background: transparent; border: 0; padding: 0; cursor: var(--cursor); filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.35)); }
+.bead-lock .bead img { width: 100%; height: 100%; }

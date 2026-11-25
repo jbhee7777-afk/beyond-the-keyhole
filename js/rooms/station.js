@@ -14,7 +14,7 @@
   const pos = (s) => F(s).lever || 1;
   // 동행하는 접이: 지금 상황에 맞는 혼잣말 힌트 (2편 내내 함께 다닌다)
   const companion = (lines, place) => ({
-    id: 'crane', img: 'assets/rooms/desk/props/crane_idle.svg', ...place, cls: 'bob', blink: 'assets/rooms/desk/props/crane_idle_blink.svg', label: '종이학 접이',
+    id: 'crane', img: 'assets/rooms/desk/props/crane_idle.webp', ...place, cls: 'bob', label: '종이학 접이',
     click: (api) => { const h = api.game.room.hints(api.game.s); api.say('접이: “' + (lines[h.key] || '같이 찾아보자! 구석구석 눌러 봐.') + '”', 0, { who: 'crane' }); },
     wrong: '접이: “그건 나한테 말고 다른 데 써 봐!”',
   });

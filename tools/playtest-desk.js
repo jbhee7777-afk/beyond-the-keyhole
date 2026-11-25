@@ -30,43 +30,51 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-desk';
   for (const v of ['east', 'south', 'west']) { await p.click('.nav-right'); await shot('02-' + v); }
   await p.click('.nav-right');
 
-  // 1. 그림 문, 쪽지, 엇갈린 연필
+  // 1. 그림 문, 쪽지, 엇갈린 연필, 연필꽂이 스티커
   await clickObj('그림 문'); await shot('03a-door-x');
   await clickObj('스케치북 구석 쪽지'); await shot('03b-note'); await back();
-  await clickObj('연필꽂이');
-  // 2. 책 더미 계단 → 내려다보면 글씨가 읽힌다
-  await view('south'); await clickObj('거대한 연필 자국'); await clickObj('책 더미 계단'); await shot('04-booktop'); await back();
-  await clickObj('종이학 접이'); await p.waitForTimeout(4800); await shot('05a-crane');
-  // 3. 메모지 → 접이가 종이배
+  await clickObj('연필꽂이'); await clickObj('엇갈린 연필');
+  // 2. 낙서를 보기 전에는 접이가 뭘 접을지 모른다
   await view('west'); await clickObj('메모지 묶음'); await clickObj('클립 상자');
-  await view('south'); await sel('memo'); await clickObj('종이학 접이'); await shot('05b-boat');
-  // 4. 물웅덩이 건너기 → 필통 → 몽당 색연필
+  await view('south'); await clickObj('종이학 접이'); await p.waitForTimeout(4800); await shot('04a-crane');
+  await sel('memo'); await clickObj('종이학 접이');
+  await expect(async () => !(await flags()).boatMade, '낙서를 보기 전에 종이배가 접힘');
+  await clickObj('거대한 연필 자국'); await clickObj('책 더미 계단'); await shot('04b-booktop'); await back();
+  await sel('memo'); await clickObj('종이학 접이'); await shot('05-boat');
+  // 3. 물웅덩이 건너기 → 필통 구슬 자물쇠
   await view('east'); await clickObj('필통'); await sel('boat'); await clickObj('물웅덩이'); await shot('06a-crossed');
-  await clickObj('필통'); await shot('06b-pcase'); await clickObj('몽당 색연필'); await back();
+  await clickObj('필통'); await shot('06b-lock');
+  const beads = async (n) => { for (let i = 0; i < n.length; i++) for (let k = 0; k < n[i]; k++) { await p.click(`.bead-lock .bead >> nth=${i}`); await p.waitForTimeout(120); } };
+  await beads([1, 1, 1]);   // 빨강·빨강·빨강 (틀림)
+  await expect(async () => !(await flags()).caseOpen, '틀린 구슬로 필통이 열림');
+  await beads([0, 1, 2]);   // 빨강·파랑·노랑
+  await p.waitForTimeout(900); await shot('06c-pcase');
+  await clickObj('빨강 몽당 색연필'); await clickObj('노랑 몽당 색연필'); await back();
   // 뭉툭한 색연필로 그려 보기 (안 됨)
-  await view('north'); await sel('crayon'); await clickObj('그림 문');
+  await view('north'); await sel('crayon_yellow'); await clickObj('그림 문');
   await expect(async () => !(await flags()).knobDrawn, '뭉툭한 색연필로 손잡이가 그려짐');
-  // 5. 연필깎이
-  await view('west'); await sel('crayon'); await clickObj('연필깎이'); await shot('07-sharpened');
+  // 4. 연필깎이 (빨강도 깎아 본다: 미끼)
+  await view('west'); await sel('crayon_red'); await clickObj('연필깎이'); await sel('crayon_yellow'); await clickObj('연필깎이'); await shot('07-sharpened');
   // 그림자가 있을 때 그려 보기 (안 됨)
-  await view('north'); await sel('crayon_sharp'); await clickObj('그림 문');
+  await view('north'); await sel('sharp_yellow'); await clickObj('그림 문');
   await expect(async () => !(await flags()).knobDrawn, '그림자가 있는데 손잡이가 그려짐');
-  // 불을 끄면 깜깜해서 못 그림
   await clickObj('스탠드 스위치'); await shot('08-dark');
-  await sel('crayon_sharp'); await clickObj('그림 문');
+  await sel('sharp_yellow'); await clickObj('그림 문');
   await expect(async () => !(await flags()).knobDrawn, '깜깜한데 손잡이가 그려짐');
   await clickObj('스탠드 스위치');
-  // 6. 커튼: 끈은 너무 가벼움 → 클립으로 지우개와 연결 → 밀기
+  // 5. 커튼: 끈은 너무 가벼움 → 클립으로 지우개와 연결 → 밀기
   await view('west'); await clickObj('커튼 끈'); await clickObj('커다란 지우개');
   await expect(async () => !(await flags()).curtainOpen, '묶지 않은 지우개로 커튼이 열림');
   await sel('clip'); await clickObj('커다란 지우개'); await shot('09a-tied');
   await clickObj('커다란 지우개'); await shot('09b-sunlight');
-  // 7. 스탠드 끄기 → 햇빛만 → 손잡이 그리기 → 문
+  // 6. 스탠드 끄기 → 빨강은 안 됨 → 노랑으로 손잡이 → 문
   await view('north'); await shot('10a-north-sun-and-lamp'); await clickObj('스탠드 스위치'); await shot('10b-shadow-gone');
+  await sel('sharp_red'); await clickObj('그림 문');
+  await expect(async () => !(await flags()).knobDrawn, '빨강으로 손잡이가 그려짐');
   await p.evaluate(() => window.__game.openHint()); await shot('11-hint'); await p.keyboard.press('Escape');
-  await sel('crayon_sharp'); await clickObj('그림 문'); await shot('12a-knob');
+  await sel('sharp_yellow'); await clickObj('그림 문'); await shot('12a-knob');
   await clickObj('그림 문'); await shot('12b-door-open');
-  await clickObj('그림 문'); await p.waitForTimeout(2200); await shot('13-ending');
+  await clickObj('열린 문'); await p.waitForTimeout(2200); await shot('13-ending');
   const f = await flags();
   console.log('won:', !!f.__won);
   console.log('fails:', fails.length ? fails : 'none');

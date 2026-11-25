@@ -72,7 +72,8 @@
     /* ── 경로 ── */
     src(name) {
       if (!name) return '';
-      if (name.includes('/') && name.includes('.')) return name;
+      if (/^(assets|https?:|data:)/.test(name)) return name; // 이미 전체 경로
+      if (name.includes('/') && name.includes('.') && name.split('/')[0] === 'assets') return name;
       return this.room.assets + name + (name.includes('.') ? '' : '.svg');
     }
 
