@@ -21,6 +21,7 @@ const list = [
   ['sea/props/octopus_work_blink.svg', 420, 440, null, [[166, 172, 18, 22], [234, 172, 18, 22]], '#e98a72', 2.4],
   ['laundry/props/sheep_worried_blink.svg', 300, 300, null, [[128, 150, 9, 10], [172, 150, 9, 10]], '#5a5f78', 1.6],
   ['lighthouse/props/penguin_worried_blink.svg', 280, 320, null, [[122, 132, 8, 9], [158, 132, 8, 9]], '#2e3040', 1.4],
+  ['station/props/bear_awake_blink.svg', 360, 340, null, [[156, 116, 9, 10], [204, 116, 9, 10]], '#a8724a', 1.8],
   ['desk/props/crane_idle_blink.svg', 220, 200, null, [[31, 54, 6, 6]], '#d3e3f2', 1.2],
   ['clock13/props/ghost_shy_blink.svg', 360, 380, '0 -10 360 380', [[150, 190, 7, 6], [214, 190, 7, 6]], '#66626a', 0],
   ['clock13/props/ghost_talk_blink.svg', 360, 380, '0 -10 360 380', [[152, 170, 14, 17], [212, 170, 14, 17]], '#66626a', 0],

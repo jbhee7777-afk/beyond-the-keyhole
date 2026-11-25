@@ -18,6 +18,7 @@ const CASES = [
   { room: 'upside', flags: { batFed: true, handleOn: true, panelOk: true, flipped: true }, inv: [], expectFlags: ['landed'] },
   { room: 'sea', flags: { gotLetter: true }, inv: [], expectInv: ['letter'] },
   { room: 'laundry', flags: { talked: true, cloudIn: true, washed: true, washing: true, seq: ['drop', 'wind', 'sun'] }, inv: [], expectInv: ['raincloud'] },
+  { room: 'station', flags: { warm: true, awake: true }, inv: [], expectInv: ['ticket'] },
   { room: 'desk', flags: { craneTalked: true, memoTaken: true, boatMade: true }, inv: [], expectInv: ['boat'] },
   { room: 'sea', flags: { gotLetter: true, letterGiven: true, hatchOpen: true, posted: true }, inv: [], expectFlags: ['whale', 'whaleWrote'] },
 ];
