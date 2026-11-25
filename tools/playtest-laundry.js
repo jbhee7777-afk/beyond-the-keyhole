@@ -34,7 +34,12 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-laundr
   await clickObj('구름 양 뭉게'); await p.waitForTimeout(5400); await shot('03-sheep');
   // 2. 분실물 바구니: 돋보기, 도르래 손잡이, 벙어리장갑
   await view('west'); await clickObj('분실물 바구니'); await shot('04-lost');
-  await clickObj('돋보기'); await clickObj('도르래 손잡이'); await clickObj('벙어리장갑'); await back();
+  await clickObj('돋보기'); await clickObj('벙어리장갑'); await back();
+  // 양 + 말 = 양말: 말무늬 양말 속 도르래 손잡이
+  await view('north'); await clickObj('별무늬 양말'); await expect(async () => !(await p.evaluate(() => window.__game.s.inv.includes('crank'))), '별무늬 양말에서 손잡이가 나옴');
+  await clickObj('말무늬 양말'); await shot('04b-sock');
+  // 세제 병
+  await view('south'); for (const k of ['물방울', '회오리', '해님', '눈송이']) await clickObj(`${k} 세제`); await shot('04c-soaps');
   // 무지개 안내판
   await view('south'); await clickObj('무지개 손님 안내판'); await shot('05-poster'); await back();
   // 3. 도르래 → 햇빛
@@ -44,8 +49,9 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-laundr
   await sel('magnifier'); await sel('greycloud'); await shot('07-label'); await back();
   // 5. 세탁기: 틀린 순서 → 다시 → 물방울·회오리·해
   await sel('greycloud'); await clickObj('커다란 세탁기'); await shot('08a-machine');
-  await clickObj('회오리 단추'); await expect(async () => !(await flags()).washed, '틀린 순서로 빨래가 됨');
-  for (const b2 of ['물방울 단추', '회오리 단추', '해 단추']) await clickObj(b2);
+  await sel('soap_wind'); await clickObj('세제 넣는 칸'); await expect(async () => !((await flags()).seq || []).length, '틀린 세제가 먼저 들어감');
+  await sel('soap_snow'); await clickObj('세제 넣는 칸');
+  for (const k of ['soap_drop', 'soap_wind', 'soap_sun']) { await sel(k); await clickObj('세제 넣는 칸'); }
   await shot('08b-washing'); await p.waitForTimeout(2800); await back();
   await sel('mitten'); await clickObj('구름 양 뭉게'); await p.waitForTimeout(600);
   // 6. 서쪽 빨랫줄에 빗구름 → 무지개

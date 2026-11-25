@@ -67,7 +67,7 @@ function bgNorth() {
   icons.forEach((f, i) => { o += f(800 + i * 72, 130); });
   // 위쪽 빨랫줄: 작은 구름 양말·손수건이 대롱대롱
   o += clothesline(60, 1540, 250, 22);
-  for (const [x, w, h, c] of [[760, 60, 90, '#fbfaf4'], [880, 90, 60, '#fff1c8'], [1010, 60, 96, '#e8eef8'], [1140, 110, 70, '#f6e0ea'], [1300, 60, 90, '#fbfaf4'], [1420, 80, 64, '#cfe4f6']]) {
+  for (const [x, w, h, c] of [[1420, 80, 64, '#cfe4f6']]) {
     o += part([[x, 258], [x + w, 260], [x + w - 4, 258 + h], [x + w * 0.5, 258 + h + 12], [x + 4, 258 + h]], c, { sw: 1.8, heavy: [1, 2] });
     o += peg(x + 10, 262) + peg(x + w - 10, 262);
   }
@@ -210,7 +210,8 @@ function bgSouth() {
   o += part([[826, 440], [826, 380], [840, 360], [860, 360], [874, 380], [874, 440]], '#7a8ab0', { sw: 1.6 }) + part(ellPts(850, 344, 14, 14, 0, Math.PI * 2, 10), '#5a4a3a', { sw: 1.4 });
   o += `<path d="M880 300 L866 330" stroke="${INK}" stroke-width="2.4"/><path d="M866 330 l2 -12 l8 8z" fill="${INK}"/>`;
   // 아래: 세제통들과 구름 빨래 바구니 더미
-  for (let i = 0; i < 4; i++) o += part([[120 + i * 90, 600], [190 + i * 90, 600], [186 + i * 90, 500], [124 + i * 90, 500]], [C.mint, C.pink, '#cfe4f6', '#fff1c8'][i], { sw: 1.8, heavy: [2, 3] });
+  // 세제 선반 (병은 소품)
+  o += part([[90, 604], [500, 600], [502, 618], [92, 622]], C.wood, { sw: 2 });
   o += cloud(1300, 560, 160, 60) + cloud(1240, 520, 90, 40, '#f1f2f6');
   put('bg/south.svg', W, H, o, { id: 1731 });
 }
@@ -262,6 +263,32 @@ function rainbow() {
   for (let i = 0; i < 6; i++) o += dot(rand(100, 1300), rand(80, 600), rand(6, 12), '#ffffff', 0.6);
   o += '</g>';
   put('props/rainbow.svg', 1400, 660, o, { id: 1743, displace: 1.2 });
+}
+// 빨랫줄 양말 (90x140): 무늬가 다르다 — 말 / 물고기 / 별
+function sock(kind) {
+  seed(1745);
+  let o = part([[16, 10], [60, 10], [60, 86], [82, 104], [80, 132], [44, 134], [16, 110]], kind === 'horse' ? '#f6e0b4' : kind === 'fish' ? '#cfe4f6' : '#f6e0ea', { sw: 2, heavy: [3, 5] });
+  o += part([[16, 10], [60, 10], [60, 26], [16, 26]], '#fbfaf4', { sw: 1.4 });
+  if (kind === 'horse') o += part([[24, 76], [26, 58], [34, 48], [38, 38], [48, 40], [46, 50], [52, 58], [52, 76], [46, 76], [44, 64], [32, 66], [30, 76]], '#8a5a3a', { sw: 1.2 }) + line([[38, 40], [32, 50]], { sw: 2, color: '#5a3a22' });
+  if (kind === 'fish') o += part([[22, 60], [40, 50], [52, 60], [40, 70]], '#6aa0d0', { sw: 1.2 }) + part([[52, 60], [62, 52], [62, 68]], '#6aa0d0', { sw: 1.2 }) + dot(30, 59, 2, INK);
+  if (kind === 'star') { const st = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5; st.push([38 + Math.cos(a) * (i % 2 ? 7 : 16), 60 + Math.sin(a) * (i % 2 ? 7 : 16)]); } o += part(st, '#f0c040', { sw: 1.2 }); }
+  o += peg(28, 12) + peg(52, 12);
+  put(`props/sock_${kind}.svg`, 90, 140, o, { id: 1745, displace: 0.8 });
+}
+// 세제 병 (70x110): 꼬리표와 같은 그림이 붙어 있다
+function soap(kind) {
+  seed(1746);
+  const col = { drop: '#9fd0ee', wind: '#b8c8e8', sun: '#f6e0a0', snow: '#e8eef8' }[kind];
+  let o = part([[8, 106], [62, 106], [64, 40], [50, 28], [50, 10], [20, 10], [20, 28], [6, 40]], col, { sw: 2, heavy: [0, 1], shade: [[44, 28], [64, 28], [64, 106], [44, 106]], shadeCol: 'rgba(40,60,90,0.18)', hatch: false });
+  o += part([[18, 2], [52, 2], [52, 12], [18, 12]], '#7a8ab0', { sw: 1.4 });
+  o += part(rectPts(14, 52, 42, 40), '#fffaf0', { sw: 1.2 });
+  const x = 35, y = 72;
+  if (kind === 'drop') o += `<path d="${S([[x, y - 14], [x + 9, y + 2], [x, y + 12], [x - 9, y + 2]], 0.3)}" fill="#7fb0e0" stroke="${INK}" stroke-width="1.4"/>`;
+  if (kind === 'wind') o += `<path d="${O([[x - 14, y], [x + 6, y - 2], [x + 12, y - 10], [x + 4, y - 14]], 0.3)}" fill="none" stroke="#5a7ab0" stroke-width="3"/><path d="${O([[x - 12, y + 8], [x + 10, y + 8]], 0.3)}" fill="none" stroke="#5a7ab0" stroke-width="3"/>`;
+  if (kind === 'sun') { o += part(ellPts(x, y, 7, 7, 0, Math.PI * 2, 10), C.sun, { sw: 1.2 }); for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; o += line([[x + Math.cos(a) * 10, y + Math.sin(a) * 10], [x + Math.cos(a) * 15, y + Math.sin(a) * 15]], { sw: 2, color: C.sun2 }); } }
+  if (kind === 'snow') for (let k = 0; k < 3; k++) { const a = k * Math.PI / 3; o += line([[x + Math.cos(a) * 13, y + Math.sin(a) * 13], [x - Math.cos(a) * 13, y - Math.sin(a) * 13]], { sw: 2.4, color: '#8ab8e0' }); }
+  put(`props/soap_${kind}.svg`, 70, 110, o, { id: 1746, displace: 0.8 });
+  put(`items/soap_${kind}.svg`, 160, 160, `<g transform="translate(36 14) scale(1.25)">${o}</g>`, { id: 1746, displace: 0.8 });
 }
 function sheep(state) { seed(1750); put(`props/sheep_${state}.svg`, 300, 300, sheepArt(state), { id: 1750, displace: 0.8 }); }
 
@@ -343,7 +370,7 @@ function frame() {
 
 bgNorth(); counter(); machineBody(); drum('empty'); drum('grey'); drum('spin'); basket(true); basket(false);
 bgEast(); blanket(false); blanket(true); pulleyHandle(); sunbeams('east'); sunbeams('west');
-bgSouth(); bgWest(); rainHung(); rainbow(); sheep('worried'); sheep('happy');
+bgSouth(); bgWest(); ['horse', 'fish', 'star'].forEach(sock); ['drop', 'wind', 'sun', 'snow'].forEach(soap); rainHung(); rainbow(); sheep('worried'); sheep('happy');
 zoomLost(); zoomMachine(); ['drop', 'wind', 'sun', 'snow'].forEach((k) => { machineButton(k, false); machineButton(k, true); }); zoomLabel(false); zoomLabel(true);
 items(); frame();
 console.log('laundry assets written, ~' + Math.round(total / 1024) + 'KB');

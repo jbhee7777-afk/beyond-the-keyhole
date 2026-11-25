@@ -30,13 +30,13 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-lighth
   for (const v of ['east', 'south', 'west']) { await p.click('.nav-right'); await shot('02-' + v); }
 
   // 1. 까망이
-  await view('east'); await clickObj('등대지기 까망이'); await p.waitForTimeout(5400); await shot('03-keeper');
+  await view('east'); await clickObj('등대지기 까망이'); await p.waitForTimeout(11800); await shot('03-keeper');
   await clickObj('등대 일지'); await shot('04-log'); await back();
   await clickObj('종이학 접이'); await shot('04b-crane');
   // 손잡이부터 당겨 보기 (잉크 없음)
-  await view('north'); await clickObj('등불 손잡이'); await expect(async () => !(await flags()).lampOn, '잉크 없이 등불이 켜짐');
+  await view('north'); await clickObj('등불 손잡이'); await clickObj('받침대 밑 잉크병'); await shot('04c-yellow'); await expect(async () => !(await flags()).lampOn, '잉크 없이 등불이 켜짐');
   // 2. 걸레 → 빗물 → 렌즈
-  await view('south'); await clickObj('걸레'); for (const c of ['빨강', '파랑', '노랑', '검정']) await clickObj(`${c} 잉크병`); await shot('05-shelf-empty');
+  await view('south'); await clickObj('걸레'); for (const c of ['빨강', '파랑', '검정']) await clickObj(`${c} 잉크병`); await shot('05-shelf-empty');
   await view('west'); await shot('06a-west-dark'); await sel('rag'); await clickObj('빗물통');
   await view('north'); await sel('wetrag'); await clickObj('등대 렌즈'); await shot('06b-lens-clean');
   // 3. 망원경 → 초록

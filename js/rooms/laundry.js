@@ -19,9 +19,9 @@
     wrong: '접이: “그건 나한테 말고 다른 데 써 봐!”',
   });
   const CRANE_LINES = {
-    talk: '저 양한테 말 걸어 볼까? 여기 주인 같아.', crank: '잃어버린 물건은 어디 모아 둘까? 바깥에 바구니가 있던데.', pulley: '저 도르래에 손잡이를 끼우면 이불을 걷을 수 있겠어!',
+    talk: '저 양한테 말 걸어 볼까? 여기 주인 같아.', crank: '‘양’이 신는 ‘말’이라… 양말! 빨랫줄에 양말이 있던데?', pulley: '저 도르래에 손잡이를 끼우면 이불을 걷을 수 있겠어!',
     grey: '먼지투성이 구름이 빨래 바구니에 있었어.', mag: '꼬리표 글씨가 너무 작아… 돋보기 같은 거 없나?', label: '돋보기로 꼬리표를 들여다보자!',
-    in: '먼지 구름을 세탁기에 넣어 보자.', wash: '꼬리표에 그려진 순서대로 단추를 누르는 거야.', hang: '안내판에 해님을 등지고 서야 무지개가 보인다고 했지?',
+    in: '먼지 구름을 세탁기에 넣어 보자.', wash: '꼬리표에 그려진 순서대로 세제를 넣는 거야.', soaps: '꼬리표 그림이랑 같은 그림이 붙은 세제가 남쪽 선반에 있었어.', hang: '안내판에 해님을 등지고 서야 무지개가 보인다고 했지?',
     sun: '빗구름만으론 안 돼. 햇빛도 있어야 해!', go: '무지개 다리야! 건너가자!',
   };
 
@@ -31,7 +31,7 @@
       f.talked = true;
       api.lock(5200);
       api.say('뭉게: “어서 오세요, 구름 세탁소예요! 무지개 다리를 타고 싶다고요? 무지개는 빗구름이랑 햇빛이 함께 있어야 떠요.”', 5200, { who: 'sheep' });
-      api.after(5200, () => api.say('뭉게: “그런데 큰일이에요. 빗구름은 먼지투성이가 됐고, 해님은 빨아 널은 이불 구름에 가려졌어요. 도르래 손잡이도 잃어버렸고요…”', 6400, { who: 'sheep', note: '뭉게의 부탁' }));
+      api.after(5200, () => api.say('뭉게: “그런데 큰일이에요. 빗구름은 먼지투성이, 해님은 이불 구름에 가려졌어요. 도르래 손잡이는… ‘양’이 신는 ‘말’ 속에 넣어 뒀는데, 어디였더라?”', 7000, { who: 'sheep', note: '뭉게의 부탁' }));
       return;
     }
     if (f.rainHung && f.sunOpen) { api.say('뭉게: “와, 무지개 다리예요! 해님을 등지고 보니 정말 예쁘죠?”', 0, { who: 'sheep' }); return; }
@@ -39,29 +39,31 @@
     api.say('뭉게: “빗구름과 햇빛, 둘 다 있어야 무지개가 떠요. 잃어버린 물건은 바깥 분실물 바구니에 모아 둬요.”', 0, { who: 'sheep' });
   }
 
-  function press(kind) {
+  // 세제 넣기: 꼬리표 순서(물방울 → 회오리 → 해)대로 세제 병을 세탁기에 붓는다
+  const SOAP_NAME = { drop: '물방울', wind: '회오리', sun: '해님', snow: '눈송이' };
+  function pour(kind) {
     return (api) => {
       const f = api.flags;
       if (f.washed) { api.say('빨래는 다 끝났어. 빗구름이 뽀송뽀송해.'); return; }
       if (!f.cloudIn) { api.sfx('nope'); api.say('세탁기가 비어 있어. 빨 구름을 먼저 넣어야 해.'); return; }
+      if (kind === 'snow') { api.sfx('nope'); api.say('뭉게: “눈송이 세제는 겨울 구름 전용이에요! 넣으면 눈구름이 돼요.”', 0, { who: 'sheep' }); return; }
       f.seq = f.seq || [];
-      if (kind === ORDER[f.seq.length]) {
-        f.seq.push(kind); api.sfx('click');
-        if (f.seq.length === 3) {
-          f.washed = true; f.washing = true; api.give('raincloud');
-          api.sfx('water'); api.burst('bubble', 520, 470, 40);
-          api.say('철컥, 빙글빙글 콸콸… 먼지가 싹 빠지고 촉촉한 빗구름이 됐어!', 4600);
-          api.after(2600, () => { f.washing = false; });
-        }
-      } else {
-        f.seq = []; api.sfx('nope');
-        api.say(kind === 'snow' ? '삐— 눈송이 코스는 겨울 구름 전용이래. 처음부터 다시!' : '삐— 구름이 엉망으로 뭉쳤다가 풀렸어. 순서가 틀렸나 봐. 처음부터 다시!');
+      if (kind !== ORDER[f.seq.length]) {
+        api.sfx('nope');
+        api.say(f.seq.length ? `지금 ${SOAP_NAME[kind]} 세제를 넣으면 순서가 꼬여. 꼬리표에서 다음 그림이 뭐였지?` : `${SOAP_NAME[kind]} 세제를 먼저 넣으면 안 될 것 같아. 꼬리표의 첫 그림은 뭐였더라?`);
+        return;
       }
+      api.take('soap_' + kind); f.seq.push(kind); api.sfx('water');
+      if (f.seq.length < 3) { api.say(`${SOAP_NAME[kind]} 세제를 쪼르르 부었어.`); return; }
+      f.washed = true; f.washing = true; api.give('raincloud');
+      api.burst('bubble', 520, 470, 40);
+      api.say('마지막으로 해님 세제까지! 빙글빙글 콸콸… 먼지가 싹 빠지고 촉촉한 빗구름이 됐어!', 4600);
+      api.after(2600, () => { f.washing = false; });
     };
   }
-  const btn = (kind, label, x, y) => ({
-    id: 'b_' + kind, img: (s) => ((F(s).seq || []).includes(kind) && !F(s).washed ? `zoom/btn_${kind}_on` : `zoom/btn_${kind}`), x, y, w: 150, h: 150, label, click: press(kind),
-  });
+  const soapUse = { soap_drop: pour('drop'), soap_wind: pour('wind'), soap_sun: pour('sun'), soap_snow: pour('snow') };
+  // 확대 화면 세제 칸: 넣은 세제가 차례로 불이 들어온다
+  const slot = (i, y) => ({ id: 'slot' + i, img: (s) => ((F(s).seq || [])[i] ? `zoom/btn_${F(s).seq[i]}_on` : ''), x: 1045, y, w: 150, h: 150 });
 
   Engine.registerRoom({
     id: 'laundry',
@@ -88,6 +90,10 @@
       raincloud: { name: '빗구름', img: 'items/raincloud', desc: '깨끗하게 빤 빗구름. 손에 들고만 있어도 보슬보슬 비가 내려.' },
       magnifier: { name: '돋보기', img: 'items/magnifier', desc: '작은 글씨도 크게 보이는 돋보기.' },
       crank: { name: '도르래 손잡이', img: 'items/crank', desc: '네모난 끝을 어딘가에 끼워 돌리는 손잡이.' },
+      soap_drop: { name: '물방울 세제', img: 'items/soap_drop', desc: '물방울 그림이 붙은 세제. 구름을 촉촉하게 적셔 줘.' },
+      soap_wind: { name: '회오리 세제', img: 'items/soap_wind', desc: '회오리 그림이 붙은 세제. 구름을 빙글빙글 헹궈 줘.' },
+      soap_sun: { name: '해님 세제', img: 'items/soap_sun', desc: '해 그림이 붙은 세제. 구름을 보송보송 말려 줘.' },
+      soap_snow: { name: '눈송이 세제', img: 'items/soap_snow', desc: '눈송이 그림이 붙은 세제. 겨울 구름 전용이래.' },
       mitten: { name: '벙어리장갑', img: 'items/mitten', desc: '분홍 벙어리장갑. 손등에 꽃 자수, 손목에 작게 「봄」이라고 수놓여 있어.', clue: true },
     },
     combos: [
@@ -120,9 +126,19 @@
             use: {
               greycloud: (api) => { api.take('greycloud'); api.set('cloudIn'); api.sfx('splash'); api.say('먼지 구름을 세탁기에 쏙 넣었어.'); api.zoom('machine'); },
               raincloud: (api) => api.say('이미 깨끗해. 또 빨면 쪼그라들 거야.'),
+              ...soapUse,
             },
           },
           companion(CRANE_LINES, { x: 1060, y: 96, w: 176, h: 160 }),
+          ...[['star', 596], ['fish', 690], ['horse', 1318]].map(([k, x]) => ({
+            id: 'sock_' + k, img: `props/sock_${k}`, x: x - 10, y: 236, w: 110, h: 171, label: { star: '별무늬 양말', fish: '물고기무늬 양말', horse: '말무늬 양말' }[k],
+            click: (api, n) => {
+              if (k !== 'horse') { api.say(k === 'star' ? '별무늬 양말 속엔 아무것도 없어.' : '물고기무늬 양말 속엔 아무것도 없어. 비린내만 살짝…?'); return; }
+              if (api.flags.crankTaken) { api.say('말무늬 양말이 텅 비었어.'); return; }
+              api.set('crankTaken'); api.give('crank', n); api.sfx('pick');
+              api.say('‘양’이 신는 ‘말’… 양말! 말 그림 양말 속에서 도르래 손잡이가 나왔어!', 5200);
+            },
+          })),
           { id: 'drum', img: (s) => (F(s).washing ? 'props/drum_spin' : F(s).cloudIn && !F(s).washed ? 'props/drum_grey' : 'props/drum_empty'), x: 918, y: 378, w: 264, h: 264, cls: 'drum' },
           {
             id: 'basket', img: (s) => (F(s).greyTaken ? 'props/basket' : 'props/basket_cloud'), x: 1230, y: 560, w: 232, h: 210, label: '빨래 바구니',
@@ -165,7 +181,10 @@
         objects: [
           { id: 'clothes', x: 0, y: 0, w: 0, h: 0, img: '', hit: [80, 110, 460, 240], label: '구름 옷', look: '구름으로 지은 셔츠들이 빨랫줄에서 팔랑팔랑. 입으면 하늘을 걷는 기분이래.' },
           { id: 'poster', x: 0, y: 0, w: 0, h: 0, img: '', hit: [620, 190, 370, 290], zoom: 'poster', label: '무지개 손님 안내판' },
-          { id: 'soap', x: 0, y: 0, w: 0, h: 0, img: '', hit: [110, 490, 380, 120], label: '세제 통', look: '구름 세제가 색깔별로 있어. 박하 향이 나.' },
+          ...[['drop', 110], ['wind', 210], ['sun', 310], ['snow', 410]].map(([k, x]) => ({
+            id: 'soapB_' + k, img: `props/soap_${k}`, x, y: 494, w: 70, h: 110, show: (s) => !F(s)['soapT_' + k], label: `${SOAP_NAME[k]} 세제`,
+            click: (api, n) => { api.set('soapT_' + k); api.give('soap_' + k, n); api.say(`${SOAP_NAME[k]} 그림이 붙은 세제 병을 챙겼어.`); },
+          })),
         ],
       },
 
@@ -201,10 +220,9 @@
     zooms: {
       lost: {
         bg: 'zoom/lost',
-        note: ['분실물 바구니', '손님들이 두고 간 물건. 돋보기, 도르래 손잡이, 벙어리장갑…'],
+        note: ['분실물 바구니', '손님들이 두고 간 물건. 돋보기, 벙어리장갑…'],
         objects: [
           { id: 'magIn', img: 'items/magnifier', x: 360, y: 300, w: 260, h: 260, cls: 'item-in', show: (s) => !F(s).magTaken, label: '돋보기', click: (api, n) => { api.set('magTaken'); api.give('magnifier', n); api.say('돋보기를 챙겼어. 작은 글씨도 크게 보여.'); } },
-          { id: 'crankIn', img: 'items/crank', x: 680, y: 320, w: 240, h: 240, cls: 'item-in', show: (s) => !F(s).crankTaken, label: '도르래 손잡이', click: (api, n) => { api.set('crankTaken'); api.give('crank', n); api.say('네모난 끝이 달린 손잡이야. 뭉게가 잃어버렸다던 그거 아닐까?'); } },
           { id: 'mittenIn', img: 'items/mitten', x: 980, y: 300, w: 260, h: 260, cls: 'item-in', show: (s) => !F(s).mittenTaken, label: '벙어리장갑', click: (api, n) => { api.set('mittenTaken'); api.give('mitten', n); api.note('봄이의 장갑', '분실물 바구니의 분홍 벙어리장갑. 손목에 「봄」이라고 수놓여 있다.'); api.say('분홍 벙어리장갑… 손목에 「봄」이라고 수놓여 있어! 스케치북의 그 이름이야.', 5200); } },
         ],
       },
@@ -214,12 +232,10 @@
         objects: [
           { id: 'drumBig', img: (s) => (F(s).washing ? 'props/drum_spin' : F(s).cloudIn && !F(s).washed ? 'props/drum_grey' : 'props/drum_empty'), x: 254, y: 204, w: 532, h: 532, cls: 'drum',
             look: (s) => (F(s).washed ? '세탁기 안이 깨끗해.' : F(s).cloudIn ? '먼지 구름이 들어 있어. 이제 단추를 순서대로!' : '텅 빈 세탁통이야.'),
-            use: { greycloud: (api) => { api.take('greycloud'); api.set('cloudIn'); api.sfx('splash'); api.say('먼지 구름을 세탁기에 쏙 넣었어.'); } },
+            use: { greycloud: (api) => { api.take('greycloud'); api.set('cloudIn'); api.sfx('splash'); api.say('먼지 구름을 세탁기에 쏙 넣었어.'); }, ...soapUse },
           },
-          btn('drop', '물방울 단추', 950, 330),
-          btn('wind', '회오리 단추', 1150, 330),
-          btn('sun', '해 단추', 950, 540),
-          btn('snow', '눈송이 단추', 1150, 540),
+          slot(0, 220), slot(1, 400), slot(2, 580),
+          { id: 'soapHole', x: 0, y: 0, w: 0, h: 0, img: '', hit: [900, 160, 440, 640], label: '세제 넣는 칸', look: '세제를 붓는 칸이 세 개. 넣은 순서대로 불이 들어와.', use: soapUse },
         ],
       },
       label: {
@@ -239,7 +255,7 @@
       if (f.rainHung && f.sunOpen) return { key: 'go', steps: ['무지개 다리가 떴어요!', '서쪽 구름 끝 정류장이에요.', '무지개 다리를 누르세요.'] };
       if (!f.talked) return { key: 'talk', steps: ['세탁소 주인에게 말을 걸어 봐요.', '북쪽 카운터에 구름 양이 있어요.', '뭉게를 누르세요.'] };
       if (!f.sunOpen) {
-        if (!has('crank')) return { key: 'crank', steps: ['해님이 이불 구름에 가려졌어요. 이불을 걷으려면 도르래를 돌려야 해요.', '뭉게가 도르래 손잡이를 잃어버렸대요. 잃어버린 물건은 어디에 모아 둘까요?', '서쪽 분실물 바구니에서 도르래 손잡이를 꺼내세요.'] };
+        if (!has('crank')) return { key: 'crank', steps: ['해님이 이불 구름에 가려졌어요. 이불을 걷으려면 도르래 손잡이가 필요해요.', '뭉게가 손잡이를 ‘양’이 신는 ‘말’ 속에 넣어 뒀대요. 양 + 말 = ?', '북쪽 빨랫줄의 말무늬 양말을 누르세요.'] };
         return { key: 'pulley', steps: ['도르래 손잡이를 끼울 곳이 있어요.', '동쪽 창 오른쪽 기둥의 네모난 구멍이에요.', '도르래 손잡이를 고른 채 동쪽 도르래 구멍을 누르세요.'] };
       }
       if (!f.rainHung) {
@@ -250,7 +266,9 @@
           return { key: 'label', steps: ['돋보기로 꼬리표를 읽어요.', '가방에서 돋보기와 먼지 구름을 합쳐 봐요.', '돋보기를 고른 채 가방 속 먼지 구름을 누르세요.'] };
         }
         if (!f.cloudIn) return { key: 'in', steps: ['먼지 구름을 빨아요.', '북쪽 커다란 세탁기예요.', '먼지 구름을 고른 채 세탁기를 누르세요.'] };
-        return { key: 'wash', steps: ['꼬리표의 순서대로 단추를 눌러요.', '물방울, 그다음 회오리, 마지막에 해예요.', '세탁기를 확대해서 물방울 → 회오리 → 해 단추를 차례로 누르세요.'] };
+        const need = ORDER.filter((k) => !(f.seq || []).includes(k) && !has('soap_' + k));
+        if (need.length) return { key: 'soaps', steps: ['꼬리표 그림과 같은 그림이 붙은 세제가 필요해요.', '남쪽 세제 선반에 그림이 붙은 세제 병이 있어요.', '남쪽 선반에서 물방울·회오리·해님 세제를 챙기세요.'] };
+        return { key: 'wash', steps: ['꼬리표의 순서대로 세제를 넣어요.', '물방울, 그다음 회오리, 마지막에 해님이에요.', '물방울 → 회오리 → 해님 세제를 차례로 고른 채 세탁기를 누르세요.'] };
       }
       return { key: 'sun', steps: ['빗구름은 널었는데 햇빛이 없어요.', '동쪽 창을 가린 이불 구름을 걷어야 해요.', '도르래 손잡이를 동쪽 도르래 구멍에 끼우세요.'] };
     },
