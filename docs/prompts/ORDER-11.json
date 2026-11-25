@@ -91,7 +91,8 @@
     "11-02-north-done.png": "MAHb73j0avM"
   },
   "exported": [
-    "11-01-north.png"
+    "11-01-north.png",
+    "11-02-north-done.png"
   ],
   "notes": {
     "11-01-north.png": "책 누르개에 T자 손잡이가 이미 그려져 있음 → 퍼즐을 \"손잡이를 빼서 갈고리로 쓴다\"로 바꿀 수 있음(손잡이를 빼는 쪽으로). 둥근 창이 북쪽 벽에도 있음."
