@@ -22,14 +22,14 @@
     f.slots.forEach((v, i) => {
       const b = document.createElement('button');
       b.className = 'piece tin-slot';
-      b.style.cssText = `left:${350 + i * 230}px;top:340px;width:200px;height:200px`;
-      const im = document.createElement('img'); im.alt = ''; im.src = game.src(`zoom/ic_${ICONS[v]}`); b.appendChild(im);
+      b.style.cssText = `left:${385 + i * 215}px;top:175px;width:180px;height:180px`;
+      const im = document.createElement('img'); im.alt = ''; im.src = game.src(`zoom/ic_${ICONS[v]}.webp`); b.appendChild(im);
       const label = () => b.setAttribute('aria-label', `${i + 1}번째 칸 (${NAMES[ICONS[f.slots[i]]]})`);
       label();
       b.onclick = (e) => {
         e.stopPropagation();
         if (game.busy) return;
-        f.slots[i] = (f.slots[i] + 1) % 4; im.src = game.src(`zoom/ic_${ICONS[f.slots[i]]}`); label();
+        f.slots[i] = (f.slots[i] + 1) % 4; im.src = game.src(`zoom/ic_${ICONS[f.slots[i]]}.webp`); label();
         api.sfx('click');
         if (f.slots.every((s, k) => s === k)) {
           f.tinOpen = true; game.busy = true;
@@ -40,6 +40,13 @@
       box.appendChild(b);
     });
     container.appendChild(box);
+  }
+
+  function bindBook(api) {
+    if (!api.has('needle')) { api.say('문 페이지를 대 봤는데 자꾸 빠져. 바늘과 실로 꿰매야 해.'); return; }
+    api.take('doorpage'); api.take('needle'); api.set('pageIn'); api.set('bookDone');
+    api.sfx('grow'); api.flash('#fff3c0', 1200); api.burst('spark', 800, 360, 50);
+    api.say('마지막 장을 한 땀 한 땀 꿰매자 책이 환하게 빛났어! 그때 바닥 문이 덜컥 열리고… “얘야, 다락방에 있니? 간식 먹으렴~”', 7000);
   }
 
   function craneTalk(api) {
@@ -60,22 +67,21 @@
     chapter: '10장',
     title: '봄이의 작업실',
     assets: 'assets/rooms/studio/',
-    sky: ['assets/rooms/studio/bg/north.svg', 'assets/rooms/studio/bg/north.svg'],
-    frame: 'bg/frame',
+    sky: ['assets/rooms/studio/bg/north.webp', 'assets/rooms/studio/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
     isLit: () => true,
     ambient: (s) => (F(s).bookDone ? 'party' : 'garden'),
-    guide: { name: '종이학 접이', img: 'props/crane' },
+    guide: { name: '종이학 접이', img: 'assets/rooms/desk/props/crane_happy.webp' },
     intro: '별빛 열차에서 내리니… 해 질 녘 다락방이야. 어? 여기, 처음 그 책을 찾았던 할머니 집 다락방이잖아!',
 
     items: {
-      scraps: { name: '습작 종이', img: 'items/scraps', desc: '봄이가 연습하다 버린 종이 조각들. 해님, 토끼, 시계… 낯익은 그림이 있어.' },
-      mould: { name: '종이 뜨는 틀', img: 'items/mould', desc: '촘촘한 그물이 달린 나무 틀. 종이죽을 떠서 새 종이를 만들어.' },
-      wetsheet: { name: '젖은 종이', img: 'items/wetsheet', desc: '틀로 막 떠낸 젖은 종이. 말려야 쓸 수 있어.' },
-      paper: { name: '새 종이', img: 'items/paper', desc: '직접 떠서 말린 도톰한 새 종이.' },
-      doorpage: { name: '문 페이지', img: 'items/doorpage', desc: '접이가 접어 준 문 모양 페이지. 펼치면 문이 톡 일어서.' },
-      needle: { name: '실 꿴 바늘', img: 'items/needle', desc: '빨간 실을 꿴 바늘. 책장을 꿰맬 수 있어.' },
+      scraps: { name: '습작 종이', img: 'items/scraps.webp', desc: '봄이가 연습하다 버린 종이 조각들. 해님, 토끼, 시계… 낯익은 그림이 있어.' },
+      mould: { name: '종이 뜨는 틀', img: 'items/mould.webp', desc: '촘촘한 그물이 달린 나무 틀. 종이죽을 떠서 새 종이를 만들어.' },
+      wetsheet: { name: '젖은 종이', img: 'items/wetsheet.webp', desc: '틀로 막 떠낸 젖은 종이. 말려야 쓸 수 있어.' },
+      paper: { name: '새 종이', img: 'items/paper.webp', desc: '직접 떠서 말린 도톰한 새 종이.' },
+      doorpage: { name: '문 페이지', img: 'items/doorpage.webp', desc: '접이가 접어 준 문 모양 페이지. 펼치면 문이 톡 일어서.' },
+      needle: { name: '실 꿴 바늘', img: 'items/needle.webp', desc: '빨간 실을 꿴 바늘. 책장을 꿰맬 수 있어.' },
     },
     combos: [
       { a: 'scraps', b: 'mould', say: '종이 조각을 틀에 올려 봤자 종이가 되진 않아. 먼저 물에 불려야 해.' },
@@ -83,28 +89,28 @@
     ],
 
     views: {
-      /* ───── 북쪽: 펼친 종이 책, 창가의 접이 ───── */
+      /* ───── 북쪽: 책 받침대의 펼친 종이 책, 창가의 접이 ───── */
       north: {
         name: '책 받침대',
-        bg: 'bg/north',
+        bg: 'bg/north.webp',
         objects: [
-          { id: 'height', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 280, 100, 340], label: '키 재기 눈금', look: '벽에 빨간 키 재기 눈금이 있어. 꽃 표시마다 봄이가 한 살씩 자랐나 봐.' },
-          { id: 'roundWin', x: 0, y: 0, w: 0, h: 0, img: '', hit: [180, 180, 240, 60], label: '둥근 창', look: '둥근 창 너머로 노을 진 마을 지붕들이 보여.' },
+          { id: 'roundWin', x: 0, y: 0, w: 0, h: 0, img: '', hit: [110, 40, 420, 380], label: '둥근 창', look: '둥근 창 너머로 노을 진 마을 지붕들이 보여.' },
+          { id: 'height', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1250, 200, 100, 300], label: '키 재기 눈금', look: '벽에 빨간 키 재기 눈금이 여섯 줄. 봄이가 한 살씩 자랄 때마다 그었나 봐.' },
+          { id: 'drawings', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1370, 220, 200, 260], label: '벽에 붙은 그림', look: '꽃 그림이랑 돛단배 그림. 봄이의 어릴 적 그림이야.' },
+          { id: 'yarnN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1220, 550, 330, 230], label: '털실 바구니', look: '털실 뭉치와 뜨개바늘. 할머니 냄새가 나.' },
+          { id: 'boxes', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 500, 450, 330], label: '종이 상자', look: '옛날 종이 묶음과 상자들. 깨끗한 새 종이는 없어.' },
           {
-            id: 'book', img: (s) => (F(s).bookDone ? 'props/book_done' : F(s).pageIn ? 'props/book_door' : 'props/book_blank'), x: 500, y: 180, w: 600, h: 380, label: '종이 책',
-            click: (api) => { if (api.flags.bookDone) { api.say('책이 완성됐어. 마지막 장의 문이 반짝반짝.'); return; } api.zoom('bookpage'); },
+            id: 'book', x: 0, y: 0, w: 0, h: 0, img: '', hit: [600, 160, 600, 340], label: '종이 책',
+            click: (api) => { api.zoom('bookpage'); },
             use: {
-              doorpage: (api) => {
-                if (!api.has('needle')) { api.say('문 페이지를 대 봤는데 자꾸 빠져. 바늘과 실로 꿰매야 해.'); return; }
-                api.take('doorpage'); api.take('needle'); api.set('pageIn'); api.set('bookDone');
-                api.sfx('grow'); api.flash('#fff3c0', 1200); api.burst('spark', 800, 360, 50);
-                api.say('마지막 장을 한 땀 한 땀 꿰매자 책이 환하게 빛났어! 그때 바닥 문이 덜컥 열리고… “얘야, 다락방에 있니? 간식 먹으렴~”', 7000);
-              },
-              needle: (api) => api.say('꿰맬 마지막 장이 아직 없어.'),
+              doorpage: (api) => bindBook(api),
+              needle: (api) => api.say(api.has('doorpage') ? '먼저 문 페이지를 책에 대고 꿰매야지. 문 페이지를 들고 책을 눌러 봐.' : '꿰맬 마지막 장이 아직 없어.'),
               paper: (api) => api.say('그냥 종이보다… 마지막 장은 특별해야지. 접이가 접어 준다고 했어.'),
             },
           },
-          { id: 'crane', img: (s) => (F(s).bookDone ? 'props/crane_happy' : 'props/crane'), x: 160, y: 200, w: 290, h: 264, cls: 'bob', blink: (s) => (F(s).bookDone ? null : 'props/crane_blink'), label: '종이학 접이',
+          { id: 'doorOnBook', img: 'props/door_on_book.webp', x: 920, y: 250, w: 230, h: 170, show: (s) => !!F(s).pageIn },
+          { id: 'bookGlow', img: 'props/book_glow.webp', x: 560, y: 100, w: 720, h: 440, cls: 'glow', show: (s) => !!F(s).bookDone },
+          { id: 'crane', img: (s) => (F(s).bookDone ? 'assets/rooms/desk/props/crane_happy.webp' : 'assets/rooms/desk/props/crane_idle.webp'), x: 300, y: 196, w: 280, h: 255, cls: 'bob', hit: [360, 210, 170, 240], label: '종이학 접이',
             click: craneTalk,
             use: {
               paper: (api, n) => { api.take('paper'); api.set('folded'); api.give('doorpage', n); api.sfx('rip'); api.say('접이: “마지막 장은 이거야! 착, 착, 착… 펼치면 문이 톡 일어서는 문 페이지 완성!”', 5600, { who: 'crane' }); },
@@ -116,15 +122,16 @@
         ],
       },
 
-      /* ───── 동쪽: 작업대 (물통, 종이 뜨는 틀, 습작 휴지통, 순서 그림) ───── */
+      /* ───── 동쪽: 작업대 (물통, 종이 뜨는 틀, 습작 휴지통, 순서 그림, 의자) ───── */
       east: {
         name: '종이 작업대',
-        bg: 'bg/east',
+        bg: 'bg/east.webp',
         objects: [
-          { id: 'steps', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1020, 134, 346, 212], label: '종이 뜨기 순서 그림', look: '봄이가 그린 순서 그림: 종이를 찢어서 → 물통에 넣고 → 틀로 뜬 다음 → 햇볕에 말린다.' },
+          { id: 'steps', x: 0, y: 0, w: 0, h: 0, img: '', hit: [890, 150, 560, 220], label: '종이 뜨기 순서 그림', look: '봄이가 그린 순서 그림: 종이를 찢어서 → 물통에 넣고 → 틀로 뜬 다음 → 햇볕에 말린다.' },
+          { id: 'jars', x: 0, y: 0, w: 0, h: 0, img: '', hit: [500, 120, 380, 150], label: '선반 병', look: '풀 병, 단추 병, 붓 꽂이. 종이 뜨는 틀은 여기 없어.' },
           {
-            id: 'tub', img: (s) => (F(s).pulp ? 'props/tub_pulp' : 'props/tub_water'), x: 300, y: 330, w: 360, h: 200, label: '물통',
-            click: (api) => api.say(api.flags.pulp ? '찢은 종이가 물에 풀려서 하얀 종이죽이 됐어.' : '맑은 물이 담긴 나무 물통이야.'),
+            id: 'tub', x: 0, y: 0, w: 0, h: 0, img: '', hit: [550, 400, 520, 150], label: '물통',
+            click: (api) => api.say(api.flags.pulp ? '찢은 종이가 물에 풀려서 하얀 종이죽이 됐어.' : '맑은 물이 담긴 넓은 나무 물통이야.'),
             use: {
               scraps: (api) => { api.take('scraps'); api.set('pulp'); api.sfx('splash'); api.say('종이 조각을 물에 넣고 휘휘 저었더니 뽀얀 종이죽이 됐어.'); },
               mould: (api, n) => {
@@ -133,35 +140,54 @@
               },
             },
           },
-          { id: 'mould', img: 'props/mould', x: 760, y: 140, w: 220, h: 190, show: (s) => !F(s).mouldTaken, label: '종이 뜨는 틀', click: (api, n) => { api.set('mouldTaken'); api.give('mould', n); api.say('벽에 걸린 종이 뜨는 틀을 내렸어.'); } },
+          { id: 'pulpLayer', img: 'props/pulp.webp', x: 560, y: 405, w: 500, h: 80, show: (s) => !!F(s).pulp },
           {
-            id: 'basket', img: (s) => (F(s).scrapsTaken ? 'props/basket_empty' : 'props/basket_full'), x: 1060, y: 560, w: 210, h: 210, label: '습작 휴지통',
+            id: 'mould', img: 'props/mould_wall.webp', x: 1070, y: 92, w: 200, h: 125, show: (s) => !F(s).mouldTaken, label: '종이 뜨는 틀',
             click: (api, n) => {
-              if (api.flags.scrapsTaken) { api.say('휴지통이 비었어.'); return; }
+              if (!api.flags.stoolMoved) { api.say('벽 높이 못에 걸린 틀이야. 까치발을 해도 손이 안 닿아. 밟고 올라설 게 있으면…'); return; }
+              api.set('mouldTaken'); api.give('mould', n); api.sfx('pick'); api.say('의자를 밟고 올라가 종이 뜨는 틀을 내렸어.');
+            },
+          },
+          {
+            id: 'stool', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1110, 600, 230, 260], label: '나무 의자',
+            click: (api) => {
+              if (api.flags.stoolMoved) { api.say('틀 밑에 의자를 받쳐 뒀어.'); return; }
+              api.set('stoolMoved'); api.sfx('step'); api.say('작은 나무 의자를 벽 쪽 못 아래로 끌어다 놓았어. 이제 올라설 수 있겠다.');
+            },
+          },
+          {
+            id: 'basket', x: 0, y: 0, w: 0, h: 0, img: '', hit: [170, 600, 210, 230], label: '습작 휴지통',
+            click: (api, n) => {
+              if (api.flags.scrapsTaken) { api.say('휴지통에 쓸 만한 종이는 다 꺼냈어.'); return; }
               api.set('scrapsTaken'); api.give('scraps', n);
               api.say('구겨진 습작 종이들… 해님 기계, 토끼, 13시 시계, 거꾸로 방… 다 내가 지나온 방들이야! 봄이가 연습한 그림이었구나.', 6000);
             },
           },
+          { id: 'towel', x: 0, y: 0, w: 0, h: 0, img: '', hit: [400, 500, 160, 170], label: '수건', look: '물기 닦는 수건. 젖은 종이를 이걸로 닦으면 찢어질 거야.' },
         ],
       },
 
       /* ───── 남쪽: 큰 둥근 창(노을), 빨랫줄, 바닥 문 ───── */
       south: {
         name: '둥근 창',
-        bg: 'bg/south',
+        bg: (s) => (F(s).bookDone ? 'bg/south_open.webp' : 'bg/south.webp'),
         objects: [
-          { id: 'chair', x: 0, y: 0, w: 0, h: 0, img: '', hit: [160, 400, 220, 280], label: '흔들의자', look: '분홍 뜨개 담요가 걸린 흔들의자. 할머니가 늘 앉던 의자야.' },
+          { id: 'chair', x: 0, y: 0, w: 0, h: 0, img: '', hit: [50, 300, 450, 500], label: '흔들의자', look: '분홍 뜨개 담요가 걸린 흔들의자. 할머니가 늘 앉던 의자야.' },
+          { id: 'yarnS', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1180, 460, 330, 200], label: '뜨개 바구니', look: '털실 뭉치가 가득. 바늘은 없고 뜨개바늘만 있어.' },
           {
-            id: 'line', x: 0, y: 0, w: 0, h: 0, img: '', hit: [420, 170, 760, 70], label: '창가 빨랫줄',
-            click: (api) => api.say('창가 빨랫줄이야. 노을 햇볕과 바람이 솔솔 들어와.'),
-            use: { wetsheet: (api) => { api.take('wetsheet'); api.set('hung'); api.sfx('pick'); api.say('젖은 종이를 빨랫줄에 널었더니… 노을 햇볕과 바람에 금세 바삭하게 말랐어!'); } },
+            id: 'line', x: 0, y: 0, w: 0, h: 0, img: '', hit: [210, 130, 1170, 100], label: '창가 빨랫줄',
+            click: (api) => api.say('둥근 창 앞 빨랫줄이야. 노을 햇볕과 바람이 솔솔 들어와.'),
+            use: {
+              wetsheet: (api) => { api.take('wetsheet'); api.set('hung'); api.sfx('pick'); api.say('젖은 종이를 빨랫줄에 널었더니… 노을 햇볕과 바람에 금세 바삭하게 말랐어!'); },
+              mould: (api) => api.say('빈 틀을 널어서 뭐 해. 종이를 먼저 떠야지.'),
+            },
           },
-          { id: 'sheet', img: 'props/sheet_dry', x: 680, y: 180, w: 250, h: 240, show: (s) => !!F(s).hung && !F(s).sheetTaken, label: '말린 종이', click: (api, n) => { api.set('sheetTaken'); api.give('paper', n); api.say('도톰하게 마른 새 종이를 걷었어.'); } },
+          { id: 'sheet', img: 'props/sheet_dry.webp', x: 640, y: 150, w: 260, h: 200, show: (s) => !!F(s).hung && !F(s).sheetTaken, label: '말린 종이', click: (api, n) => { api.set('sheetTaken'); api.give('paper', n); api.say('도톰하게 마른 새 종이를 걷었어.'); } },
           {
-            id: 'hatch', img: (s) => (F(s).bookDone ? 'props/hatch_open' : 'props/hatch_closed'), x: 580, y: 560, w: 440, h: 280, hit: [600, 640, 400, 190], label: '바닥 문',
+            id: 'hatch', x: 0, y: 0, w: 0, h: 0, img: '', hit: [500, 650, 570, 190], label: '바닥 문',
             click: (api) => {
               if (api.flags.bookDone) { api.sfx('step'); api.win(); return; }
-              api.sfx('locked'); api.say('아래층으로 가는 바닥 문이 꼭 닫혀 있어. 책이 완성되면 집으로 가는 문이 열린다고 접이가 그랬지.');
+              api.sfx('locked'); api.say('아래층으로 가는 바닥 문이 꼭 닫혀 있어. 고리를 당겨도 꿈쩍 안 해. 책이 완성되면 열린다고 접이가 그랬지.');
             },
           },
         ],
@@ -170,16 +196,17 @@
       /* ───── 서쪽: 봄이의 여행 지도, 옛날 사진, 반짇고리 ───── */
       west: {
         name: '여행 지도 벽',
-        bg: 'bg/west',
+        bg: 'bg/west.webp',
         objects: [
-          { id: 'map', x: 0, y: 0, w: 0, h: 0, img: '', hit: [240, 96, 670, 386], label: '봄이의 여행 지도', click: (api) => { api.note('봄이의 여행 지도', '출발(발자국) → 책상 → 구름 → 등대 → 기차 → 집'); api.say('어린 봄이가 그린 여행 지도야. 발자국에서 출발해서 책상 → 구름 → 등대 → 기차 → 집. 내가 지나온 길이랑 똑같아!', 5600); } },
-          { id: 'photo', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1000, 160, 220, 260], label: '옛날 사진', look: '빛바랜 사진 속 단발머리 아이가 종이학을 들고 웃고 있어. 이 아이가 봄이구나…' },
+          { id: 'map', x: 0, y: 0, w: 0, h: 0, img: '', hit: [160, 100, 1020, 500], label: '봄이의 여행 지도', click: (api) => { api.note('봄이의 여행 지도', '발자국에서 출발해 점선을 따라가면: 책상 → 구름 → 등대 → 기차 → 집'); api.say('어린 봄이가 그린 여행 지도야. 발자국에서 출발해 점선을 따라가면 책상, 구름, 등대, 기차, 그리고 집. 내가 지나온 길이랑 똑같아!', 5600); } },
+          { id: 'photo', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1220, 140, 270, 300], label: '옛날 사진', look: '빛바랜 사진 속 단발머리 아이가 종이학을 들고 웃고 있어. 이 아이가 봄이구나…' },
+          { id: 'box', x: 0, y: 0, w: 0, h: 0, img: '', hit: [100, 620, 420, 260], label: '종이 상자', look: '오래된 편지와 그림이 가득한 상자. 새 종이는 없어.' },
           {
-            id: 'tin', img: (s) => (F(s).tinOpen ? 'props/tin_open' : 'props/tin_closed'), x: 960, y: 400, w: 340, h: 200, hit: [970, 430, 320, 150], label: '반짇고리',
+            id: 'tin', img: (s) => (F(s).tinOpen ? 'props/tin_open.webp' : 'props/tin_closed.webp'), x: 1205, y: 330, w: 280, h: 198, label: '반짇고리',
             click: (api, n) => {
               const f = api.flags;
               if (!f.tinOpen) { api.zoom('tin'); return; }
-              if (f.needleTaken) { api.say('반짇고리 안에 실타래만 남았어.'); return; }
+              if (f.needleTaken) { api.say('반짇고리 안에 실타래와 바늘꽂이만 남았어.'); return; }
               api.set('needleTaken'); api.give('needle', n); api.say('빨간 실이 꿰어진 바늘을 챙겼어.');
             },
           },
@@ -189,13 +216,17 @@
 
     zooms: {
       bookpage: {
-        bg: 'assets/rooms/greenhouse/zoom/paper.svg',
-        note: ['책의 마지막 장', '마지막 장은 너를 위해 비워 둘게. 네가 직접 만들어서 꿰매 넣으렴. — 봄'],
-        text: '<h3>마지막 장</h3><p>(찢긴 자국 옆에 작은 글씨)</p><p>마지막 장은 <em>너를 위해</em> 비워 둘게.<br>네가 직접 <em>종이를 만들어</em>, <em>꿰매</em> 넣으렴.<br>그러면 집으로 가는 문이 열릴 거야.</p><p class="sign">— 봄</p>',
+        bg: 'zoom/desk_blur.webp',
+        note: ['책의 마지막 장', '마지막 장은 너를 위해 비워 둘게. 네가 직접 종이를 만들어 꿰매 넣으렴. — 봄'],
+        objects: [
+          { id: 'bookBig', img: (s) => (F(s).pageIn ? 'props/book_door.webp' : 'props/book_blank.webp'), x: 200, y: 60, w: 1200, h: 800, cls: (s) => (F(s).bookDone ? 'glow' : ''), hit: [260, 120, 1080, 680], label: '펼친 책',
+            click: (api) => api.say(api.flags.bookDone ? '마지막 장의 문이 반짝반짝 빛나.' : '왼쪽에는 내가 지나온 방들 그림. 오른쪽 마지막 장은 찢겨 나갔고, 귀퉁이에 작은 글씨: “마지막 장은 너를 위해 비워 둘게. 네가 직접 종이를 만들어 꿰매 넣으렴. — 봄”', 6400),
+            use: { doorpage: (api) => bindBook(api) } },
+        ],
       },
       tin: {
-        bg: 'zoom/tin',
-        note: ['반짇고리 자물쇠', '네 칸에 그림을 맞춘다. 발자국이 왼쪽에서 오른쪽으로: 봄이가 지나간 순서?'],
+        bg: 'zoom/tin.webp',
+        note: ['반짇고리 자물쇠', '뚜껑의 네 칸에 그림을 맞춘다. 봄이가 지나간 순서?'],
         widget: tinWidget,
       },
     },
@@ -209,7 +240,7 @@
           if (!f.hung) {
             if (!has('wetsheet')) {
               if (!f.pulp) { if (!has('scraps')) return { key: 'scraps', steps: ['새 종이를 직접 만들어야 해요. 동쪽 벽의 순서 그림을 보세요.', '첫 단계는 종이를 찢는 거예요. 버린 종이가 어디 있을까요?', '동쪽 습작 휴지통에서 종이 조각을 꺼내세요.'] }; return { key: 'pulp', steps: ['종이 조각을 물에 불려요.', '동쪽 작업대의 나무 물통이에요.', '습작 종이를 고른 채 물통을 누르세요.'] }; }
-              if (!has('mould')) return { key: 'mould', steps: ['종이죽을 떠낼 도구가 필요해요.', '동쪽 벽에 그물 달린 틀이 걸려 있어요.', '벽의 종이 뜨는 틀을 챙기세요.'] };
+              if (!has('mould')) return { key: 'mould', steps: ['종이죽을 떠낼 도구가 필요해요. 동쪽 벽 높이 그물 달린 틀이 걸려 있어요.', '손이 안 닿아요. 밟고 올라설 만한 게 방에 있지 않나요?', f.stoolMoved ? '동쪽 벽의 종이 뜨는 틀을 누르세요.' : '동쪽 작은 나무 의자를 눌러 끌어다 놓고, 틀을 누르세요.'] };
               return { key: 'lift', steps: ['틀로 종이죽을 떠요.', '동쪽 물통이에요.', '종이 뜨는 틀을 고른 채 물통을 누르세요.'] };
             }
             return { key: 'dry', steps: ['젖은 종이는 말려야 해요.', '남쪽 둥근 창 앞에 빨랫줄이 있어요.', '젖은 종이를 고른 채 남쪽 빨랫줄을 누르세요.'] };
@@ -229,7 +260,7 @@
       title: '종이 문 너머, 할머니의 다락방',
       text: ['사다리를 내려가자 고소한 냄새가 났어요. 부엌에서 할머니가 웃으며 손을 흔들었지요. “다녀왔니? 내 책 속 친구들은 잘 있었고?”', '할머니의 앞치마 주머니에서 종이학 하나가 고개를 쏙 내밀었어요. 접이가 날개를 파닥였어요. “봄아, 다녀왔어!”', '봄은 할머니의 이름이었어요. 아홉 살 봄이가 만든 종이 책은, 오랫동안 이날을 기다리고 있었답니다.'],
       next: '2편 완결 · 책장을 덮고 다시 처음부터 놀 수 있어요',
-      image: 'assets/ui/finale2.svg',
+      image: 'assets/ui/finale2.webp',
     },
   });
 })();
