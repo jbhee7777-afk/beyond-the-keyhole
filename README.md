@@ -42,6 +42,9 @@
 | 5장 | 바닷속 우체국 | 신비롭고 몽환적인 | **플레이 가능** (처음부터 탈출까지) |
 | 6장 | 거인의 책상 (2편 시작) | 아기자기하고 놀라운 (내가 작아졌다!) | **플레이 가능** (처음부터 탈출까지) |
 | 7장 | 구름 세탁소 | 몽글몽글 상쾌한 | **플레이 가능** (처음부터 탈출까지) |
+| 8장 | 잉크 등대 | 고요한 밤바다 | **플레이 가능** (처음부터 탈출까지) |
+| 9장 | 겨울잠 기차역 | 포근하고 조용한 | **플레이 가능** (처음부터 탈출까지) |
+| 10장 | 봄이의 작업실 (2편 마지막) | 따뜻하고 아련한 | **플레이 가능** (처음부터 탈출까지) |
 
 1~5장은 **1편 「다섯 개의 문」**, 6~10장은 같은 세계의 **2편 「봄을 찾아서」**예요. 표지의 1편/2편 꼬리표로 고르고, 2편은 1편을 깨지 않아도 할 수 있어요.
 
@@ -88,6 +91,9 @@ js/rooms/upside.js      4장 방 데이터 (방 전체가 180도 뒤집힘)
 js/rooms/sea.js         5장 방 데이터 (우편함 번호 위젯 포함)
 js/rooms/desk.js        6장 방 데이터 (작아진 나, 그림자 X, 종이배)
 js/rooms/laundry.js     7장 방 데이터 (세탁기 단추 위젯, 무지개)
+js/rooms/lighthouse.js  8장 방 데이터 (색 섞기, 등불, 징검다리)
+js/rooms/station.js     9장 방 데이터 (난로·꽃으로 곰 깨우기, 선로 전환기)
+js/rooms/studio.js      10장 방 데이터 (종이 뜨기, 반짇고리 그림 자물쇠 위젯)
 js/main.js              표지·장 선택
 assets/rooms/<방>/      bg(배경) · props(소품) · items(아이템) · zoom(확대 화면)
 assets/ui/              화살표, 꼬리표, 아이콘
@@ -133,6 +139,18 @@ node tools/art/laundry.mjs
 ```
 
 ```bash
+node tools/art/lighthouse.mjs
+```
+
+```bash
+node tools/art/station.mjs
+```
+
+```bash
+node tools/art/studio.mjs
+```
+
+```bash
 node tools/art/frames.mjs
 ```
 
@@ -152,7 +170,7 @@ npm run build
 글꼴은 `assets/fonts/`에 들어 있어 인터넷이 막혀도 같은 글꼴로 보입니다 (다시 만들기: `tools/subset-fonts.py`).
 
 `playtest`는 Playwright로 1~5장을 처음부터 끝까지 실제로 클릭해 보고, 단계별 스크린샷을 `screenshots/playtest/`, `screenshots/playtest-2/`, `screenshots/playtest-3/` … `playtest-5/`에 남깁니다. 마지막으로 `playtest-resilience.js`가 연출 도중 새로고침, 가방이 꽉 찬 경우, 휴대폰·태블릿 화면을 검사합니다.
-개발할 때는 `index.html#play-toyshop`(2장), `index.html#play-clock13`(3장), `#play-upside`(4장), `#play-sea`(5장), `#play-desk`(6장)으로 바로 들어갈 수 있습니다.
+개발할 때는 `index.html#play-toyshop`(2장), `index.html#play-clock13`(3장), `#play-upside`(4장), `#play-sea`(5장), `#play-desk`(6장), `#play-laundry`(7장), `#play-lighthouse`(8장), `#play-station`(9장), `#play-studio`(10장)으로 바로 들어갈 수 있습니다.
 
 ## 문서
 

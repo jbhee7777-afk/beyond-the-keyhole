@@ -662,6 +662,7 @@
     win() {
       const e = this.room.ending;
       const box = this.endEl;
+      clearTimeout(this.subT); this.sub.classList.remove('show');
       box.innerHTML = '';
       if (e.image) { const im = el('img', 'ending-art', box); im.src = e.image; im.alt = ''; }
       const card = el('div', 'ending-card' + (e.image ? ' with-art' : ''), box);
