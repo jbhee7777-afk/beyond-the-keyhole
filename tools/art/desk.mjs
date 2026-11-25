@@ -4,6 +4,7 @@
 // 멀리 있는 방은 초점이 나간 듯 흐리게(접사 렌즈), 가까운 책상 위 물건은 또렷하게.
 import { digits, seed, rand, pick, INK, wob, rect, rectPts, ellPts, shape, fill, line, hatch, svg } from './ink.mjs';
 import { part, S, O, craneArt } from './chars.mjs';
+import { roundRectPts, blobPts } from './props.mjs';
 
 const OUT = new URL('../../assets/rooms/desk/', import.meta.url).pathname;
 const W = 1600, H = 900;
@@ -92,9 +93,13 @@ function bgNorth() {
   // 연필꽂이 — 연필들이 화면 위로 솟아 있다. 두 자루가 X자로 엇갈림
   o += pencil(1120, 260, 1070, -80, 44, { col: '#7ab0d8' }) + pencil(1270, 260, 1300, -60, 44, { col: '#9ad08a' });
   o += pencil(1130, 260, 1290, -40, 46) + pencil(1270, 260, 1110, -50, 46, { col: '#e98a9a' });
-  o += part([[1090, 220], [1300, 220], [1294, 652], [1096, 652]], C.tin, { sw: 2.6, heavy: [1, 2], shade: [[1230, 220], [1300, 220], [1294, 652], [1230, 652]], shadeCol: 'rgba(0,40,50,0.25)' });
+  // 양철 연필꽂이: 둥근 바닥, 몸을 감싸는 골, 말린 입구 테, 번쩍이는 반사광
+  let ribs = '';
+  for (const y of [250, 300, 540, 600]) ribs += O(ellPts(1195, y, 104, 18, 0, Math.PI, 14), 0.3);
+  o += part([[1090, 220], [1092, 400], [1096, 640], [1140, 662], [1195, 668], [1250, 662], [1294, 640], [1298, 400], [1300, 220]], C.tin, { sw: 2.6, heavy: [5, 8], shade: [[1236, 200], [1310, 200], [1310, 680], [1236, 680]], shadeCol: 'rgba(0,40,50,0.28)', extra: `<path d="${ribs}" fill="none" stroke="#3a5a64" stroke-width="2" opacity="0.6"/><path d="${O([[1118, 236], [1116, 400], [1120, 630]], 0.3)}" fill="none" stroke="#ffffff" stroke-width="14" opacity="0.35" stroke-linecap="round"/><path d="${O([[1140, 240], [1140, 620]], 0.3)}" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.4" stroke-linecap="round"/>` });
   o += part(ellPts(1195, 220, 105, 20, 0, Math.PI * 2, 22), '#3a4a50', { sw: 2.2 });
-  o += part([[1096, 360], [1298, 360], [1296, 500], [1098, 500]], '#f0dfb4', { sw: 1.8 });
+  o += `<path d="${O(ellPts(1195, 222, 106, 21, 0, Math.PI, 16), 0.3)}" fill="none" stroke="${INK}" stroke-width="10"/><path d="${O(ellPts(1195, 222, 106, 21, 0, Math.PI, 16), 0.3)}" fill="none" stroke="#a8c8d0" stroke-width="6"/>`;
+  o += part([[1096, 368], [1196, 378], [1298, 368], [1296, 500], [1196, 510], [1098, 500]], '#f0dfb4', { sw: 1.8 });
   for (const [x, y, c] of [[1140, 420, '#e98a9a'], [1190, 446, '#7ab0d8'], [1246, 416, '#f3cf5a']]) o += part(ellPts(x, y, 17, 17, 0, Math.PI * 2, 10), c, { sw: 1.4 });
   // 스탠드: 오른쪽 끝 받침(잘림), 화면 위로 솟은 팔, 머리 위의 갓
   o += part(ellPts(1520, 690, 170, 40, 0, Math.PI * 2, 24), C.lamp2, { sw: 2.6, heavy: [6, 14] });
@@ -244,21 +249,32 @@ function bgWest(open) {
   o += curtainPanels(open);
   o += deskTop(586);
   // 클립 상자 (뚜껑 열린 양철 상자)
-  o += part([[100, 470], [430, 462], [436, 660], [106, 668]], C.tin, { sw: 2.6, heavy: [1, 2], shade: [[340, 462], [436, 462], [436, 666], [340, 666]], shadeCol: 'rgba(0,40,50,0.25)' });
-  o += part([[100, 470], [430, 462], [404, 430], [126, 438]], '#3a4a50', { sw: 2.2 });
+  // 뚜껑을 뒤로 젖힌 양철 클립 상자: 둥근 모서리, 두께, 말린 테두리
+  o += part(roundRectPts(110, 348, 300, 96, 18), '#5a8a96', { sw: 2.2, extra: `<path d="${S(roundRectPts(128, 362, 264, 70, 12), 0.3)}" fill="#7aaab4" opacity="0.6"/>` });
+  o += part([[100, 470], [124, 434], [404, 426], [430, 462]], '#3a4a50', { sw: 2.2 });
+  o += part([[100, 478], [100, 640], [112, 664], [140, 668], [400, 660], [426, 654], [436, 630], [430, 470], [404, 462], [126, 470]], C.tin, { sw: 2.6, heavy: [4, 7], shade: [[350, 450], [450, 450], [450, 680], [350, 680]], shadeCol: 'rgba(0,40,50,0.25)', extra: `<path d="${O([[124, 486], [122, 640]], 0.3)}" fill="none" stroke="#ffffff" stroke-width="10" opacity="0.3" stroke-linecap="round"/>` });
+  o += `<path d="${O([[100, 474], [266, 466], [432, 464]], 0.3)}" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="${O([[100, 474], [266, 466], [432, 464]], 0.3)}" fill="none" stroke="#a8c8d0" stroke-width="5" stroke-linecap="round"/>`;
   for (let i = 0; i < 10; i++) { const x = 140 + i * 26, y = 430 + rand(-8, 8); o += `<path d="${O([[x, y + 26], [x, y - 14], [x + 16, y - 14], [x + 16, y + 18], [x + 6, y + 18], [x + 6, y - 2]], 0.3)}" fill="none" stroke="${C.clip2}" stroke-width="4"/>`; }
   o += part([[110, 560], [426, 554], [426, 610], [110, 616]], '#e6dcc2', { sw: 1.6 });
   // 메모지 묶음 (노란 정사각 더미)
   for (let k = 0; k < 7; k++) o += part([[460, 690 - k * 8], [730, 684 - k * 8], [736, 702 - k * 8], [466, 708 - k * 8]], k === 6 ? C.memo : C.memo2, { sw: 1.6 });
   o += part([[460, 634], [730, 628], [736, 646], [466, 652]], C.memo, { sw: 2 });
   // 연필깎이 (책상에 고정하는 손잡이식, 손잡이가 내 키보다 높다)
-  o += part([[770, 380], [1060, 366], [1072, 676], [780, 684]], '#c94a40', { sw: 2.8, heavy: [1, 2], shade: [[990, 366], [1072, 366], [1072, 680], [990, 680]], shadeCol: 'rgba(80,0,0,0.25)' });
-  o += part(ellPts(850, 500, 46, 46, 0, Math.PI * 2, 16), '#3a2a2a', { sw: 2.2 });
-  o += part(ellPts(850, 500, 22, 22, 0, Math.PI * 2, 12), '#1a1414', { sw: 1.6 });
+  // 손잡이식 연필깎이: 둥근 지붕의 몸통, 금속 앞판과 구멍 고리, 투명한 부스러기 서랍, 책상 고정 나사
+  o += `<path d="${S([[770, 690], [1090, 680], [1110, 700], [790, 708]], 0.5)}" fill="${INK}" opacity="0.25"/>`;
+  o += part([[780, 680], [776, 440], [790, 396], [840, 372], [1000, 366], [1046, 380], [1064, 420], [1072, 676]], '#c94a40', { sw: 2.8, heavy: [5, 7], shade: [[990, 350], [1090, 350], [1090, 690], [990, 690]], shadeCol: 'rgba(80,0,0,0.28)', light: [[800, 404], [860, 380], [880, 392], [806, 430]] });
+  o += part([[786, 560], [1068, 552], [1070, 660], [790, 668]], '#e8eef0', { sw: 2, extra: `<path d="${S([[800, 640], [840, 610], [880, 630], [930, 604], [990, 626], [1050, 610], [1060, 656], [796, 662]], 0.5)}" fill="#d8a070" opacity="0.85"/><path d="${O([[804, 574], [1040, 568]], 0.3)}" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.6"/>` });
+  o += part(roundRectPts(904, 596, 50, 18, 6), '#a8b0b8', { sw: 1.4 });
+  o += part(blobPts(850, 492, 64, 64, { n: 16, k: 0.02 }), '#b8c0c8', { sw: 2.2, heavy: [2, 7], light: [[800, 460], [840, 436], [846, 446], [810, 470]] });
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; o += line([[850 + Math.cos(a) * 50, 492 + Math.sin(a) * 50], [850 + Math.cos(a) * 60, 492 + Math.sin(a) * 60]], { sw: 2, color: '#6a7078' }); }
+  o += part(ellPts(850, 492, 38, 38, 0, Math.PI * 2, 16), '#3a2a2a', { sw: 2.2 });
+  o += part(ellPts(850, 492, 16, 16, 0, Math.PI * 2, 12), '#1a1414', { sw: 1.6 });
+  for (const x of [800, 1050]) o += part(roundRectPts(x - 20, 674, 40, 16, 6), '#6a6a74', { sw: 1.6 });
   o += part([[1060, 460], [1124, 460], [1128, 488], [1060, 492]], C.clip, { sw: 2 });
   o += line([[1124, 474], [1150, 300], [1210, 284]], { sw: 14, color: C.clip2, step: 999 }) + line([[1124, 474], [1150, 300], [1210, 284]], { sw: 7, color: C.clip, step: 999 });
   o += part([[1196, 240], [1236, 240], [1240, 330], [1198, 332]], '#5a3a2a', { sw: 2 });
-  for (let i = 0; i < 7; i++) o += `<path d="${O([[790 + i * 36, 694], [814 + i * 36, 680], [838 + i * 36, 698]], 1)}" fill="none" stroke="${C.pencil2}" stroke-width="5"/>`;
+  // 깎인 연필 부스러기 (꽃잎처럼 말린 나무 껍질, 가장자리에 색 띠)
+  for (const [x, y, c] of [[760, 702, '#e98a9a'], [1090, 698, '#7ab0d8'], [1130, 712, '#f3cf5a']]) { o += part([[x - 22, y], [x - 12, y - 14], [x + 8, y - 16], [x + 22, y - 4], [x + 10, y + 6], [x - 8, y + 6]], '#e8c49a', { sw: 1.4 }) + `<path d="${O([[x - 20, y + 1], [x - 6, y + 6], [x + 10, y + 5], [x + 21, y - 3]], 0.3)}" fill="none" stroke="${c}" stroke-width="3"/>` + `<path d="${O([[x - 8, y - 8], [x + 2, y - 2], [x + 10, y - 8]], 0.3)}" fill="none" stroke="#b08a5a" stroke-width="1"/>`; }
   put(`bg/west${open ? '_open' : ''}.svg`, W, H, o, { id: 1641 });
 }
 function curtainPanels(open) {

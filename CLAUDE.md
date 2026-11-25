@@ -32,6 +32,7 @@
 - 지금 에셋은 `tools/art/*.mjs`가 만든 SVG. 손그림 흔들림(`wob`), 수채 얼룩 + 선 떨림 필터(`#art`), 빗금 그림자(`hatch`)를 쓴다.
 - 이미지 생성 도구로 만든 PNG로 바꿀 때는 같은 파일명·같은 크기로 넣고, 방 데이터의 이름에 `.png`를 붙이면 된다 (`img: 'props/door_closed.png'`). 엔진은 확장자가 없으면 `.svg`로 본다.
 - 에셋 목록과 생성 프롬프트: `docs/ASSET_LIST.md`.
+- 소품은 사다리꼴·직사각형·타원 하나로 끝내지 않는다. `tools/art/props.mjs`의 `barrel`·`crate`·`rock`·`splat`·`mound`·`suitcase`·`cardbox`·`wicker`·`yarn`·`turned`·`roundRectPts`를 쓰거나, 두께(윗면·옆면)·이음선·못·반사광·그늘을 직접 그린다.
 - 캐릭터는 `tools/art/chars.mjs`에 모은다. 원·타원 조합 금지: 손으로 찍은 점을 이은 한 줄 윤곽(`part`), 그늘 쪽 굵은 선(`heavy`), 형태를 따라가는 그늘(`shade`), 털 뭉치(`tufts`), 눈꺼풀·눈썹·주둥이까지 그린다. 감정 표현은 눈썹 방향으로 확인한다 (슬픔 = 안쪽 끝이 올라감).
 
 ## 확인

@@ -3,6 +3,7 @@
 // 분위기: 구름 위에 떠 있는 세탁소. 하늘색 줄무늬 벽, 구름 카펫, 빨랫줄에 널린 구름들. 처음엔 해가 가려져 흐릿하다.
 import { seed, rand, pick, INK, wob, rect, rectPts, ellPts, fill, line, hatch, svg } from './ink.mjs';
 import { part, S, O, sheepArt } from './chars.mjs';
+import { wicker, turned, roundRectPts, yarn } from './props.mjs';
 
 const OUT = new URL('../../assets/rooms/laundry/', import.meta.url).pathname;
 const W = 1600, H = 900;
@@ -79,9 +80,10 @@ function counter() {
   seed(1712);
   let o = part([[0, 30], [520, 24], [530, 230], [6, 236]], C.wood, { sw: 2.6, heavy: [1, 2], shade: [[400, 24], [530, 24], [530, 236], [400, 236]], shadeCol: 'rgba(80,50,20,0.22)' });
   o += part([[-10, 0], [540, -4], [544, 36], [-6, 40]], C.wood2, { sw: 2.4 });
-  for (const x of [40, 200, 360]) o += part(rectPts(x, 70, 130, 130), 'none', { sw: 1.6 });
+  for (const x of [40, 200, 360]) o += part(roundRectPts(x, 70, 130, 130, 10), 'none', { sw: 1.6 }) + `<path d="${S(roundRectPts(x + 12, 82, 106, 106, 8), 0.3)}" fill="none" stroke="${C.wood2}" stroke-width="1.6" opacity="0.8"/>` + part(ellPts(x + 65, 100, 9, 6, 0, Math.PI * 2, 10), C.brass, { sw: 1.2 });
+  o += part([[6, 220], [526, 214], [528, 238], [6, 244]], C.wood2, { sw: 1.8 });
   // 카운터 위: 작은 종, 구름 비누 상자
-  o += part([[380, 0], [420, -46], [460, 0]], C.brass, { sw: 1.6 }) + dot(420, -50, 6, C.brass2);
+  o += part([[372, 0], [384, -10], [392, -36], [406, -48], [434, -48], [448, -36], [456, -10], [468, 0]], C.brass, { sw: 1.8, heavy: [5, 7], light: [[396, -34], [408, -44], [412, -40], [400, -28]] }) + part(ellPts(420, 0, 50, 7, 0, Math.PI * 2, 12), C.brass2, { sw: 1.4 }) + part(ellPts(420, -54, 8, 7, 0, Math.PI * 2, 10), C.brass2, { sw: 1.4 });
   o += part(rectPts(60, -40, 120, 40), C.pink, { sw: 1.6 }) + `<path d="${S(cloudPts(120, -20, 30, 12, 10), 0.3)}" fill="${C.cloud}" stroke="${INK}" stroke-width="1"/>`;
   put('props/counter.svg', 560, 240, o, { id: 1712, displace: 1.2, vb: '-10 -60 560 300' });
 }
@@ -89,8 +91,10 @@ function machineBody() {
   seed(1713);
   // 500x520: 앞문(둥근 유리)이 있는 커다란 드럼 세탁기, 위에 단추판
   let o = `<path d="${S([[10, 506], [490, 506], [480, 518], [20, 518]])}" fill="${INK}" opacity="0.2"/>`;
-  o += part([[20, 40], [480, 34], [488, 500], [14, 506]], C.machine, { sw: 2.8, heavy: [1, 2], shade: [[380, 34], [488, 34], [488, 506], [380, 506]], shadeCol: 'rgba(80,80,100,0.18)' });
-  o += part([[20, 40], [480, 34], [482, 120], [18, 126]], C.machine2, { sw: 2 });
+  for (const x of [50, 430]) o += part(roundRectPts(x - 18, 490, 36, 22, 6), '#6a6a74', { sw: 1.6 });
+  o += part(roundRectPts(16, 34, 470, 466, 28), C.machine, { sw: 2.8, heavy: [5, 12], shade: [[390, 20], [500, 20], [500, 510], [390, 510]], shadeCol: 'rgba(80,80,100,0.2)', light: [[34, 140], [52, 140], [52, 470], [34, 470]] });
+  o += part([[18, 120], [18, 62], [30, 40], [56, 34], [446, 34], [472, 40], [484, 62], [484, 120]], C.machine2, { sw: 2 }) + line([[20, 122], [482, 118]], { sw: 2.4 });
+  o += part(roundRectPts(330, 140, 120, 34, 8), '#e6e2d6', { sw: 1.8 }) + part(roundRectPts(370, 150, 40, 10, 4), '#9a9aa8', { sw: 1 });
   // 단추판 그림 (작게)
   for (let i = 0; i < 4; i++) o += part(ellPts(220 + i * 62, 82, 20, 20, 0, Math.PI * 2, 12), ['#cfe4f6', '#dcecf0', '#fff1c8', '#e8f2fa'][i], { sw: 1.6 });
   o += part(ellPts(90, 82, 34, 34, 0, Math.PI * 2, 16), '#e0dccf', { sw: 2 }) + line([[90, 82], [110, 62]], { sw: 3 });
@@ -116,10 +120,9 @@ function drum(state) {
 function basket(withCloud) {
   seed(1715);
   let o = `<path d="${S([[10, 196], [220, 196], [210, 206], [20, 206]])}" fill="${INK}" opacity="0.18"/>`;
-  if (withCloud) o += part(cloudPts(116, 70, 92, 56, 14), C.grey, { sw: 2.2, heavy: [2, 6], shade: [[30, 80], [210, 80], [210, 140], [30, 140]], shadeCol: 'rgba(60,60,80,0.25)' }) + [0, 1, 2, 3, 4, 5].map(() => dot(rand(50, 180), rand(40, 110), rand(2, 5), C.grey2)).join('');
-  o += part([[10, 90], [222, 86], [204, 200], [26, 204]], '#d9b878', { sw: 2.4, heavy: [1, 2] });
-  for (let y = 104; y < 200; y += 16) o += line([[16, y], [216, y - 2]], { sw: 1.4, color: '#a8864a' });
-  for (let x = 30; x < 212; x += 20) o += line([[x, 90], [x + 2, 200]], { sw: 1, color: '#a8864a', op: 0.6 });
+  o += wicker({ cx: 116, by: 196, wTop: 210, wBot: 160, h: 104, col: '#d9b878', dark: '#a8864a', inner: '#7a5a30' });
+  for (const s of [-1, 1]) o += `<path d="${O([[116 + s * 104, 104], [116 + s * 118, 120], [116 + s * 108, 136]], 0.3)}" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><path d="${O([[116 + s * 104, 104], [116 + s * 118, 120], [116 + s * 108, 136]], 0.3)}" fill="none" stroke="#d9b878" stroke-width="4" stroke-linecap="round"/>`;
+  if (withCloud) o += part(cloudPts(116, 78, 92, 50, 14), C.grey, { sw: 2.2, heavy: [2, 6], shade: [[30, 80], [210, 80], [210, 140], [30, 140]], shadeCol: 'rgba(60,60,80,0.25)' }) + [0, 1, 2, 3, 4, 5].map(() => dot(rand(50, 180), rand(40, 110), rand(2, 5), C.grey2)).join('');
   put(`props/basket${withCloud ? '_cloud' : ''}.svg`, 232, 210, o, { id: 1715, displace: 1.2 });
 }
 
@@ -229,16 +232,16 @@ function bgWest() {
   o += fill(wob([[-10, 640], [W + 10, 640], [W + 10, H + 10], [-10, H + 10]], { sharp: true }), C.cloud2);
   o += cloudFloor(644, H);
   // 빨랫줄 기둥 두 개 + 줄
-  for (const x of [420, 1180]) o += part([[x - 14, 240], [x + 14, 240], [x + 16, 690], [x - 16, 690]], C.wood2, { sw: 2.2, heavy: [1, 2] }) + part([[x - 40, 236], [x + 40, 236], [x + 40, 250], [x - 40, 250]], C.wood, { sw: 1.6 });
+  for (const x of [420, 1180]) { o += turned(x, 244, 690, 46, C.wood2, C.woodD) + part([[x - 46, 252], [x - 40, 234], [x + 40, 234], [x + 46, 252], [x + 30, 258], [x - 30, 258]], C.wood, { sw: 1.8 }) + part(ellPts(x, 226, 12, 10, 0, Math.PI * 2, 10), C.wood, { sw: 1.4 }); o += `<path d="${S([[x - 40, 690], [x + 40, 690], [x + 30, 680], [x - 30, 680]], 0.5)}" fill="${C.cloud}" stroke="${INK}" stroke-width="1.2"/>`; }
   o += clothesline(420, 1180, 250, 30);
   // 정류장 표지판 (무지개 그림)
   o += line([[1300, 300], [1302, 680]], { sw: 10, color: C.woodD });
   o += part([[1230, 230], [1380, 226], [1384, 330], [1234, 334]], C.trim, { sw: 2.2 });
   ['#e86a6a', '#f0b050', '#7ac08a', '#6aa0e0'].forEach((c, i) => { o += `<path d="${O(ellPts(1308, 318, 54 - i * 10, 60 - i * 10, Math.PI, Math.PI * 2, 12), 0.3)}" fill="none" stroke="${c}" stroke-width="6"/>`; });
   // 분실물 바구니 (왼쪽 앞)
-  o += part([[230, 560], [520, 552], [500, 720], [250, 728]], '#c9a06a', { sw: 2.6, heavy: [1, 2] });
-  for (let y = 576; y < 720; y += 18) o += line([[236, y], [512, y - 4]], { sw: 1.4, color: '#9a7440' });
-  o += part(cloudPts(300, 548, 50, 22, 10), '#e8eef8', { sw: 1.6 }) + part([[380, 520], [460, 512], [470, 556], [390, 560]], '#c46a5a', { sw: 1.6 }) + part([[420, 520], [436, 470], [452, 520]], C.brass, { sw: 1.4 });
+  o += wicker({ cx: 375, by: 726, wTop: 300, wBot: 240, h: 168, col: '#c9a06a', dark: '#9a7440' });
+  o += part(cloudPts(290, 548, 56, 26, 10), '#e8eef8', { sw: 1.6 }) + part([[372, 520], [452, 512], [462, 560], [382, 566]], '#c46a5a', { sw: 1.6 }) + part([[412, 520], [428, 470], [444, 520]], C.brass, { sw: 1.4 }) + yarn({ cx: 478, cy: 550, r: 22, col: '#7ab0d8' });
+  o += `<path d="${O(ellPts(375, 558, 152, 19, 0, Math.PI, 12), 0.3)}" fill="none" stroke="${INK}" stroke-width="11" stroke-linecap="round"/><path d="${O(ellPts(375, 558, 152, 19, 0, Math.PI, 12), 0.3)}" fill="none" stroke="#c9a06a" stroke-width="7" stroke-linecap="round"/>`;
   o += part([[250, 600], [340, 598], [342, 640], [252, 642]], C.trim, { sw: 1.4 }) + line([[264, 616], [326, 614]], { sw: 2, op: 0.5 }) + line([[264, 628], [310, 627]], { sw: 2, op: 0.5 });
   put('bg/west.svg', W, H, o, { id: 1741 });
 }

@@ -3,6 +3,7 @@
 // 분위기: 고요한 밤바다 위 둥근 등대 꼭대기 방. 잉크빛 남색, 놋쇠, 따뜻한 나무. 등불이 켜지면 금빛·초록 빛이 돈다.
 import { seed, rand, pick, INK, wob, rect, rectPts, ellPts, fill, line, hatch, svg } from './ink.mjs';
 import { part, S, O, penguinArt } from './chars.mjs';
+import { barrel, crate, rock, splat } from './props.mjs';
 
 const OUT = new URL('../../assets/rooms/lighthouse/', import.meta.url).pathname;
 const W = 1600, H = 900;
@@ -55,8 +56,10 @@ function bgNorth() {
   seed(1811);
   let o = shell({ windows: [[110, 90, 280, 420], [1210, 90, 260, 420]] });
   // 받침대
-  o += part([[540, 640], [1060, 640], [1040, 560], [560, 560]], C.plank2, { sw: 2.6, heavy: [0, 1] });
-  o += part([[580, 560], [1020, 560], [1000, 520], [600, 520]], C.brass2, { sw: 2.2 });
+  o += part([[540, 640], [1060, 640], [1062, 626], [1044, 618], [1044, 572], [1056, 566], [1050, 556], [550, 556], [544, 566], [556, 572], [556, 618], [538, 626]], C.plank2, { sw: 2.6, heavy: [0, 3], shade: [[900, 540], [1080, 540], [1080, 650], [900, 650]], shadeCol: 'rgba(30,15,5,0.3)' });
+  for (const x of [600, 700, 800, 900, 1000]) o += part([[x - 34, 584], [x + 34, 584], [x + 34, 610], [x - 34, 610]], C.plank, { sw: 1.4 });
+  o += part([[586, 558], [1014, 558], [1018, 546], [1000, 524], [600, 524], [582, 546]], C.brass2, { sw: 2.2, light: [[600, 522], [1000, 522], [1004, 534], [596, 534]] });
+  for (let x = 610; x <= 990; x += 38) o += dot(x, 548, 3, C.brassL);
   // 계단형 렌즈 (프레넬): 겹겹 고리
   o += part([[620, 520], [600, 300], [640, 160], [800, 100], [960, 160], [1000, 300], [980, 520]], C.glass, { sw: 3, heavy: [4, 6], shade: [[860, 100], [1000, 100], [1000, 520], [860, 520]], shadeCol: 'rgba(30,50,90,0.25)' });
   for (let k = 0; k < 7; k++) { const y = 160 + k * 52; o += line([[612 + Math.abs(3 - k) * 6, y], [800, y + 8], [988 - Math.abs(3 - k) * 6, y]], { sw: 2.4, color: '#8fb0c0', step: 999 }); o += line([[630, y + 10], [970, y + 18]], { sw: 1, color: '#ffffff', op: 0.5, step: 999 }); }
@@ -76,7 +79,7 @@ function bgNorth() {
 function lensInk() {
   seed(1812);
   let o = '';
-  for (let i = 0; i < 9; i++) { const x = rand(40, 340), y = rand(40, 380), r = rand(14, 40); const pts = []; for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2; pts.push([x + Math.cos(a) * r * (k % 2 ? 0.6 : 1 + rand(0, 0.4)), y + Math.sin(a) * r * (k % 2 ? 0.6 : 1 + rand(0, 0.4))]); } o += `<path d="${S(pts, 1)}" fill="${C.black}" opacity="0.85"/>`; o += line([[x, y + r * 0.6], [x + rand(-4, 4), y + r + rand(20, 50)]], { sw: rand(4, 8), color: C.black, op: 0.8 }); }
+  for (const [x, y, r] of [[90, 80, 34], [250, 60, 26], [180, 190, 40], [310, 200, 22], [70, 280, 24], [240, 320, 30], [130, 120, 14], [320, 110, 16], [200, 370, 14]]) o += splat({ cx: x, cy: y, r, col: '#1c1c28', op: 0.88, drips: r > 20 ? 2 : 1 });
   put('props/lens_ink.svg', 380, 420, o, { id: 1812, displace: 1.4 });
 }
 function reservoirGreen() {
@@ -115,7 +118,7 @@ function bgEast() {
   o += line([[560, 40], [560, 150]], { sw: 2 }) + part([[536, 150], [584, 150], [580, 220], [540, 220]], C.brass, { sw: 1.8, heavy: [1, 2] }) + dot(560, 186, 10, C.lamp, 0.8);
   // 바닥 앞쪽: 밧줄 뭉치, 나무 상자와 유리병 속 배
   for (let r = 70; r > 10; r -= 12) o += `<path d="${O(ellPts(200, 800, r * 1.6, r * 0.6, 0, Math.PI * 2, 18), 0.6)}" fill="none" stroke="${C.rope}" stroke-width="9"/>` + `<path d="${O(ellPts(200, 800, r * 1.6, r * 0.6, 0, Math.PI * 2, 18), 0.6)}" fill="none" stroke="#8a6a3a" stroke-width="1.4"/>`;
-  o += part([[1240, 860], [1460, 856], [1450, 700], [1250, 704]], C.plank2, { sw: 2.4, heavy: [1, 2] }) + line([[1250, 780], [1452, 776]], { sw: 2, op: 0.6 }) + line([[1246, 704], [1456, 858]], { sw: 2, op: 0.4 });
+  o += crate({ x: 1236, by: 862, w: 200, h: 156, d: 50, col: C.plank, dark: C.plankD });
   o += part([[1280, 700], [1420, 700], [1424, 640], [1400, 620], [1300, 620], [1276, 640]], '#cfe6ee', { sw: 2 }) + `<path d="${S([[1300, 680], [1400, 680], [1390, 692], [1310, 692]], 0.3)}" fill="#8a5a3a"/>` + part([[1350, 680], [1350, 640], [1380, 676]], '#f4ecd8', { sw: 1 });
   put('bg/east.svg', W, H, o, { id: 1821 });
 }
@@ -134,7 +137,13 @@ function bgSouth() {
   o += part([[140, 470], [600, 462], [602, 486], [142, 494]], C.plank, { sw: 2.2 });
   for (const x of [170, 560]) o += part([[x, 486], [x + 18, 486], [x + 6, 530]], C.plank2, { sw: 1.4 });
   o += part([[140, 300], [600, 294], [602, 316], [142, 322]], C.plank, { sw: 2 });
-  for (let i = 0; i < 6; i++) o += part(rectPts(160 + i * 72, 220, 50, 76), pick(['#6a4a8a', '#3a5a8a', '#8a5a3a', '#4a7a5a']), { sw: 1.4 });
+  for (let i = 0; i < 7; i++) {
+    const bw = rand(38, 54), bh = rand(64, 80), bx = 156 + i * 62 + rand(-3, 3), tilt = i === 5 ? 10 : 0, col = pick(['#6a4a8a', '#3a5a8a', '#8a5a3a', '#4a7a5a', '#8a3a3a']);
+    const b0 = [[bx, 296], [bx + bw, 296], [bx + bw + tilt, 296 - bh + 4], [bx + bw - 6 + tilt, 296 - bh], [bx + 6 + tilt, 296 - bh], [bx + tilt, 296 - bh + 4]];
+    o += part(b0, col, { sw: 1.6, heavy: [1, 2], shade: [[bx + bw * 0.7, 200], [bx + bw + 20, 200], [bx + bw + 20, 300], [bx + bw * 0.7, 300]], shadeCol: 'rgba(0,0,0,0.25)' });
+    for (const f of [0.18, 0.82]) o += line([[bx + 3 + tilt * (1 - f), 296 - bh * f], [bx + bw - 3 + tilt * (1 - f), 296 - bh * f]], { sw: 3, color: C.brass, op: 0.8 });
+    o += part([[bx + bw * 0.25 + tilt * 0.5, 296 - bh * 0.62], [bx + bw * 0.75 + tilt * 0.5, 296 - bh * 0.62], [bx + bw * 0.75 + tilt * 0.4, 296 - bh * 0.42], [bx + bw * 0.25 + tilt * 0.4, 296 - bh * 0.42]], C.paper, { sw: 1 });
+  }
   // 걸레 걸이
   o += part([[1150, 300], [1290, 296], [1292, 312], [1152, 316]], C.plank2, { sw: 1.8 }) + dot(1220, 318, 6, C.brass);
   // 바다 지도 (등대 → 징검다리 → 기차역이 점선으로)
@@ -144,7 +153,7 @@ function bgSouth() {
   for (let i = 0; i < 8; i++) o += dot(1060 + i * 40, 214 + Math.sin(i) * 8, 4, '#7a6a5a');
   o += line([[800, 90], [800, 300]], { sw: 10, color: '#5a5a66' }) + line([[740, 140], [860, 140]], { sw: 10, color: '#5a5a66' }) + `<path d="${O([[700, 260], [740, 330], [800, 350], [860, 330], [900, 260]], 0.5)}" fill="none" stroke="#5a5a66" stroke-width="12"/>` + part(ellPts(800, 80, 18, 18, 0, Math.PI * 2, 12), 'none', { sw: 6, stroke: '#5a5a66' });
   o += `<path d="${O([[700, 120], [660, 260], [700, 400], [650, 520]], 1)}" fill="none" stroke="${C.rope}" stroke-width="8"/>`;
-  for (const [x, w] of [[60, 200], [1350, 190]]) { o += part([[x, 880], [x + w, 880], [x + w - 14, 700], [x + 14, 700]], C.plank2, { sw: 2.4, heavy: [1, 2] }); for (const y of [740, 840]) o += line([[x + 8, y], [x + w - 8, y]], { sw: 6, color: '#5a5a66' }); o += part(ellPts(x + w / 2, 700, w / 2 - 14, 18, 0, Math.PI * 2, 16), C.plank, { sw: 1.8 }); }
+  for (const [x, w] of [[60, 200], [1350, 190]]) o += barrel({ cx: x + w / 2, by: 872, w: w - 20, h: 176, col: C.plank2, dark: C.plankD });
   put('bg/south.svg', W, H, o, { id: 1831 });
 }
 function bottle(col, name) {
@@ -168,7 +177,9 @@ function bgWest() {
   seed(1841);
   let o = nightSky(-10, -10, W + 20, 700, { station: true });
   // 바다 위 바위들 (어두워서 잘 안 보임)
-  for (const [x, y, r] of [[560, 556, 44], [700, 528, 36], [840, 504, 30], [960, 484, 24], [1060, 468, 18], [1140, 455, 14]]) o += `<path d="${S(ellPts(x, y, r * 1.6, r * 0.6, 0, Math.PI * 2, 12), 1)}" fill="#1a2440" stroke="#0e1424" stroke-width="2"/>`;
+  seed(1849);
+  for (const [x, y, r] of [[560, 556, 44], [700, 528, 36], [840, 504, 30], [960, 484, 24], [1060, 468, 18], [1140, 455, 14]]) o += rock({ cx: x, cy: y, rx: r * 1.6, ry: r * 0.7, col: '#1a2440', light: '#2e3c64', water: '#2a4470', sw: 1.6 });
+  seed(1841);
   // 문틀 (양옆 벽) + 발코니 난간
   o += part([[-10, -10], [130, -10], [130, 700], [-10, 700]], C.wall, { sw: 2.4 }) + part([[1470, -10], [1610, -10], [1610, 700], [1470, 700]], C.wall, { sw: 2.4 });
   o += part([[-10, 680], [W + 10, 680], [W + 10, H + 10], [-10, H + 10]], C.plank, { sw: 2.4 });
@@ -176,9 +187,7 @@ function bgWest() {
   o += line([[130, 600], [1470, 600]], { sw: 10, color: C.brass2 }) + line([[130, 596], [1470, 596]], { sw: 4, color: C.brass });
   for (let x = 160; x < 1460; x += 70) o += line([[x, 600], [x, 682]], { sw: 4, color: C.brass2 });
   // 빗물통
-  o += part([[170, 500], [390, 494], [380, 720], [180, 726]], C.plank2, { sw: 2.6, heavy: [1, 2] });
-  for (const y of [540, 680]) o += line([[172, y], [388, y - 4]], { sw: 6, color: '#5a5a6a' });
-  o += part(ellPts(280, 498, 108, 20, 0, Math.PI * 2, 18), '#2a4470', { sw: 2 }) + line([[220, 494], [300, 492]], { sw: 2, color: '#9ac0e0', op: 0.7 });
+  o += barrel({ cx: 280, by: 712, w: 210, h: 214, col: C.plank2, dark: C.plankD, top: '#2a4470' });
   put('bg/west.svg', W, H, o, { id: 1841 });
 }
 // 망원경 (세발 받침) — 징검다리 빛보다 앞에 그린다. 400x320, x1080 y420에 둔다
@@ -195,7 +204,7 @@ function stonesLit() {
   let o = '<g filter="url(#blur)"><path d="M200 640 L1600 360 L1600 470 L200 720Z" fill="#fff3c0" opacity="0.18"/></g>';
   for (const [x, y, r] of [[560, 556, 44], [700, 528, 36], [840, 504, 30], [960, 484, 24], [1060, 468, 18], [1140, 455, 14], [1210, 445, 11], [1268, 437, 9]]) {
     o += `<ellipse cx="${x}" cy="${y + 6}" rx="${r * 2.2}" ry="${r * 0.9}" fill="#fff3b0" opacity="0.35" filter="url(#blur2)"/>`;
-    o += `<path d="${S(ellPts(x, y, r * 1.6, r * 0.6, 0, Math.PI * 2, 12), 1)}" fill="#d8c28a" stroke="${INK}" stroke-width="2"/>` + line([[x - r, y - r * 0.2], [x + r * 0.4, y - r * 0.4]], { sw: 2, color: '#fff6d0', op: 0.8 });
+    o += rock({ cx: x, cy: y, rx: r * 1.6, ry: r * 0.7, col: '#d8c28a', light: '#fff6d0', moss: r > 25 ? '#7a9a5a' : null, water: '#3a5a8a', sw: r > 20 ? 2.2 : 1.6 });
   }
   put('props/stones_lit.svg', W, H, o, { id: 1842, displace: 1 });
 }

@@ -3,6 +3,7 @@
 // 분위기: 눈 쌓인 작은 시골 기차역. 처음엔 푸르스름하게 춥고, 난로를 피우면 주황빛으로 포근해진다.
 import { digits, seed, rand, pick, INK, wob, rect, rectPts, ellPts, fill, line, hatch, svg } from './ink.mjs';
 import { part, S, O, bearArt } from './chars.mjs';
+import { suitcase, mound, blobPts, roundRectPts, barrel } from './props.mjs';
 
 const OUT = new URL('../../assets/rooms/station/', import.meta.url).pathname;
 const W = 1600, H = 900;
@@ -15,7 +16,7 @@ let total = 0;
 const put = (rel, w, h, body, o) => { total += svg(OUT + rel, w, h, body, o); };
 const dot = (x, y, r, c, op = 1) => `<circle cx="${(+x).toFixed(1)}" cy="${(+y).toFixed(1)}" r="${r}" fill="${c}"${op < 1 ? ` opacity="${op}"` : ''}/>`;
 function lumpPts(cx, cy, rx, ry, n = 18, k = 0.06) { const p = []; for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2; p.push([cx + Math.cos(a) * rx * (i % 2 ? 1 - k : 1), cy + Math.sin(a) * ry * (i % 2 ? 1 - k : 1)]); } return p; }
-const snowLump = (cx, cy, rx, ry) => part(lumpPts(cx, cy, rx, ry), C.snow, { sw: 2, heavy: [2, 5], shade: [[cx - rx, cy + ry * 0.1], [cx + rx, cy + ry * 0.1], [cx + rx, cy + ry * 1.2], [cx - rx, cy + ry * 1.2]], shadeCol: C.snowS, hatch: false });
+const snowLump = (cx, cy, rx, ry) => part(blobPts(cx, cy, rx, ry, { n: 16, k: 0.16, flat: 0.55 }), C.snow, { sw: 2, heavy: [2, 5], shade: [[cx - rx, cy + ry * 0.1], [cx + rx, cy + ry * 0.1], [cx + rx, cy + ry * 1.2], [cx - rx, cy + ry * 1.2]], shadeCol: C.snowS, hatch: false });
 
 /* ───────────── 역장실 껍데기 (나무 벽, 마루) ───────────── */
 function office() {
@@ -66,17 +67,36 @@ function bgNorth() {
   seed(1911);
   let o = office();
   // 무쇠 난로와 연통
-  o += part([[150, 700], [370, 700], [380, 420], [140, 420]], C.iron, { sw: 2.8, heavy: [1, 2], shade: [[300, 420], [380, 420], [380, 700], [300, 700]], shadeCol: 'rgba(0,0,0,0.3)' });
-  o += part([[130, 420], [390, 420], [384, 392], [136, 392]], C.iron2, { sw: 2.2 });
+  o += `<path d="${S([[130, 716], [420, 712], [440, 736], [150, 740]], 0.6)}" fill="${INK}" opacity="0.25"/>`;
+  o += part([[150, 690], [146, 640], [140, 560], [144, 470], [150, 430], [370, 430], [376, 470], [380, 560], [374, 640], [370, 690]], C.iron, { sw: 2.8, heavy: [5, 8], shade: [[300, 420], [390, 420], [390, 700], [300, 700]], shadeCol: 'rgba(0,0,0,0.32)', light: [[158, 440], [176, 440], [172, 680], [156, 680]] });
+  o += part([[136, 690], [384, 690], [388, 706], [132, 706]], C.iron2, { sw: 2 });
+  o += part([[128, 432], [134, 412], [170, 396], [350, 396], [386, 412], [392, 432]], C.iron2, { sw: 2.4, heavy: [3, 5] }) + part(roundRectPts(226, 380, 68, 20, 8), C.iron, { sw: 1.8 });
+  for (const y of [446, 676]) for (let x = 160; x <= 360; x += 25) o += dot(x, y, 2.2, '#8a8a98');
+  o += part(roundRectPts(220, 630, 80, 22, 6), C.brass, { sw: 1.4 }) + line([[236, 641], [284, 641]], { sw: 1.4, op: 0.6 });
+  o += part(roundRectPts(188, 458, 144, 154, 14), C.iron2, { sw: 2.2 }) + dot(338, 520, 6, C.brass) + dot(338, 552, 6, C.brass);
   o += part([[200, 470], [320, 470], [320, 600], [200, 600]], '#1a1a20', { sw: 2.4 });
   for (let x = 214; x < 320; x += 18) o += line([[x, 476], [x, 594]], { sw: 3, color: C.iron });
   o += part([[236, 392], [284, 392], [284, -10], [236, -10]], C.iron, { sw: 2.2, heavy: [1, 2] });
   for (const y of [120, 260]) o += part([[228, y], [292, y], [292, y + 14], [228, y + 14]], C.iron2, { sw: 1.4 });
-  for (const x of [160, 360]) o += part([[x - 10, 700], [x + 10, 700], [x + 6, 730], [x - 6, 730]], C.iron2, { sw: 1.4 });
+  for (const [x, d] of [[160, -1], [360, 1]]) o += part([[x - 12, 704], [x + 12, 704], [x + 10 + d * 4, 724], [x + d * 14, 734], [x + d * 6, 736], [x - 8 + d * 4, 724]], C.iron2, { sw: 1.4 });
   // 안락의자 (곰곰이는 소품)
-  o += part([[540, 700], [520, 430], [560, 330], [800, 300], [1040, 330], [1080, 430], [1060, 700]], '#6a8aa8', { sw: 2.8, heavy: [4, 6], shade: [[900, 300], [1080, 300], [1080, 700], [900, 700]], shadeCol: 'rgba(0,20,50,0.22)' });
-  o += part([[500, 520], [600, 500], [610, 720], [510, 730]], '#7a9ab8', { sw: 2.2 }) + part([[1000, 500], [1100, 520], [1090, 730], [990, 720]], '#7a9ab8', { sw: 2.2 });
-  for (const x of [560, 1040]) o += part([[x - 10, 720], [x + 10, 720], [x + 8, 760], [x - 8, 760]], C.woodD, { sw: 1.6 });
+  // 날개 달린 안락의자: 둥근 등받이 + 단추 누빔, 동그랗게 말린 팔걸이, 방석, 주름 치마, 나무 다리
+  const CH = '#6a8aa8', CH2 = '#56769a', CHL = '#8aa8c4';
+  let tuft = '';
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 5 - (r === 0 ? 1 : 0); c++) { const x = 640 + c * 80 + (r === 0 ? 40 : 0) + (r % 2 ? 40 : 0) - (r === 2 ? 40 : 0), y = 380 + r * 70; tuft += `<circle cx="${x}" cy="${y}" r="5" fill="${CH2}" stroke="${INK}" stroke-width="1.2"/>` + `<path d="${O([[x - 22, y - 16], [x, y], [x + 22, y - 16]], 0.3)}" fill="none" stroke="${CH2}" stroke-width="1.6"/><path d="${O([[x - 22, y + 16], [x, y], [x + 22, y + 16]], 0.3)}" fill="none" stroke="${CH2}" stroke-width="1.6"/>`; }
+  o += part([[560, 640], [548, 420], [562, 352], [610, 316], [700, 298], [800, 292], [900, 298], [990, 316], [1038, 352], [1052, 420], [1040, 640]], CH, { sw: 2.8, heavy: [6, 10], shade: [[900, 280], [1060, 280], [1060, 660], [900, 660]], shadeCol: 'rgba(0,20,50,0.24)', light: [[600, 330], [760, 300], [760, 316], [600, 350]], extra: tuft });
+  // 날개 (등받이 양옆)
+  o += part([[560, 560], [520, 470], [512, 400], [540, 360], [574, 372], [584, 470]], CHL, { sw: 2.2 }) + part([[1040, 560], [1080, 470], [1088, 400], [1060, 360], [1026, 372], [1016, 470]], CH2, { sw: 2.2, heavy: [1, 3] });
+  // 방석 + 주름 치마
+  o += part([[580, 640], [600, 610], [800, 600], [1000, 610], [1020, 640], [1000, 668], [800, 676], [600, 668]], CHL, { sw: 2.4 });
+  let pleat = ''; for (let x = 560; x <= 1040; x += 30) pleat += O([[x, 676], [x + 4, 722]], 0.3);
+  o += part([[548, 670], [1052, 670], [1060, 724], [540, 724]], CH, { sw: 2.4, heavy: [1, 2], extra: `<path d="${pleat}" fill="none" stroke="${CH2}" stroke-width="1.6"/>` });
+  // 말린 팔걸이 (앞쪽 둥근 소용돌이)
+  for (const [x, dir, col] of [[520, 1, CHL], [1080, -1, CH2]]) {
+    o += part([[x, 726], [x - dir * 6, 560], [x + dir * 4, 520], [x + dir * 50, 508], [x + dir * 96, 520], [x + dir * 104, 560], [x + dir * 98, 726]], col, { sw: 2.4, heavy: dir > 0 ? [5, 6] : [0, 1] });
+    o += part(ellPts(x + dir * 50, 532, 36, 26, 0, Math.PI * 2, 14), dir > 0 ? CH : CH2, { sw: 1.8 }) + `<path d="${O([[x + dir * 30, 532], [x + dir * 44, 520], [x + dir * 62, 530], [x + dir * 52, 544], [x + dir * 42, 534]], 0.3)}" fill="none" stroke="${INK}" stroke-width="1.6"/>`;
+  }
+  for (const x of [556, 1044]) o += part([[x - 12, 722], [x + 12, 722], [x + 8, 758], [x + 2, 764], [x - 6, 758]], C.woodD, { sw: 1.6 });
   // 깨우는 법 안내문 (확대하면 읽힌다)
   o += part([[1120, 150], [1400, 142], [1406, 400], [1126, 408]], C.paper, { sw: 2.4, heavy: [1, 2] }) + dot(1262, 160, 7, C.red);
   o += part(ellPts(1190, 230, 26, 22, 0, Math.PI * 2, 12), C.fire, { sw: 1.4 });
@@ -93,7 +113,10 @@ function stoveFire() {
   o += `<ellipse cx="260" cy="540" rx="320" ry="260" fill="${C.fire}" opacity="0.35"/><ellipse cx="800" cy="500" rx="900" ry="500" fill="#ffd8a0" opacity="0.12"/>`;
   o += '</g>';
   o += part([[204, 600], [316, 600], [316, 474], [204, 474]], '#3a1a10', { sw: 0 });
-  for (let i = 0; i < 6; i++) { const x = 214 + i * 18; o += `<path d="${S([[x - 8, 598], [x + 8, 598], [x + 4, 540 - rand(0, 30)], [x, 520 - rand(0, 30)], [x - 4, 540 - rand(0, 30)]], 0.4)}" fill="${i % 2 ? C.fire : C.fire2}"/>`; }
+  const tongue = (x, w, top, lean) => S([[x - w, 598], [x - w * 1.2, 570], [x - w * 0.4 + lean * 0.3, 548], [x - w * 0.6 + lean * 0.6, top + 30], [x + lean, top], [x + w * 0.4 + lean * 0.5, top + 26], [x + w * 0.9, 552], [x + w * 1.2, 576], [x + w, 598]], 0.3);
+  o += `<path d="${S([[206, 598], [316, 598], [314, 560], [260, 540], [208, 560]], 0.3)}" fill="#c43a1a" opacity="0.9"/>`;
+  for (const [x, w, top, lean] of [[226, 16, 512, -6], [260, 20, 486, 8], [296, 16, 506, 10]]) o += `<path d="${tongue(x, w, top, lean)}" fill="${C.fire}"/>` + `<path d="${tongue(x, w * 0.5, top + 34, lean * 0.6)}" fill="${C.fire2}"/>`;
+  for (let i = 0; i < 6; i++) o += dot(rand(214, 310), rand(480, 530), rand(1.5, 3), C.fire2, 0.9);
   for (let x = 214; x < 320; x += 18) o += line([[x, 476], [x, 594]], { sw: 3, color: C.iron });
   put('bg/fire.svg', W, H, o, { id: 1912, displace: 0.8 });
 }
@@ -149,31 +172,79 @@ function bgSouth() {
   o += part([[420, 600], [760, 596], [762, 616], [422, 620]], C.wood, { sw: 2 }) + part([[430, 560], [750, 556], [752, 572], [432, 576]], C.wood, { sw: 1.8 });
   for (const x of [440, 740]) o += line([[x, 620], [x - 4, 650]], { sw: 6, color: C.iron });
   o += `<path d="${S([[420, 556], [760, 552], [756, 540], [424, 544]], 0.4)}" fill="${C.snow}"/>`;
-  o += part([[880, 650], [1060, 650], [1056, 560], [884, 560]], '#8a4a3a', { sw: 2.2, heavy: [1, 2] }) + part([[940, 560], [1000, 560], [996, 540], [944, 540]], 'none', { sw: 3 }) + line([[884, 600], [1056, 600]], { sw: 3, color: C.brass });
-  o += part([[1120, 650], [1200, 650], [1196, 520], [1124, 520]], C.red, { sw: 2.2, heavy: [1, 2] }) + part(ellPts(1160, 520, 40, 18, Math.PI, Math.PI * 2, 12).concat([[1200, 520], [1120, 520]]), C.red, { sw: 2 }) + part([[1136, 560], [1184, 560], [1184, 570], [1136, 570]], '#2a2a32', { sw: 1.2 });
-  o += `<path d="${S([[1118, 512], [1202, 512], [1196, 500], [1124, 500]], 0.4)}" fill="${C.snow}"/>`;
+  o += suitcase({ x: 880, by: 648, w: 180, h: 92, col: '#8a4a3a', strap: C.woodD, brass: C.brass });
+  o += `<path d="${S([[884, 556], [1056, 556], [1052, 546], [890, 546]], 0.4)}" fill="${C.snow}"/>`;
+  // 둥근 우체통: 받침 + 볼록한 기둥 + 모자 같은 지붕, 투입구, 작은 문과 명판
+  o += part([[1114, 652], [1206, 652], [1202, 636], [1118, 636]], '#2a2a32', { sw: 1.8 });
+  o += part([[1124, 638], [1120, 580], [1124, 532], [1196, 532], [1200, 580], [1196, 638]], C.red, { sw: 2.4, heavy: [3, 5], shade: [[1174, 520], [1210, 520], [1210, 640], [1174, 640]], shadeCol: 'rgba(60,0,0,0.3)', light: [[1130, 540], [1142, 540], [1140, 630], [1130, 630]] });
+  o += part([[1112, 534], [1120, 516], [1140, 500], [1160, 496], [1180, 500], [1200, 516], [1208, 534]], '#a83a30', { sw: 2.4, heavy: [3, 6] }) + part(ellPts(1160, 494, 10, 6, 0, Math.PI * 2, 10), '#a83a30', { sw: 1.6 });
+  o += part(roundRectPts(1134, 552, 52, 12, 5), '#2a2a32', { sw: 1.4 }) + part(roundRectPts(1140, 586, 40, 40, 4), '#b83e34', { sw: 1.4 }) + part(roundRectPts(1146, 594, 28, 12, 2), C.paper, { sw: 1 }) + dot(1176, 608, 2.6, C.brass);
+  o += `<path d="${S([[1114, 520], [1140, 500], [1160, 494], [1182, 500], [1206, 520], [1186, 514], [1160, 506], [1134, 514]], 0.4)}" fill="${C.snow}" stroke="${INK}" stroke-width="1" stroke-opacity="0.5"/>`;
   put('bg/south.svg', W, H, o, { id: 1931 });
+}
+function wheel(cx, cy, r, col, spokes = 10) {
+  let o = part(ellPts(cx, cy, r, r, 0, Math.PI * 2, 20), col, { sw: 2.4, heavy: [2, 8], shade: [[cx - r, cy + r * 0.2], [cx + r, cy - r * 0.2], [cx + r, cy + r], [cx - r, cy + r]], shadeCol: 'rgba(40,0,0,0.25)' });
+  o += `<path d="${S(ellPts(cx, cy, r * 0.8, r * 0.8, 0, Math.PI * 2, 18), 0.3)}" fill="none" stroke="${INK}" stroke-width="1.6"/>`;
+  for (let i = 0; i < spokes; i++) { const a = i / spokes * Math.PI * 2; o += line([[cx + Math.cos(a) * r * 0.2, cy + Math.sin(a) * r * 0.2], [cx + Math.cos(a) * r * 0.78, cy + Math.sin(a) * r * 0.78]], { sw: Math.max(2, r * 0.07), color: INK, op: 0.75 }); }
+  o += part(ellPts(cx, cy, r * 0.24, r * 0.24, 0, Math.PI * 2, 10), '#c8c8d0', { sw: 1.6 }) + dot(cx, cy, r * 0.08, INK);
+  return o;
 }
 function train() {
   seed(1932);
-  // 1300x420: 증기 기관차 + 객차 한 칸, 별 모양 등
-  let o = `<path d="${S([[20, 410], [1280, 410], [1270, 420], [30, 420]])}" fill="${INK}" opacity="0.25"/>`;
-  o += part([[40, 380], [520, 380], [520, 160], [380, 150], [380, 60], [300, 60], [300, 150], [60, 160]], C.blue, { sw: 2.8, heavy: [5, 7], shade: [[420, 150], [520, 150], [520, 380], [420, 380]], shadeCol: 'rgba(0,0,30,0.3)' });
-  o += part([[300, 60], [380, 60], [390, 30], [290, 30]], C.iron, { sw: 2 });
-  o += part(ellPts(150, 270, 90, 90, 0, Math.PI * 2, 20), C.iron2, { sw: 2.4 });
-  const st = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5; st.push([150 + Math.cos(a) * (i % 2 ? 22 : 48), 270 + Math.sin(a) * (i % 2 ? 22 : 48)]); }
-  o += part(st, '#f6d060', { sw: 2 }) + `<circle cx="150" cy="270" r="70" fill="#fff3b0" opacity="0.3" filter="url(#blur)"/>`;
-  o += part([[400, 180], [500, 180], [500, 260], [400, 260]], '#f6d060', { sw: 2 });
-  for (const x of [120, 280, 440]) o += part(ellPts(x, 380, 46, 46, 0, Math.PI * 2, 16), C.red, { sw: 2.2 }) + dot(x, 380, 10, C.iron);
-  o += line([[120, 380], [440, 380]], { sw: 8, color: C.iron });
-  // 객차
-  o += part([[560, 380], [1260, 380], [1250, 110], [570, 110]], '#7a4a8a', { sw: 2.8, heavy: [1, 2] });
-  o += part([[560, 120], [1260, 120], [1240, 90], [580, 90]], C.iron, { sw: 2 });
-  for (let i = 0; i < 4; i++) o += part(rectPts(610 + i * 150, 160, 110, 100), '#fff3b0', { sw: 2 }) + line([[665 + i * 150, 160], [665 + i * 150, 260]], { sw: 3, color: '#7a4a8a' });
-  o += part([[1150, 150], [1220, 150], [1220, 370], [1150, 370]], '#5a3a6a', { sw: 2 }) + dot(1162, 270, 5, C.brass);
-  for (const x of [660, 1160]) o += part(ellPts(x, 390, 34, 34, 0, Math.PI * 2, 14), C.iron2, { sw: 2 });
-  // 연기 (김)
-  for (let i = 0; i < 4; i++) o += snowLump(340 - i * 50, 10 - i * 40, 40 + i * 10, 26 + i * 6);
+  // 1300x420 (위로 연기 180): 증기 기관차 + 객차 한 칸. 기관차 앞의 둥근 문에 별 모양 등
+  let o = `<path d="${S([[10, 404], [1290, 404], [1280, 424], [20, 424]])}" fill="${INK}" opacity="0.25"/>`;
+  // 연기 (굴뚝에서 뒤쪽으로 흘러감)
+  for (let i = 0; i < 5; i++) o += part(blobPts(222 + i * 70, 40 - i * 44, 34 + i * 12, 24 + i * 8, { n: 14, k: 0.3 }), i < 2 ? '#f6f8fc' : '#e8eef8', { sw: 1.8, shade: [[100, 46 - i * 44], [700, 46 - i * 44], [700, 120 - i * 40], [100, 120 - i * 40]], shadeCol: 'rgba(100,120,170,0.25)', hatch: false });
+  // 발판 아래 실린더
+  o += part(roundRectPts(96, 316, 120, 60, 18), C.iron, { sw: 2.2 }) + line([[110, 346], [200, 346]], { sw: 2, color: '#6a6a78' });
+  // 보일러 (굵은 원통) + 쇠띠와 리벳
+  let bands = '';
+  for (const x of [200, 270, 340]) bands += `<path d="${O([[x, 172], [x + 6, 250], [x, 328]], 0.3)}" fill="none" stroke="${C.iron2}" stroke-width="7"/>` + [190, 230, 270, 310].map((y) => dot(x + (y === 230 || y === 270 ? 5 : 2), y, 2.2, '#c8c8d0')).join('');
+  o += part([[130, 170], [420, 166], [430, 250], [420, 332], [130, 330]], C.blue, { sw: 2.8, heavy: [1, 3], shade: [[110, 280], [440, 276], [440, 340], [110, 340]], shadeCol: 'rgba(0,0,30,0.32)', light: [[140, 182], [410, 178], [410, 198], [140, 202]], extra: bands });
+  // 굴뚝 (윗부분이 나팔처럼 벌어짐)
+  o += part([[196, 170], [244, 170], [240, 110], [266, 74], [262, 58], [178, 58], [174, 74], [200, 110]], C.iron2, { sw: 2.4, heavy: [1, 3] }) + part(ellPts(220, 60, 44, 9, 0, Math.PI * 2, 14), '#1a1a20', { sw: 1.8 }) + line([[202, 126], [204, 164]], { sw: 3, color: '#6a6a78', op: 0.8 });
+  // 놋쇠 돔 + 종
+  o += part([[290, 170], [292, 140], [312, 122], [338, 122], [358, 140], [360, 170]], C.brass, { sw: 2.2, heavy: [3, 5], light: [[296, 150], [316, 128], [326, 128], [306, 152]] });
+  // 기관실 (둥근 지붕이 앞뒤로 튀어나옴, 위가 둥근 창)
+  o += part([[400, 380], [540, 380], [540, 126], [400, 126]], C.blue, { sw: 2.8, heavy: [1, 2], shade: [[500, 120], [560, 120], [560, 390], [500, 390]], shadeCol: 'rgba(0,0,30,0.3)' });
+  o += part([[380, 128], [392, 108], [470, 92], [548, 108], [560, 128], [548, 136], [392, 136]], C.iron2, { sw: 2.4 });
+  o += part([[424, 260], [424, 186], [446, 160], [494, 160], [516, 186], [516, 260]], '#f6d060', { sw: 2.4, extra: `<path d="${S([[424, 182], [516, 182], [516, 196], [424, 200]], 0.3)}" fill="#fff8d8" opacity="0.6"/>` }) + line([[470, 160], [470, 260]], { sw: 4, color: C.blue });
+  o += `<path d="${O([[414, 290], [526, 290], [526, 360], [414, 360], [414, 290]], 0.4)}" fill="none" stroke="${C.brass}" stroke-width="3"/>`;
+  // 발판 (빨간 테두리)
+  o += part([[40, 332], [552, 332], [552, 352], [40, 352]], C.iron2, { sw: 2 }) + line([[44, 348], [548, 348]], { sw: 3, color: C.red });
+  // 앞쪽 둥근 문 (연기 상자 문): 테두리 리벳 + 별 등 + 손잡이
+  o += part(ellPts(130, 250, 92, 92, 0, Math.PI * 2, 22), C.iron2, { sw: 2.6, heavy: [2, 8] });
+  o += part(ellPts(130, 250, 76, 76, 0, Math.PI * 2, 20), C.iron, { sw: 1.8, light: [[70, 200], [140, 172], [150, 186], [80, 214]] });
+  for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2; o += dot(130 + Math.cos(a) * 84, 250 + Math.sin(a) * 84, 2.6, '#c8c8d0'); }
+  const st = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5; st.push([130 + Math.cos(a) * (i % 2 ? 20 : 46), 246 + Math.sin(a) * (i % 2 ? 20 : 46)]); }
+  o += `<circle cx="130" cy="246" r="74" fill="#fff3b0" opacity="0.3" filter="url(#blur)"/>` + part(st, '#f6d060', { sw: 2.2, light: [[118, 226], [130, 204], [134, 232]] });
+  o += line([[176, 288], [196, 296]], { sw: 5, color: C.brass });
+  // 배장기 (앞쪽 눈 치우개)
+  o += part([[52, 352], [140, 352], [150, 404], [18, 404]], C.red, { sw: 2.4, heavy: [2, 3] });
+  for (const k of [0.2, 0.4, 0.6, 0.8]) o += line([[52 + 88 * k, 354], [18 + 132 * k, 402]], { sw: 2.4, op: 0.7 });
+  // 바퀴 + 연결봉
+  for (const x of [190, 310, 440]) o += wheel(x, 370, 46, C.red);
+  o += line([[190, 386], [440, 386]], { sw: 10, color: INK }) + line([[190, 386], [440, 386]], { sw: 6, color: '#c8c8d0' }) + [190, 310, 440].map((x) => dot(x, 386, 6, C.brass)).join('');
+  o += line([[150, 346], [190, 386]], { sw: 6, color: '#9a9aa8' });
+  // 연결 고리
+  o += line([[540, 340], [580, 340]], { sw: 8, color: C.iron2 }) + part(ellPts(560, 340, 10, 7, 0, Math.PI * 2, 10), C.iron, { sw: 1.4 });
+  // 객차: 둥근 모서리 몸통, 금빛 줄무늬, 위가 둥근 창 + 커튼, 둥근 지붕과 환기창
+  const cx0 = 570, cx1 = 1260;
+  o += part([[cx0 + 10, 110], [cx1 - 10, 110], [cx1, 130], [cx1, 360], [cx1 - 10, 372], [cx0 + 10, 372], [cx0, 360], [cx0, 130]], '#7a4a8a', { sw: 2.8, heavy: [2, 4], shade: [[cx0 - 6, 300], [cx1 + 6, 300], [cx1 + 6, 380], [cx0 - 6, 380]], shadeCol: 'rgba(30,0,40,0.3)' });
+  o += line([[cx0 + 6, 290], [cx1 - 6, 290]], { sw: 3, color: C.brass }) + line([[cx0 + 6, 146], [cx1 - 6, 146]], { sw: 2, color: C.brass, op: 0.8 });
+  for (let i = 0; i < 6; i++) o += `<path d="${S(roundRectPts(cx0 + 20 + i * 92, 306, 72, 50, 8), 0.3)}" fill="none" stroke="#5a3a6a" stroke-width="2"/>`;
+  o += part([[cx0 - 14, 116], [cx0 + 20, 82], [(cx0 + cx1) / 2, 66], [cx1 - 20, 82], [cx1 + 14, 116], [cx1 + 4, 124], [cx0 - 4, 124]], C.iron, { sw: 2.6, heavy: [0, 2], light: [[cx0 + 30, 86], [(cx0 + cx1) / 2, 72], [cx1 - 30, 86], [(cx0 + cx1) / 2, 80]] });
+  for (const x of [700, 860, 1020, 1160]) o += part(roundRectPts(x, 58, 40, 18, 6), C.iron2, { sw: 1.6 });
+  for (let i = 0; i < 4; i++) {
+    const wx = 610 + i * 136, ww = 104;
+    o += part([[wx, 270], [wx, 186], [wx + 10, 166], [wx + ww / 2, 158], [wx + ww - 10, 166], [wx + ww, 186], [wx + ww, 270]], '#fff3b0', { sw: 2.4, extra: `<path d="${S([[wx, 160], [wx + ww * 0.3, 160], [wx + ww * 0.22, 210], [wx + 6, 268], [wx, 268]], 0.3)}" fill="${C.red}" opacity="0.85"/><path d="${S([[wx + ww, 160], [wx + ww * 0.7, 160], [wx + ww * 0.78, 210], [wx + ww - 6, 268], [wx + ww, 268]], 0.3)}" fill="${C.red}" opacity="0.85"/>` });
+    o += line([[wx - 4, 272], [wx + ww + 4, 272]], { sw: 5, color: C.brass2 });
+  }
+  // 문 (위쪽 작은 창, 손잡이, 발판)
+  o += part([[1170, 372], [1170, 170], [1180, 156], [1230, 156], [1240, 170], [1240, 372]], '#5a3a6a', { sw: 2.4 }) + part(roundRectPts(1184, 180, 42, 50, 10), '#fff3b0', { sw: 1.8 }) + dot(1182, 280, 5, C.brass);
+  o += part([[1160, 372], [1250, 372], [1246, 390], [1164, 390]], C.iron2, { sw: 1.6 });
+  // 대차 (작은 바퀴 둘씩)
+  for (const bx of [700, 1060]) { o += part(roundRectPts(bx - 80, 366, 160, 26, 8), C.iron2, { sw: 2 }); for (const dx of [-46, 46]) o += wheel(bx + dx, 392, 30, C.iron, 8); }
   put('props/train.svg', 1300, 420, o, { id: 1932, displace: 1.4, vb: '0 -180 1300 600' });
 }
 
@@ -184,27 +255,36 @@ function bgWest() {
   // 역 건물 벽 (오른쪽) + 문
   o += part([[1180, -10], [1610, -10], [1610, 700], [1180, 700]], C.wall, { sw: 2.4 });
   for (let x = 1190; x < 1600; x += 50) o += line([[x, -10], [x, 700]], { sw: 1.4, color: C.wall2 });
-  o += part([[1240, 260], [1420, 260], [1420, 700], [1240, 700]], C.woodD, { sw: 2.4 }) + dot(1400, 480, 8, C.brass);
+  o += part([[1226, 704], [1226, 250], [1434, 250], [1434, 704]], C.wood2, { sw: 2.4 }) + part(roundRectPts(1240, 266, 180, 438, 8), C.woodD, { sw: 2.4, heavy: [3, 8], light: [[1246, 276], [1262, 276], [1262, 690], [1246, 690]] });
+  for (const [px, py, ph] of [[1258, 300, 160], [1338, 300, 160], [1258, 490, 180], [1338, 490, 180]]) o += `<path d="${S(roundRectPts(px, py, 64, ph, 6), 0.3)}" fill="none" stroke="${INK}" stroke-width="1.6" opacity="0.6"/>`;
+  o += part(ellPts(1400, 480, 10, 10, 0, Math.PI * 2, 10), C.brass, { sw: 1.6 }) + part(roundRectPts(1392, 498, 16, 26, 4), C.brass2, { sw: 1.2 });
   o += `<path d="${S([[1180, 0], [1610, 0], [1610, 40], [1180, 40]], 0.5)}" fill="${C.snow}"/>`;
   // 눈 덮인 땅
   o += fill(wob([[-10, 620], [1180, 620], [1180, 910], [-10, 910]], { sharp: true }), C.snow2);
-  for (let i = 0; i < 12; i++) o += snowLump(rand(0, 1160), rand(700, 880), rand(40, 100), rand(14, 26));
+  for (let i = 0; i < 10; i++) { const w = rand(90, 220); o += mound({ cx: rand(0, 1160), by: rand(720, 890), w, h: w * rand(0.14, 0.22), bumps: 2, sparkle: false }); }
   // 선로 전환기 받침 (손잡이와 번호판은 소품)
-  o += part([[900, 700], [1080, 700], [1070, 640], [910, 640]], C.iron, { sw: 2.2, heavy: [0, 1] });
+  o += part([[896, 704], [1084, 704], [1086, 690], [1070, 682], [1064, 650], [1050, 638], [930, 638], [916, 650], [910, 682], [894, 690]], C.iron, { sw: 2.2, heavy: [0, 3], light: [[930, 642], [1050, 642], [1056, 652], [924, 652]] });
+  for (const x of [920, 1060]) o += dot(x, 694, 3, '#8a8a98');
   o += line([[980, 640], [960, 900]], { sw: 10, color: '#5a5a66' }) + line([[1000, 640], [1060, 900]], { sw: 10, color: '#5a5a66' });
   o += line([[780, 260], [784, 700]], { sw: 10, color: C.iron }) + part([[752, 220], [812, 220], [804, 270], [760, 270]], C.iron2, { sw: 2 }) + dot(782, 246, 12, '#fff3b0') + `<circle cx="782" cy="246" r="40" fill="#fff3b0" opacity="0.25" filter="url(#blur)"/>`;
-  o += part([[100, 820], [330, 812], [340, 790], [110, 798]], C.wood, { sw: 2.2 }) + `<path d="${O([[80, 840], [120, 846], [350, 836], [370, 816]], 0.6)}" fill="none" stroke="${C.red}" stroke-width="6"/>` + line([[130, 800], [132, 842]], { sw: 4, color: C.red }) + line([[320, 792], [322, 836]], { sw: 4, color: C.red });
+  // 나무 썰매: 앞이 둥글게 말린 빨간 날 두 줄 + 판자 세 장 + 끈
+  for (const [dy, op] of [[-10, 0.7], [0, 1]]) o += `<path d="${O([[90, 842 + dy], [130, 848 + dy], [330, 840 + dy], [362, 828 + dy], [372, 808 + dy], [360, 796 + dy], [348, 806 + dy]], 0.5)}" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round" opacity="${op}"/><path d="${O([[90, 842 + dy], [130, 848 + dy], [330, 840 + dy], [362, 828 + dy], [372, 808 + dy], [360, 796 + dy], [348, 806 + dy]], 0.5)}" fill="none" stroke="${C.red}" stroke-width="5" stroke-linecap="round" opacity="${op}"/>`;
+  for (const x of [140, 220, 300]) o += line([[x, 810], [x + 2, 844]], { sw: 5, color: '#a83a30' });
+  for (const [y, x0, x1] of [[796, 104, 336], [808, 100, 340], [820, 96, 344]]) o += part([[x0, y], [x1, y - 4], [x1 + 2, y + 8], [x0 + 2, y + 12]], y === 808 ? C.wood2 : C.wood, { sw: 1.6 });
+  o += `<path d="${O([[344, 800], [380, 780], [420, 800], [440, 840]], 0.6)}" fill="none" stroke="${C.rope || '#c9a46a'}" stroke-width="3"/>`;
+  o += `<path d="${S([[110, 794], [200, 788], [320, 790], [300, 784], [180, 782]], 0.5)}" fill="${C.snow}"/>`;
   for (let i = 0; i < 9; i++) o += part(ellPts(560 + i * 70, 860 - i * 22 + (i % 2) * 12, 12, 7, 0, Math.PI * 2, 8), '#c8d0e0', { sw: 0.8 });
   put('bg/west.svg', W, H, o, { id: 1941 });
 }
 function snowPile(dug) {
   seed(1942);
   let o = '';
-  if (!dug) { o += snowLump(240, 170, 230, 120) + snowLump(150, 110, 120, 70) + snowLump(330, 120, 110, 60); }
+  if (!dug) { o += mound({ cx: 240, by: 282, w: 420, h: 230, bumps: 4 }); }
   else {
-    o += snowLump(90, 200, 90, 50) + snowLump(400, 190, 80, 50);
-    o += part([[170, 230], [320, 230], [310, 120], [180, 120]], C.iron, { sw: 2.2, heavy: [1, 2] }) + line([[180, 130], [310, 130]], { sw: 4, color: '#5a5a66' });
-    for (let i = 0; i < 8; i++) o += part(lumpPts(200 + (i % 4) * 30, 112 - Math.floor(i / 4) * 16, 16, 12, 8, 0.2), C.coal, { sw: 1.2 });
+    o += mound({ cx: 96, by: 260, w: 180, h: 110, bumps: 2 }) + mound({ cx: 396, by: 256, w: 170, h: 100, bumps: 2 });
+    o += barrel({ cx: 245, by: 236, w: 150, h: 112, col: '#4a4a56', dark: '#2a2a32', hoopCol: '#6a6a78', top: C.coal });
+    o += `<path d="${O([[176, 140], [200, 86], [290, 86], [314, 140]], 0.4)}" fill="none" stroke="${INK}" stroke-width="5"/>`;
+    for (let i = 0; i < 9; i++) o += part(blobPts(196 + (i % 4) * 32 + (i > 3 ? 14 : 0), 122 - Math.floor(i / 4) * 14, 17, 12, { n: 9, k: 0.25 }), i % 3 ? C.coal : '#3a3438', { sw: 1.2, light: [[190 + (i % 4) * 32, 112 - Math.floor(i / 4) * 14], [204 + (i % 4) * 32, 110 - Math.floor(i / 4) * 14], [200 + (i % 4) * 32, 116 - Math.floor(i / 4) * 14]] });
   }
   put(`props/snow_${dug ? 'dug' : 'pile'}.svg`, 480, 300, o, { id: 1942, displace: 1.2 });
 }
@@ -217,7 +297,7 @@ function lever(n) {
   seed(1944);
   // 220x340: 손잡이 각도 + 번호판(손글씨 숫자)
   const ang = { 1: -0.5, 2: 0, 3: 0.5 }[n];
-  let o = part([[60, 250], [160, 250], [160, 330], [60, 330]], C.iron2, { sw: 2.2 });
+  let o = part([[50, 334], [170, 334], [166, 318], [152, 312], [150, 262], [134, 248], [86, 248], [70, 262], [68, 312], [54, 318]], C.iron2, { sw: 2.2, heavy: [0, 2], light: [[86, 252], [134, 252], [140, 262], [80, 262]] }) + [80, 140].map((x) => dot(x, 322, 3, '#8a8a98')).join('') + part(roundRectPts(90, 280, 40, 8, 3), '#1a1a20', { sw: 1 });
   o += part(rectPts(70, 20, 80, 80), '#2a3a5a', { sw: 2.4 }) + digits(n, 110, 86, 50, { color: '#f6d060', sw: 7 });
   const tip = [110 + Math.sin(ang) * 150, 260 - Math.cos(ang) * 150];
   o += line([[110, 260], tip], { sw: 14, color: C.iron, step: 999 }) + part(ellPts(tip[0], tip[1], 20, 20, 0, Math.PI * 2, 12), C.red, { sw: 2 });
@@ -235,7 +315,7 @@ function items() {
   seed(1960);
   const it = (n, b) => put(`items/${n}.svg`, 160, 160, b, { id: 1960, displace: 1 });
   it('shovel', line([[40, 20], [96, 100]], { sw: 10, color: C.woodD, step: 999 }) + part([[80, 90], [128, 80], [140, 130], [104, 148]], '#9aa4b0', { sw: 2.2 }));
-  it('coal', [0, 1, 2, 3, 4].map((i) => part(lumpPts(50 + (i % 3) * 30, 100 - Math.floor(i / 3) * 26, 22, 18, 8, 0.2), C.coal, { sw: 1.8, heavy: [1, 3] })).join('') + [0, 1, 2].map(() => dot(rand(40, 120), rand(70, 120), 2, '#6a6a70')).join(''));
+  it('coal', [0, 1, 2, 3, 4].map((i) => part(blobPts(50 + (i % 3) * 30, 100 - Math.floor(i / 3) * 26, 22, 17, { n: 9, k: 0.25 }), i % 2 ? C.coal : '#3a3438', { sw: 1.8, heavy: [1, 3], light: [[40 + (i % 3) * 30, 92 - Math.floor(i / 3) * 26], [58 + (i % 3) * 30, 88 - Math.floor(i / 3) * 26], [52 + (i % 3) * 30, 96 - Math.floor(i / 3) * 26]] })).join('') + [0, 1, 2].map(() => dot(rand(40, 120), rand(70, 120), 2, '#6a6a70')).join(''));
   it('flower', line([[80, 150], [82, 70]], { sw: 4, color: '#5a8a4a' }) + part([[82, 120], [118, 100], [108, 126]], '#6aa05a', { sw: 1.4 }) + [0, 1, 2, 3, 4, 5].map((i) => { const a = i * Math.PI / 3; return part([[82, 56], [82 + Math.cos(a - 0.4) * 30, 56 + Math.sin(a - 0.4) * 30], [82 + Math.cos(a) * 42, 56 + Math.sin(a) * 42], [82 + Math.cos(a + 0.4) * 30, 56 + Math.sin(a + 0.4) * 30]], '#f0a0b8', { sw: 1.6 }); }).join('') + part(ellPts(82, 56, 12, 12, 0, Math.PI * 2, 10), '#f6d060', { sw: 1.4 }));
   // 기차표: 도착지 칸에 지붕과 둥근 창 그림 (다락방)
   it('ticket', part([[14, 44], [146, 36], [150, 120], [18, 128]], '#f6e2a0', { sw: 2.4, heavy: [1, 2] }) + line([[100, 40], [104, 124]], { sw: 1.6, op: 0.5 }) + `<path d="${S([[30, 106], [30, 84], [58, 62], [86, 84], [86, 106]], 0.3)}" fill="#c4704a" stroke="${INK}" stroke-width="1.8"/><circle cx="58" cy="90" r="7" fill="#f6d060" stroke="${INK}" stroke-width="1.4"/>` + dot(124, 80, 8, 'none') + `<circle cx="124" cy="80" r="9" fill="none" stroke="${C.red}" stroke-width="2.4"/>`);
