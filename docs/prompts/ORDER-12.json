@@ -1,0 +1,92 @@
+{
+  "style_ref": "docs/prompts/ref/11-north.jpg",
+  "items": [
+    {
+      "file": "12-01-north.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. A NEW ROOM: a cozy little tea house in a paper world, celadon green wall tiles, warm copper, wooden beams, soft lantern light, a few wisps of steam. Front view of the counter wall: in the center a small round charcoal brazier with glowing embers, and on it an EMPTY copper kettle with a long spout (no steam). Behind it a big six-pane window with clear, cold, dark-blue glass (misty night outside). Shelves of teapots and tea bowls on both sides. A small wooden counter. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "12-02-north-fog.png",
+      "kind": "배경",
+      "edit_of": "12-01",
+      "prompt": "Edit this image. Keep everything exactly the same (same counter, brazier, shelves, window frame, same composition). Change only this: the copper kettle now puffs thick white steam, and the whole window glass is fogged white with steam. On the fogged glass, a finger drawing shows clearly: one curved branch with FOUR little round birds sitting on it from left to right at clearly different heights: bird 1 fairly high, bird 2 the lowest, bird 3 the highest, bird 4 fairly low. No text."
+    },
+    {
+      "file": "12-03-east.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same cozy steamy tea house as 12-01 (celadon green tiles, warm copper, wooden beams, soft lantern light, wisps of white steam): on the left a long wooden shelf with FOUR identical empty clear drinking glasses standing in a row, spaced apart, and a small wooden mallet beside them. In the center a tall wooden tea cabinet with glass doors, closed, with a small brass lock. On the right a big round ceramic water jar full of water with a wooden ladle hanging on its rim. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "12-04-east-open.png",
+      "kind": "배경",
+      "edit_of": "12-03",
+      "prompt": "Edit this image. Keep everything exactly the same. Change only this: the glass doors of the tea cabinet are swung open, and inside on the shelf stand a round tea tin, a big copper measuring jug and one small cup. No text."
+    },
+    {
+      "file": "12-05-south.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same cozy steamy tea house as 12-01 (celadon green tiles, warm copper, wooden beams, soft lantern light, wisps of white steam): a big old wooden table seen from the front and slightly above, its top covered with faint dry water-stain marks that look like an old map: a little mountain at the far end, thin dry winding stream marks, a small round dry lake, a rock, a tree, and a tiny round door drawn at the near edge. A round celadon teapot and small cups at the side. A cushioned otter-sized armchair beside the table (empty). Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "12-06-west.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same cozy steamy tea house as 12-01 (celadon green tiles, warm copper, wooden beams, soft lantern light, wisps of white steam): on the left a wall of TWELVE small wooden tea drawers in 3 rows of 4, each drawer front painted with one small simple picture: fish, bird, leaf, moon, sun, flower, shell, cloud, cat, teapot, star, boat (each different, clearly readable). On the right a round wooden door with an iron ring handle, closed. Dried herbs hanging from a beam. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "12-07-west-open.png",
+      "kind": "배경",
+      "edit_of": "12-06",
+      "prompt": "Edit this image. Keep everything exactly the same. Change only this: the round wooden door is wide open, and through it a bright misty path of shallow sparkling water flows away into soft light. No text."
+    },
+    {
+      "file": "12-08-dalle.png",
+      "kind": "캐릭터",
+      "edit_of": "",
+      "prompt": "Character sheet, transparent background: a gentle river otter tea-house keeper named Dalle, sleek brown fur, damp drooping whiskers, small round ears, wearing a celadon green apron with a pocket, standing on two legs, full body, same art style as the reference (ink line, hatching, watercolor). Three poses side by side with big gaps: tired and thirsty (droopy eyes, inner eyebrow ends raised, holding an empty teacup), surprised (eyes wide, whiskers up), happy (eyes closed smiling, holding a steaming teacup up). No text."
+    },
+    {
+      "file": "12-09-props.png",
+      "kind": "소품",
+      "edit_of": "",
+      "prompt": "Game prop sheet, transparent background, objects far apart and not touching, same art style as the reference: an empty copper kettle with a long spout; a wooden ladle; a round tea tin; a big copper measuring jug; one small handleless cup; a white teacup full of green tea; a small corked glass bottle of clear sparkling spring water; a small wooden mallet. No text."
+    },
+    {
+      "file": "12-10-glasses.png",
+      "kind": "소품",
+      "edit_of": "",
+      "prompt": "Transparent background: exactly two IDENTICAL clear drinking glasses side by side with a big gap, same size, same angle, straight front view, same art style as the reference. The left glass is completely empty. The right glass is filled with water right up to the brim. No text."
+    },
+    {
+      "file": "12-11-tinlabel.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up: the paper label on a round tea tin, filling the frame, warm light. On the label: a small drawing of green tea leaves and, next to it, a drawn thermometer with FIVE evenly spaced tick marks; the red liquid rises exactly up to the FOURTH tick mark from the bottom. No numbers, no letters. Landscape."
+    },
+    {
+      "file": "12-12-leaves.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up from straight above: the inside bottom of an empty white teacup on a wooden table. The few wet green tea leaves left at the bottom clearly form the shape of a FISH. Warm light, a little steam. No text. Landscape."
+    },
+    {
+      "file": "12-13-map-dry.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Top-down close-up of an old wooden table top with faint dry pale water-stain marks forming a map: a small mountain at the top, from it thin dry winding stream marks running downward, splitting and joining, passing a small round dry lake in the middle, a rock on the left, a tree on the right, and ending at a tiny round door drawn at the bottom edge. Everything dry and faded. No text. Landscape."
+    },
+    {
+      "file": "12-14-map-wet.png",
+      "kind": "확대 화면",
+      "edit_of": "12-13",
+      "prompt": "Edit this image. Keep everything exactly the same (same table, same mountain, lake, rock, tree, door, same stream paths, same composition). Change only this: clear shining water now flows from the mountain down through every stream mark, fills the lake, and reaches the tiny round door, glistening. No text."
+    }
+  ],
+  "canva_media": {},
+  "exported": [],
+  "notes": {}
+}
