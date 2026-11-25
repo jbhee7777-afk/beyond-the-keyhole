@@ -44,7 +44,9 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-statio
   // 4. 선로 3 → 기적 → 기차
   await clickObj('곰 역장 곰곰이'); await expect(async () => !(await flags()).trainHere, '선로가 1인데 기차가 옴');
   await view('east'); await clickObj('종이학 접이'); await shot('09b-crane');
-  await view('west'); await clickObj('선로 전환기'); await clickObj('선로 전환기'); await shot('10-lever3');
+  await view('west'); await clickObj('선로 전환기'); await expect(async () => !(await flags()).lever, '얼어붙은 전환기가 움직임');
+  await sel('shovel'); await clickObj('선로 전환기');
+  await clickObj('선로 전환기'); await clickObj('선로 전환기'); await shot('10-lever3');
   await expect(async () => !!(await flags()).trainHere, '선로 3에 맞췄는데 기적이 안 울림');
   await view('north'); await clickObj('곰 역장 곰곰이'); await p.waitForTimeout(1500);
   await p.evaluate(() => window.__game.openHint()); await shot('11-hint'); await p.keyboard.press('Escape');

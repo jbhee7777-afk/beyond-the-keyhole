@@ -21,7 +21,7 @@
   const CRANE_LINES = {
     shovel: '곰 역장님을 깨우려면 방을 따뜻하게 해야 한대. 난로 연료가 어디 있을까?', dig: '눈 더미를 삽으로 파 보자!', coal: '석탄이다! 꺼내 가자.', stove: '난로에 석탄을 넣자.',
     flower: '따뜻해졌으니 창가 꽃이 피었을지도!', wake: '꽃 냄새로 봄이 온 걸 알려 주자.', lever: '다락방은 몇 번 선로일까? 기차표 그림이랑 창밖 시간표를 비교해 봐.',
-    whistle: '곰곰이 아저씨가 기적을 불어 줄 거야.', board: '기차다! 다락방으로 가자!',
+    whistle: '곰곰이 아저씨가 기적을 불어 줄 거야.', thaw: '전환기가 꽁꽁 얼었어. 단단한 걸로 톡톡 깨 볼까? 삽 같은 거!', board: '기차다! 다락방으로 가자!',
   };
 
   function bearClick(api) {
@@ -42,14 +42,13 @@
     chapter: '9장',
     title: '겨울잠 기차역',
     assets: 'assets/rooms/station/',
-    sky: ['assets/rooms/station/bg/north.svg', 'assets/rooms/station/bg/north.svg'],
-    frame: 'bg/frame',
+    sky: ['assets/rooms/station/bg/north.webp', 'assets/rooms/station/bg/north.webp'],
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
     isLit: warm,
-    dim: { color: '#3a5080', opacity: 0.34 },
+    dim: { color: '#3a5080', opacity: 0.12 },
     ambient: (s) => (warm(s) ? 'workshop' : 'night'),
-    guide: { name: '곰 역장 곰곰이', img: 'props/bear_awake' },
+    guide: { name: '곰 역장 곰곰이', img: 'props/bear_awake.webp' },
     intro: '징검다리 끝은 눈 쌓인 작은 기차역이었어. 으슬으슬 추워… 역장실에서 커다란 코 고는 소리가 들려.',
     repair(s, fix) {
       const f = s.flags;
@@ -57,10 +56,10 @@
     },
 
     items: {
-      shovel: { name: '눈삽', img: 'items/shovel', desc: '눈을 푹푹 퍼내는 삽.' },
-      coal: { name: '석탄', img: 'items/coal', desc: '새까만 석탄 덩어리. 난로에 넣으면 활활 탈 거야.' },
-      flower: { name: '봄꽃', img: 'items/flower', desc: '따뜻해지자 활짝 핀 분홍 꽃. 달콤한 봄 냄새가 나.' },
-      ticket: { name: '기차표', img: 'items/ticket', desc: '별빛 열차 기차표. 도착지 칸에 지붕과 둥근 창문 그림 — 다락방이야!' },
+      shovel: { name: '눈삽', img: 'items/shovel.webp', desc: '눈을 푹푹 퍼내는 삽.' },
+      coal: { name: '석탄', img: 'items/coal.webp', desc: '새까만 석탄 덩어리. 난로에 넣으면 활활 탈 거야.' },
+      flower: { name: '봄꽃', img: 'items/flower.webp', desc: '따뜻해지자 활짝 핀 분홍 꽃. 달콤한 봄 냄새가 나.' },
+      ticket: { name: '기차표', img: 'items/ticket.webp', desc: '별빛 열차 기차표. 도착지 칸에 지붕과 둥근 창문 그림 — 다락방이야!' },
     },
     combos: [
       { a: 'coal', b: 'flower', say: '꽃에 석탄 가루가 묻으면 안 돼!' },
@@ -71,16 +70,19 @@
       /* ───── 북쪽: 역장실 (난로, 곰곰이, 깨우는 법 안내문) ───── */
       north: {
         name: '역장실',
-        bg: 'bg/north',
+        bg: (s) => (warm(s) ? 'bg/north_warm.webp' : 'bg/north.webp'),
         objects: [
-          { id: 'fire', img: 'bg/fire', x: 0, y: 0, w: 1600, h: 900, show: warm },
           {
-            id: 'stove', x: 0, y: 0, w: 0, h: 0, img: '', hit: [130, 380, 260, 330], label: '무쇠 난로',
+            id: 'stove', x: 0, y: 0, w: 0, h: 0, img: '', hit: [100, 200, 340, 580], label: '무쇠 난로',
             click: (api) => api.say(api.flags.warm ? '난로가 활활 타서 방이 포근해.' : '차가운 무쇠 난로야. 석탄이 하나도 없어.'),
             use: { coal: (api) => { api.take('coal'); api.set('warm'); api.sfx('match'); api.flash('#ffd8a0', 1200); api.say('석탄을 넣었더니 화르르! 난로가 타오르면서 방이 금세 따뜻해졌어.', 5000); } },
           },
+          { id: 'windowN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [390, 20, 370, 430], label: '작은 창', look: '창밖에 눈이 펑펑. 승강장 불빛이 희미하게 보여.' },
+          { id: 'clockN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [880, 0, 190, 250], label: '벽시계', look: '벽시계가 째깍째깍. 다락방행 별빛 열차는 밤에만 다닌대.' },
+          { id: 'guide', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1195, 115, 200, 265], zoom: 'guide', label: '깨우는 법 안내문' },
+          { id: 'table', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1300, 330, 300, 450], label: '협탁', look: (s) => (warm(s) ? '책 두 권과 랜턴. 난로 불이 랜턴 유리에 비쳐.' : '책 두 권과 꺼진 랜턴. 서랍은 텅 비었어.') },
           {
-            id: 'bear', img: (s) => (F(s).awake ? 'props/bear_awake' : 'props/bear_sleep'), x: 600, y: 330, w: 400, h: 378, cls: 'breathe', blink: (s) => (F(s).awake ? 'props/bear_awake_blink' : null), hit: [660, 350, 280, 330], label: '곰 역장 곰곰이',
+            id: 'bear', img: (s) => (F(s).awake ? 'props/bear_awake.webp' : 'props/bear_sleep.webp'), x: 600, y: 300, w: 560, h: 520, cls: 'breathe', hit: [680, 320, 420, 270], label: '곰 역장 곰곰이',
             click: bearClick,
             use: {
               flower: (api) => {
@@ -92,85 +94,93 @@
                 api.after(5200, () => { api.game.s.zoom = 'letter'; api.say('곰곰이가 품속 편지를 펼쳐 보여 주고, 기차표 한 장을 건네줬어.', 4600); });
               },
               coal: (api) => api.say('곰곰이 대신 난로에 넣어야지!'),
+              shovel: (api) => api.say('삽으로 깨우면 깜짝 놀랄 거야. 안내문에 큰 소리 금지라고 했어.'),
             },
             wrong: '쿨쿨… 그걸로는 안 깨.',
           },
-          { id: 'zzz', img: 'props/zzz', x: 900, y: 230, w: 170, h: 130, cls: 'float', show: (s) => !F(s).awake },
-          { id: 'guide', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1120, 140, 290, 270], zoom: 'guide', label: '깨우는 법 안내문' },
-          { id: 'clockN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [740, 80, 120, 120], label: '벽시계', look: '벽시계가 째깍째깍. 다락방행 별빛 열차는 밤에만 다닌대.' },
-          { id: 'letterOnBear', x: 0, y: 0, w: 0, h: 0, img: '', hit: [700, 560, 140, 60], show: (s) => !!F(s).awake, zoom: 'letter', label: '봄이의 편지' },
+          { id: 'letterOnBear', x: 0, y: 0, w: 0, h: 0, img: '', hit: [760, 590, 260, 110], show: (s) => !!F(s).awake, zoom: 'letter', label: '봄이의 편지' },
         ],
       },
 
-      /* ───── 동쪽: 성에 낀 창 (시간표), 창가 꽃화분 ───── */
+      /* ───── 동쪽: 성에 낀 창 (시간표), 창가 꽃화분, 외투 ───── */
       east: {
         name: '창가',
-        bg: 'bg/east',
+        bg: (s) => (warm(s) ? 'bg/east_clear.webp' : 'bg/east.webp'),
         objects: [
           {
-            id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [300, 80, 760, 480], label: '큰 창',
-            click: (api) => { if (!api.flags.warm) { api.say('창에 성에가 꽁꽁 껴서 바깥이 하나도 안 보여. 숫자 같은 게 희미하게…'); return; } api.zoom('timetable'); },
+            id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [330, 0, 700, 680], label: '큰 창',
+            click: (api) => { if (!api.flags.warm) { api.say('창에 성에가 꽁꽁 껴서 바깥이 하나도 안 보여. 창 너머에 큰 판자 같은 게 서 있는데…'); return; } api.zoom('timetable'); },
           },
-          { id: 'frost', img: 'props/frost', x: 300, y: 80, w: 1000, h: 480, show: (s) => !warm(s) },
           {
-            id: 'flower', img: (s) => (F(s).flowerTaken ? 'props/flower_empty' : warm(s) ? 'props/flower_bloom' : 'props/flower_bud'), x: 1100, y: 340, w: 160, h: 230, label: '꽃화분',
+            id: 'flower', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1040, 460, 140, 210], label: '꽃화분',
             click: (api, n) => {
               const f = api.flags;
-              if (f.flowerTaken) { api.say('빈 화분이야.'); return; }
+              if (f.flowerTaken) { api.say('화분에 꽃이 아직 몇 송이 남아 있어.'); return; }
               if (!f.warm) { api.say('꽃봉오리가 추위에 꽁꽁 오므리고 있어.'); return; }
               api.set('flowerTaken'); api.give('flower', n); api.say('따뜻해지니 꽃이 활짝 피었어! 한 송이 똑. 달콤한 봄 냄새.');
             },
           },
-          companion(CRANE_LINES, { x: 470, y: 430, w: 176, h: 160 }),
-          { id: 'coat', x: 0, y: 0, w: 0, h: 0, img: '', hit: [60, 160, 160, 270], label: '역장 외투', look: '두툼한 역장 외투. 주머니에 사탕 껍질만 있어.' },
+          companion(CRANE_LINES, { x: 1180, y: 520, w: 220, h: 200 }),
+          { id: 'coat', x: 0, y: 0, w: 0, h: 0, img: '', hit: [60, 130, 270, 590], label: '역장 외투', look: '두툼한 역장 외투와 모자. 주머니에 사탕 껍질만 있어.' },
         ],
       },
 
       /* ───── 남쪽: 눈 내린 승강장 ───── */
       south: {
         name: '승강장',
-        bg: 'bg/south',
+        bg: (s) => (F(s).trainHere ? 'bg/south_train.webp' : 'bg/south.webp'),
         objects: [
-          { id: 'snowman', x: 0, y: 0, w: 0, h: 0, img: '', hit: [170, 460, 140, 200], label: '눈사람', look: '누가 만든 눈사람이야. 당근 코가 반짝.' },
-          { id: 'signal', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1270, 290, 60, 360], label: '신호등', look: (s) => (F(s).trainHere ? '신호등이 초록으로 바뀌었어.' : '신호등이 빨간불이야. 기차가 아직 안 와.') },
+          { id: 'snowman', x: 0, y: 0, w: 0, h: 0, img: '', hit: [190, 330, 190, 250], label: '눈사람', look: '누가 만든 눈사람이야. 털모자에 빨간 목도리까지.' },
+          { id: 'bench', x: 0, y: 0, w: 0, h: 0, img: '', hit: [410, 280, 390, 220], label: '벤치', look: '눈이 소복이 쌓인 벤치. 앉으면 엉덩이가 꽁꽁 얼겠어.' },
+          { id: 'suitcase', x: 0, y: 0, w: 0, h: 0, img: '', hit: [840, 430, 200, 150], label: '여행 가방', look: '누군가 두고 간 가죽 가방. 꼬리표에 집 그림이 그려져 있어. 다락방으로 가는 손님 건가 봐.' },
+          { id: 'postbox', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1100, 300, 130, 280], label: '빨간 우체통', look: '눈 모자를 쓴 빨간 우체통. 편지는 곰 역장님이 꼭 직접 전한대.' },
+          { id: 'signal', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1300, 140, 100, 440], label: '신호등', look: (s) => (F(s).trainHere ? '신호등이 초록으로 바뀌었어.' : '신호등이 빨간불이야. 기차가 아직 안 와.') },
           {
-            id: 'train', img: 'props/train', x: 150, y: 140, w: 1300, h: 600, hit: [200, 420, 1240, 320], show: (s) => !!F(s).trainHere, label: '별빛 열차',
+            id: 'train', x: 0, y: 0, w: 0, h: 0, img: '', hit: [100, 520, 1500, 330], show: (s) => !!F(s).trainHere, label: '별빛 열차',
             click: (api) => {
               if (!api.has('ticket')) { api.say('기차표가 있어야 탈 수 있어.'); return; }
               api.take('ticket'); api.set('boarded'); api.sfx('step'); api.win();
             },
             use: { ticket: (api) => { api.take('ticket'); api.set('boarded'); api.sfx('step'); api.win(); } },
           },
-          { id: 'track', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 660, 1600, 160], show: (s) => !F(s).trainHere, label: '선로', look: '눈 덮인 선로가 멀리까지 이어져. 기차는 아직 안 왔어.' },
+          { id: 'track', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 700, 1600, 200], show: (s) => !F(s).trainHere, label: '선로', look: '눈 덮인 선로가 멀리까지 이어져. 기차는 아직 안 왔어.' },
         ],
       },
 
       /* ───── 서쪽: 역 밖 (눈 더미, 삽, 선로 전환기) ───── */
       west: {
         name: '역 밖',
-        bg: 'bg/west',
+        bg: (s) => (F(s).dug ? 'bg/west_dug.webp' : F(s).shovelTaken ? 'bg/west_noshovel.webp' : 'bg/west.webp'),
         objects: [
           {
-            id: 'pile', img: (s) => (F(s).dug ? 'props/snow_dug' : 'props/snow_pile'), x: 260, y: 450, w: 480, h: 300, hit: [280, 470, 440, 260], label: '눈 더미',
+            id: 'pile', x: 0, y: 0, w: 0, h: 0, img: '', hit: [20, 330, 380, 470], label: '눈 더미',
             click: (api, n) => {
               const f = api.flags;
               if (!f.dug) { api.say('눈이 산더미처럼 쌓였어. 그 속에 뭔가 까만 게 보이는데… 손으로 파기엔 너무 차가워.'); return; }
               if (f.coalTaken) { api.say('석탄 통이 비었어.'); return; }
               api.set('coalTaken'); api.give('coal', n); api.say('눈 속 석탄 통에서 석탄을 한 줌 꺼냈어.');
             },
-            use: { shovel: (api) => { api.set('dug'); api.sfx('dig'); api.burst('dust', 500, 560, 26); api.say('삽으로 푹푹 퍼냈더니 눈 속에서 석탄 통이 나왔어!'); } },
+            use: { shovel: (api) => { if (api.flags.dug) { api.say('이미 다 팠어.'); return; } api.set('dug'); api.sfx('dig'); api.burst('dust', 220, 600, 26); api.say('삽으로 푹푹 퍼냈더니 눈 속에서 석탄 통이 나왔어!'); } },
           },
-          { id: 'shovel', img: 'props/shovel', x: 1150, y: 290, w: 130, h: 420, show: (s) => !F(s).shovelTaken, label: '눈삽', click: (api, n) => { api.set('shovelTaken'); api.give('shovel', n); api.say('벽에 기대 둔 눈삽을 챙겼어.'); } },
+          { id: 'sled', x: 0, y: 0, w: 0, h: 0, img: '', hit: [200, 650, 430, 200], label: '나무 썰매', look: '눈썰매야. 타고 싶지만 지금은 바빠!' },
+          { id: 'lamp', x: 0, y: 0, w: 0, h: 0, img: '', hit: [380, 10, 140, 540], label: '가로등', look: '가로등 불빛이 눈송이를 노랗게 비춰.' },
+          { id: 'shovel', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1320, 340, 170, 380], show: (s) => !F(s).shovelTaken, label: '눈삽', click: (api, n) => { api.set('shovelTaken'); api.give('shovel', n); api.say('문 옆에 기대 둔 눈삽을 챙겼어.'); } },
+          { id: 'plate', img: (s) => `props/plate_${pos(s)}.webp`, x: 640, y: 278, w: 120, h: 72 },
           {
-            id: 'lever', img: (s) => `props/lever_${pos(s)}`, x: 880, y: 320, w: 220, h: 340, label: '선로 전환기',
+            id: 'lever', x: 0, y: 0, w: 0, h: 0, img: '', hit: [600, 250, 300, 420], label: '선로 전환기',
             click: (api) => {
-              const f = api.flags; f.lever = (pos(api.game.s) % 3) + 1; api.sfx('creak');
-              // 곰곰이가 깨어 있으면 3번에 맞추는 순간 바로 기적이 울린다 (맞혔다는 반응이 즉시 오게)
+              const f = api.flags;
+              if (!f.thawed) { api.sfx('locked'); api.say('끙… 손잡이가 꽁꽁 얼어붙어서 꿈쩍도 안 해. 얼음을 깨뜨릴 단단한 게 있으면…'); return; }
+              f.lever = (pos(api.game.s) % 3) + 1; api.sfx('creak');
               if (f.lever === 3 && f.awake && !f.trainHere) { f.trainHere = true; api.sfx('rooster'); api.say('철컥, 3번! 역장실 쪽에서 “삐익—!” 기적 소리가 울려. 다락방행 별빛 열차가 승강장으로 들어온다!', 5600); return; }
-              api.say(`선로 전환기를 ${f.lever}번으로 철컥 돌렸어.`);
+              api.say(`선로 전환기를 ${f.lever}번으로 철컥 돌렸어. 위 번호판도 ${f.lever}번이 됐어.`);
+            },
+            use: {
+              shovel: (api) => { if (api.flags.thawed) { api.say('얼음은 이미 깼어.'); return; } api.set('thawed'); api.sfx('dig'); api.burst('dust', 750, 520, 20); api.say('삽 손잡이로 톡톡톡! 손잡이에 붙은 얼음이 쩍 갈라져 떨어졌어. 이제 움직이겠다.', 5000); },
+              coal: (api) => api.say('석탄으로 문질러도 얼음은 안 녹아. 단단한 걸로 깨 봐야겠어.'),
             },
           },
-          { id: 'door', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 260, 180, 440], label: '역 문', look: '역장실로 들어가는 문이야.' },
+          { id: 'door', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1190, 210, 120, 450], label: '역 문', look: '역장실로 들어가는 문이야.' },
         ],
       },
     },
@@ -179,12 +189,12 @@
       guide: {
         bg: 'assets/rooms/greenhouse/zoom/paper.svg',
         note: ['겨울잠 곰 깨우는 법', '봄이 왔다고 느끼게: ① 따뜻하게(난로) ② 코끝에 꽃 냄새. 큰 소리 금지.'],
-        text: '<h3>겨울잠 곰 깨우는 법</h3><p>겨울잠 자는 곰은 <em>봄이 왔다</em>고 느껴야 깨요.</p><p>① 방을 <em>따뜻하게</em> (난로)<br>② 코끝에 <em>꽃 냄새</em></p><p>큰 소리로 깨우면 깜짝 놀라서 기차 시간을 다 잊어버려요!</p><p class="sign">— 기차역 직원 일동</p>',
+        text: '<h3>겨울잠 곰 깨우는 법</h3><p>겨울잠 자는 곰은 <em>봄이 왔다</em>고 느껴야 깨요.</p><p>① 방을 <em>따뜻하게</em> (불꽃 그림)<br>② 코끝에 <em>꽃 냄새</em> (꽃 그림)</p><p>큰 소리로 깨우면 깜짝 놀라서 기차 시간을 다 잊어버린대요.</p>',
       },
       timetable: {
-        bg: 'zoom/timetable',
-        note: ['기차 시간표', '물결(바다) → 1번, 산 → 2번, 지붕과 둥근 창(다락방) → 3번 선로'],
-        objects: [{ id: 'board', x: 0, y: 0, w: 0, h: 0, img: '', hit: [400, 160, 820, 400], label: '시간표 판', look: '물결 그림은 1번, 산 그림은 2번, 지붕과 둥근 창 그림은 3번 선로래.' }],
+        bg: 'zoom/timetable.webp',
+        note: ['기차 시간표', '선로 번호는 안 적혀 있다. 위에서부터: 물결(바다) · 산 · 지붕과 둥근 창(다락방)'],
+        objects: [{ id: 'board', x: 0, y: 0, w: 0, h: 0, img: '', hit: [560, 200, 700, 520], label: '시간표 판', look: '번호는 하나도 없고 그림만 세 줄. 위에서부터 물결, 산, 지붕과 둥근 창. 줄마다 점선이 쭉 이어져 있어.' }],
       },
       letter: {
         bg: 'assets/rooms/greenhouse/zoom/paper.svg',
@@ -207,7 +217,8 @@
         if (!has('flower')) return { key: 'flower', steps: ['방이 따뜻해졌어요. 이제 꽃 냄새가 필요해요.', '동쪽 창가 화분을 보세요. 따뜻해지면 꽃이 펴요.', '동쪽 꽃화분에서 꽃을 따세요.'] };
         return { key: 'wake', steps: ['꽃 냄새로 봄이 온 걸 알려 줘요.', '곰 역장님 코끝에 꽃을 대요.', '봄꽃을 고른 채 북쪽 곰곰이를 누르세요.'] };
       }
-      if (pos(s) !== 3) return { key: 'lever', steps: ['다락방행 기차는 몇 번 선로일까요? 기차표의 도착지 그림을 보세요.', '동쪽 창밖 시간표에서 지붕과 둥근 창 그림을 찾아요. 3번이에요.', '서쪽 선로 전환기를 눌러 3번에 맞추세요.'] };
+      if (!f.thawed) return { key: 'thaw', steps: ['다락방행 기차를 부르려면 바깥 선로 전환기를 돌려야 해요. 그런데 꽁꽁 얼었어요.', '단단한 걸로 얼음을 톡톡 깨면 돼요. 가방에 뭐가 있죠?', '눈삽을 고른 채 서쪽 선로 전환기를 누르세요.'] };
+      if (pos(s) !== 3) return { key: 'lever', steps: ['다락방행 기차는 몇 번 선로일까요? 기차표의 도착지 그림을 보세요.', '동쪽 창밖 시간표엔 번호가 없어요. 그림이 위에서부터 몇 번째 줄에 있는지 세어 봐요.', '서쪽 선로 전환기를 눌러 3번에 맞추세요.'] };
       return { key: 'whistle', steps: ['곰 역장님께 기적을 불어 달라고 해요.', '선로를 3번에 맞췄어요.', '북쪽 곰곰이를 누르세요.'] };
     },
 
