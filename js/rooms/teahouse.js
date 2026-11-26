@@ -248,7 +248,7 @@
             },
           })),
           {
-            id: 'dalle', img: (s) => `props/${F(s).doorOpen ? 'dalle_happy' : F(s).served ? 'dalle_surprised' : 'dalle_tired'}.webp`, x: 1200, y: 270, w: 420, h: 300, cls: 'bob', hit: [1300, 290, 220, 280], label: '수달 달래',
+            id: 'dalle', img: (s) => `props/${F(s).doorOpen ? 'dalle_happy' : F(s).served ? 'dalle_surprised' : 'dalle_tired'}.webp`, x: 1150, y: 250, w: 400, h: 366, cls: 'bob', hit: [1235, 280, 210, 320], label: '수달 달래',
             click: dalleTalk,
             use: {
               tea: (api) => { api.take('tea'); api.set('served'); api.sfx('shine'); api.say('달래: “아아… 이 맛이에요!” 달래가 차를 호로록 비우고 빈 찻잔을 내밀었어. 바닥에 찻잎이 몇 장 붙어 있어.', 5600, { who: 'dalle' }); api.after(1800, () => api.zoom('leaves')); },
