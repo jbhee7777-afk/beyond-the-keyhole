@@ -85,7 +85,8 @@
     "13-03-south.png",
     "13-04-west.png",
     "13-05-west-open.png",
-    "13-06-whi.png"
+    "13-06-whi.png",
+    "13-07-props.png"
   ],
   "notes": {
     "design": "docs/PART3_DESIGN.md 13장. 별자리·문 단추·행성·초점 점은 코드에서 그림 위에 얹는다.",
