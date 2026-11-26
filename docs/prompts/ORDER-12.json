@@ -47,19 +47,22 @@
       "file": "12-08-dalle.png",
       "kind": "캐릭터",
       "edit_of": "",
-      "prompt": "Character sheet, transparent background: a gentle river otter tea-house keeper named Dalle, sleek brown fur, damp drooping whiskers, small round ears, wearing a celadon green apron with a pocket, standing on two legs, full body, same art style as the reference (ink line, hatching, watercolor). Three poses side by side with big gaps: tired and thirsty (droopy eyes, inner eyebrow ends raised, holding an empty teacup), surprised (eyes wide, whiskers up), happy (eyes closed smiling, holding a steaming teacup up). No text."
+      "prompt": "Character sheet, transparent background: a gentle river otter tea-house keeper named Dalle, sleek brown fur, damp drooping whiskers, small round ears, wearing a celadon green apron with a pocket, standing on two legs, full body, same art style as the reference (ink line, hatching, watercolor). Three poses side by side with big gaps: tired and thirsty (droopy eyes, inner eyebrow ends raised, holding an empty teacup), surprised (eyes wide, whiskers up), happy (eyes closed smiling, holding a steaming teacup up). No text.",
+      "canva_prompt": "Character sheet, on a plain flat pure white background with nothing else: a gentle river otter tea-house keeper named Dalle, sleek brown fur, damp drooping whiskers, small round ears, wearing a celadon green apron with a pocket, standing on two legs, full body, same art style as the reference (ink line, hatching, watercolor). Three poses side by side with big gaps: tired and thirsty (droopy eyes, inner eyebrow ends raised, holding an empty teacup), surprised (eyes wide, whiskers up), happy (eyes closed smiling, holding a steaming teacup up). No text."
     },
     {
       "file": "12-09-props.png",
       "kind": "소품",
       "edit_of": "",
-      "prompt": "Game prop sheet, transparent background, objects far apart and not touching, same art style as the reference: an empty copper kettle with a long spout; a wooden ladle; a round tea tin; a big copper measuring jug; one small handleless cup; a white teacup full of green tea; a small corked glass bottle of clear sparkling spring water; a small wooden mallet. No text."
+      "prompt": "Game prop sheet, transparent background, objects far apart and not touching, same art style as the reference: an empty copper kettle with a long spout; a wooden ladle; a round tea tin; a big copper measuring jug; one small handleless cup; a white teacup full of green tea; a small corked glass bottle of clear sparkling spring water; a small wooden mallet. No text.",
+      "canva_prompt": "Game prop sheet, on a plain flat pure white background with nothing else, objects far apart and not touching, same art style as the reference: an empty copper kettle with a long spout; a wooden ladle; a round tea tin; a big copper measuring jug; one small handleless cup; a white teacup full of green tea; a small corked glass bottle of clear sparkling spring water; a small wooden mallet. No text."
     },
     {
       "file": "12-10-glasses.png",
       "kind": "소품",
       "edit_of": "",
-      "prompt": "Transparent background: exactly two IDENTICAL clear drinking glasses side by side with a big gap, same size, same angle, straight front view, same art style as the reference. The left glass is completely empty. The right glass is filled with water right up to the brim. No text."
+      "prompt": "Transparent background: exactly two IDENTICAL clear drinking glasses side by side with a big gap, same size, same angle, straight front view, same art style as the reference. The left glass is completely empty. The right glass is filled with water right up to the brim. No text.",
+      "canva_prompt": "On a plain flat pure white background with nothing else: exactly two IDENTICAL clear drinking glasses side by side with a big gap, same size, same angle, straight front view, same art style as the reference. The left glass is completely empty. The right glass is filled with water right up to the brim. No text."
     },
     {
       "file": "12-11-tinlabel.png",
@@ -86,7 +89,11 @@
       "prompt": "Edit this image. Keep everything exactly the same (same table, same mountain, lake, rock, tree, door, same stream paths, same composition). Change only this: clear shining water now flows from the mountain down through every stream mark, fills the lake, and reaches the tiny round door, glistening. No text."
     }
   ],
-  "canva_media": {},
+  "canva_media": {
+    "12-01-north.png": "MAHb-sru-dQ"
+  },
   "exported": [],
-  "notes": {}
+  "notes": {
+    "canva": "캐릭터·소품은 canva_prompt(흰 배경)로 뽑아 tools/gen/cutout.py로 오린다. 스타일 참조 MAHb7tzVJKc(11장 북쪽)."
+  }
 }
