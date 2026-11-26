@@ -215,7 +215,7 @@
             },
           },
           {
-            id: 'whi', img: (s) => `props/${F(s).doorOpen ? 'whi_happy' : F(s).focused ? 'whi_surprised' : 'whi_sleepy'}.webp`, x: 140, y: 200, w: 300, h: 300, cls: 'bob', hit: [205, 220, 170, 280], label: '부엉이 휘',
+            id: 'whi', img: (s) => `props/${F(s).doorOpen ? 'whi_happy' : F(s).focused ? 'whi_surprised' : 'whi_sleepy'}.webp`, x: 55, y: 130, w: 480, h: 400, cls: 'bob', hit: [180, 140, 230, 370], label: '부엉이 휘',
             click: whiTalk,
             use: {
               key: (api) => api.say('휘: “그건 행성 모형 태엽 열쇠예요!”', 0, { who: 'whi' }),
