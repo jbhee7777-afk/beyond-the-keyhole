@@ -10,8 +10,8 @@
  */
 (function () {
   const F = (s) => s.flags;
-  const BIRDS = [3, 1, 4, 2]; // 김 서린 창의 새 높이 (4 = 가장 높음)
-  const WATER = BIRDS.map((b) => 5 - b); // 정답 물 높이: 높은 음일수록 물이 적다 → [2, 4, 1, 3]
+  const BIRDS = [3, 2, 4, 1]; // 김 서린 창의 새 높이 (4 = 가장 높음). 나뭇가지가 오른쪽으로 내려간다
+  const WATER = BIRDS.map((b) => 5 - b); // 정답 물 높이: 높은 음일수록 물이 적다 → [2, 3, 1, 4]
   const DRAWERS = ['fish', 'bird', 'leaf', 'moon', 'sun', 'flower', 'shell', 'cloud', 'cat', 'teapot', 'star', 'boat'];
   const DNAME = { fish: '물고기', bird: '새', leaf: '잎', moon: '달', sun: '해', flower: '꽃', shell: '조개', cloud: '구름', cat: '고양이', teapot: '찻주전자', star: '별', boat: '배' };
   const HOT = 100, COLD = 20, POT = 4;
@@ -172,7 +172,7 @@
               ladle: (api) => {
                 if (api.flags.boiled) { api.say('주전자엔 물이 충분해.'); return; }
                 api.take('ladle'); api.set('boiled'); api.set('fogged'); api.sfx('water');
-                api.note('김 서린 창의 그림', '나뭇가지 위 새 네 마리. 왼쪽부터: 조금 높음, 가장 낮음, 가장 높음, 조금 낮음.');
+                api.note('김 서린 창의 그림', '비스듬한 나뭇가지 위 새 네 마리. 왼쪽부터: 둘째로 높음, 셋째로 높음, 가장 높음, 가장 낮음.');
                 api.say('국자의 찬물을 주전자에 부었어. 보글보글… 금세 끓어올라 하얀 김이 바로 뒤 유리창에 서리기 시작했어.', 5200);
                 api.after(5200, () => api.say('어? 김 서린 유리에 손가락으로 그린 그림만 또렷하게 떠올랐어! 나뭇가지 위 새 네 마리야.', 5200));
               },
@@ -303,7 +303,7 @@
           if (!has('ladle')) return { key: 'water', steps: ['달래는 찻장 노래를 김 서린 창에 적어 뒀대요. 김을 만들어야 해요. 북쪽 주전자가 비어 있어요.', '물은 동쪽 큰 물항아리에 있어요.', '동쪽 물항아리를 눌러 국자로 찬물을 뜨세요.'] };
           return { key: 'boil', steps: ['주전자에 물을 부어 끓여요.', '북쪽 화로 위 구리 주전자예요. 바로 뒤가 유리창이죠.', '찬물 담은 국자를 고른 채 북쪽 주전자를 누르세요.'] };
         }
-        return { key: 'glass', steps: ['창의 새 네 마리 높이가 노래예요. 동쪽 물잔 네 개로 쳐 봐요.', '물이 많을수록 소리가 낮아요. 그러니 높은 새는 물을 적게.', '왼쪽부터 물을 2칸, 4칸, 1칸, 3칸 붓고 두드려 보세요.'] };
+        return { key: 'glass', steps: ['창의 새 네 마리 높이가 노래예요. 동쪽 물잔 네 개로 쳐 봐요.', '물이 많을수록 소리가 낮아요. 그러니 높은 새는 물을 적게.', '왼쪽부터 물을 2칸, 3칸, 1칸, 4칸 붓고 두드려 보세요.'] };
       }
       if (!f.tinTaken) return { key: 'tin', steps: ['찻장이 열렸어요.', '동쪽 찻장 안을 보세요.', '동쪽 유리문 찻장을 누르세요.'] };
       if (!f.toolsTaken) return { key: 'tools', steps: ['찻장에 계량 도구가 더 있어요.', '동쪽 찻장이에요.', '동쪽 찻장을 한 번 더 누르세요.'] };
