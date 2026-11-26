@@ -92,8 +92,11 @@
   "canva_media": {
     "12-01-north.png": "MAHb-sru-dQ"
   },
-  "exported": [],
+  "exported": [
+    "12-01-north.png"
+  ],
   "notes": {
-    "canva": "캐릭터·소품은 canva_prompt(흰 배경)로 뽑아 tools/gen/cutout.py로 오린다. 스타일 참조 MAHb7tzVJKc(11장 북쪽)."
+    "canva": "캐릭터·소품은 canva_prompt(흰 배경)로 뽑아 tools/gen/cutout.py로 오린다. 스타일 참조 MAHb7tzVJKc(11장 북쪽).",
+    "north": "12-01: 창 580-1010,130-470 / 주전자·화로 640-950,380-600 / 오른쪽 찻주전자 쟁반 1040-1260,520-610. 주전자는 화로 위에 그대로 두고 국자로 물을 부어 끓이는 흐름으로 바꿈."
   }
 }
