@@ -35,7 +35,8 @@
       "file": "12-06-west.png",
       "kind": "배경",
       "edit_of": "12-07",
-      "prompt": "Edit this image. Keep everything exactly the same (same drawers with their pictures, lanterns, herbs, shelves, pots, same composition). Change only this: the round wooden door is now CLOSED, filling the round doorway, with its iron ring handle; no view outside, no water. No text."
+      "prompt": "Edit this image. Keep everything exactly the same (same drawers with their pictures, lanterns, herbs, shelves, pots, same composition). Change only this: the round wooden door is now CLOSED, filling the round doorway, with its iron ring handle; no view outside, no water. No text.",
+      "skip_canva": true
     },
     {
       "file": "12-07-west-open.png",
