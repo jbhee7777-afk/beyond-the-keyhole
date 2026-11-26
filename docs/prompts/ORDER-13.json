@@ -79,8 +79,11 @@
   "canva_media": {
     "13-01-north.png": "MAHcBLkA6WY"
   },
-  "exported": [],
+  "exported": [
+    "13-01-north.png"
+  ],
   "notes": {
-    "design": "docs/PART3_DESIGN.md 13장. 별자리·문 단추·행성·초점 점은 코드에서 그림 위에 얹는다."
+    "design": "docs/PART3_DESIGN.md 13장. 별자리·문 단추·행성·초점 점은 코드에서 그림 위에 얹는다.",
+    "north": "앞 렌즈 고리 470-600,120-300 / 눈 고리 1040-1110,505-605 / 횃대 200-390,490-790 / 바구니 1240-1410,530-780"
   }
 }

@@ -203,7 +203,7 @@
         bg: 'bg/north.webp',
         objects: [
           {
-            id: 'scope', x: 0, y: 0, w: 0, h: 0, img: '', hit: [600, 120, 500, 560], label: '큰 망원경',
+            id: 'scope', x: 0, y: 0, w: 0, h: 0, img: '', hit: [470, 110, 660, 520], label: '큰 망원경',
             click: (api) => {
               const f = api.flags;
               if (f.bigIn && f.smallIn) { api.zoom('scope'); return; }
@@ -215,7 +215,7 @@
             },
           },
           {
-            id: 'whi', img: (s) => `props/${F(s).doorOpen ? 'whi_happy' : F(s).focused ? 'whi_surprised' : 'whi_sleepy'}.webp`, x: 120, y: 320, w: 360, h: 330, cls: 'bob', hit: [190, 340, 220, 300], label: '부엉이 휘',
+            id: 'whi', img: (s) => `props/${F(s).doorOpen ? 'whi_happy' : F(s).focused ? 'whi_surprised' : 'whi_sleepy'}.webp`, x: 140, y: 200, w: 300, h: 300, cls: 'bob', hit: [205, 220, 170, 280], label: '부엉이 휘',
             click: whiTalk,
             use: {
               key: (api) => api.say('휘: “그건 행성 모형 태엽 열쇠예요!”', 0, { who: 'whi' }),
@@ -223,6 +223,7 @@
             },
             wrong: '휘: “부엉… 그건 별이랑 상관없는 것 같아요.”',
           },
+          { id: 'charts', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 530, 180, 260], label: '별 지도 바구니', look: '둘둘 만 별 지도들. 펼쳐 보니 별자리마다 별 몇 개가 하얗게 지워져 있어.' },
         ],
       },
 
