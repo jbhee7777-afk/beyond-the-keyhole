@@ -77,16 +77,10 @@
       "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up from straight above: the inside bottom of an empty white teacup on a wooden table. The few wet green tea leaves left at the bottom clearly form the shape of a FISH. Warm light, a little steam. No text. Landscape."
     },
     {
-      "file": "12-13-map-dry.png",
-      "kind": "확대 화면",
-      "edit_of": "",
-      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Top-down close-up of an old wooden table top with faint dry pale water-stain marks forming a map: a small mountain at the top, from it thin dry winding stream marks running downward, splitting and joining, passing a small round dry lake in the middle, a rock on the left, a tree on the right, and ending at a tiny round door drawn at the bottom edge. Everything dry and faded. No text. Landscape."
-    },
-    {
-      "file": "12-14-map-wet.png",
-      "kind": "확대 화면",
-      "edit_of": "12-13",
-      "prompt": "Edit this image. Keep everything exactly the same (same table, same mountain, lake, rock, tree, door, same stream paths, same composition). Change only this: clear shining water now flows from the mountain down through every stream mark, fills the lake, and reaches the tiny round door, glistening. No text."
+      "file": "12-13-south-wet.png",
+      "kind": "배경",
+      "edit_of": "12-05",
+      "prompt": "Edit this image. Keep everything exactly the same (same table, same lanterns, shelves, teapot, cups, plant, armchair, same water-stain map with mountain, tree, rock, lake and tiny door, same composition). Change only this: clear shining water now flows from the little mountain down through the thin winding stream marks on the table top, fills the small round lake and reaches the tiny round door at the near edge, glistening with soft reflections. No text."
     }
   ],
   "canva_media": {
@@ -100,12 +94,14 @@
     "12-01-north.png",
     "12-02-north-fog.png",
     "12-03-east.png",
-    "12-04-east-open.png"
+    "12-04-east-open.png",
+    "12-05-south.png"
   ],
   "notes": {
     "canva": "캐릭터·소품은 canva_prompt(흰 배경)로 뽑아 tools/gen/cutout.py로 오린다. 스타일 참조 MAHb7tzVJKc(11장 북쪽).",
     "north": "12-01: 창 580-1010,130-470 / 주전자·화로 640-950,380-600 / 오른쪽 찻주전자 쟁반 1040-1260,520-610. 주전자는 화로 위에 그대로 두고 국자로 물을 부어 끓이는 흐름으로 바꿈.",
     "birds": "12-02 실제 새 높이: [3,2,4,1] (가지가 오른쪽으로 내려감). 정답 물 [2,3,1,4]로 코드 반영.",
-    "east": "물잔 175-445,400-490 / 망치 465-585 / 찻장 660-1090,95-780 / 항아리 1165-1475,470-800"
+    "east": "물잔 175-445,400-490 / 망치 465-585 / 찻장 660-1090,95-780 / 항아리 1165-1475,470-800",
+    "south": "탁자 260-1300,340-700. 지도: 산 690-810,350-410 / 나무 490-580,505-590 / 바위 640-720,540-595 / 호수 825-990,515-600 / 작은 문 715-830,605-675. 안락의자 1220-1590,270-650. 지도 확대 대신 남쪽 탁자에서 바로 떨어뜨리기(12-13/14 → 12-13-south-wet 하나로)."
   }
 }

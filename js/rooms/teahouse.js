@@ -15,6 +15,8 @@
   const DRAWERS = ['fish', 'bird', 'leaf', 'moon', 'sun', 'flower', 'shell', 'cloud', 'cat', 'teapot', 'star', 'boat'];
   const DNAME = { fish: '물고기', bird: '새', leaf: '잎', moon: '달', sun: '해', flower: '꽃', shell: '조개', cloud: '구름', cat: '고양이', teapot: '찻주전자', star: '별', boat: '배' };
   const HOT = 100, COLD = 20, POT = 4;
+  // 남쪽 탁자 물얼룩 지도의 자리 (그림 좌표)
+  const MAP = [['mountain', '산', [690, 345, 125, 70]], ['tree', '나무', [490, 505, 95, 90]], ['rock', '바위', [638, 538, 85, 60]], ['lake', '호수', [825, 512, 170, 90]], ['mdoor', '작은 문', [712, 602, 120, 75]]];
   const same = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 
   /* ── 물잔 실로폰: 잔을 누르면 물이 한 칸씩 (1→4→비움). 두드려 보기로 소리 확인 ── */
@@ -230,9 +232,23 @@
         name: '물얼룩 탁자',
         bg: (s) => (F(s).flowed ? 'bg/south_wet.webp' : 'bg/south.webp'),
         objects: [
-          { id: 'table', x: 0, y: 0, w: 0, h: 0, img: '', hit: [300, 420, 900, 380], label: '물얼룩 지도', click: (api) => api.zoom('map') },
+          { id: 'table', x: 0, y: 0, w: 0, h: 0, img: '', hit: [260, 340, 1040, 360], label: '물얼룩 탁자', click: (api) => api.say(api.flags.flowed ? '물이 산에서부터 물길을 따라 흘러 호수를 채우고 작은 문까지 닿았어.' : '탁자에 마른 물얼룩이 지도처럼 남아 있어. 맨 위 산, 구불구불한 물길, 나무, 바위, 둥근 호수, 맨 앞의 작은 문.') },
+          ...MAP.map(([id, name, hit]) => ({
+            id: 'map_' + id, x: 0, y: 0, w: 0, h: 0, img: '', hit, label: '지도의 ' + name,
+            click: (api) => api.say(`마른 물얼룩으로 그린 ${name}.`),
+            use: {
+              spring: (api) => {
+                const f = api.flags;
+                if (f.flowed) { api.say('물은 이미 문까지 흘러.'); return; }
+                if (id !== 'mountain') { api.sfx('splash'); api.say(`${name}에 한 방울 떨어뜨렸어. 물이 아래쪽으로만 조금 번지다 멈췄어. 위쪽 물길은 바싹 마른 그대로야.`); return; }
+                api.take('spring'); api.set('flowed'); api.set('doorOpen'); api.sfx('water'); api.burst('bubble', 750, 380, 30);
+                api.say('산꼭대기에 샘물을 똑. 물이 마른 물길을 따라 아래로아래로 흘러 호수를 채우고, 작은 문까지 닿았어! 서쪽에서 물소리가 들려.', 6200);
+              },
+              ladle: (api) => api.say('보통 물을 부으면 얼룩만 번져서 지도가 망가질 거야.'),
+            },
+          })),
           {
-            id: 'dalle', img: (s) => `props/${F(s).doorOpen ? 'dalle_happy' : F(s).served ? 'dalle_surprised' : 'dalle_tired'}.webp`, x: 1150, y: 360, w: 420, h: 300, cls: 'bob', hit: [1250, 370, 220, 280], label: '수달 달래',
+            id: 'dalle', img: (s) => `props/${F(s).doorOpen ? 'dalle_happy' : F(s).served ? 'dalle_surprised' : 'dalle_tired'}.webp`, x: 1200, y: 270, w: 420, h: 300, cls: 'bob', hit: [1300, 290, 220, 280], label: '수달 달래',
             click: dalleTalk,
             use: {
               tea: (api) => { api.take('tea'); api.set('served'); api.sfx('shine'); api.say('달래: “아아… 이 맛이에요!” 달래가 차를 호로록 비우고 빈 찻잔을 내밀었어. 바닥에 찻잎이 몇 장 붙어 있어.', 5600, { who: 'dalle' }); api.after(1800, () => api.zoom('leaves')); },
@@ -269,33 +285,13 @@
       tinlabel: { bg: 'zoom/tinlabel.webp', note: ['찻잎 통 라벨', '찻잎 그림 옆에 온도계. 다섯 눈금 중 아래에서 넷째까지 빨간 줄.'] },
       brew: { bg: 'zoom/brew_bg.webp', note: ['차 우리기', '찻주전자는 네 잔 들이. 큰 계량 주전자는 세 잔, 작은 잔은 한 잔.'], widget: brewWidget },
       leaves: { bg: 'zoom/leaves.webp', note: ['찻잔 바닥의 찻잎', '젖은 찻잎이 물고기 모양으로 붙어 있다.'] },
-      map: {
-        bg: (s) => (F(s).flowed ? 'zoom/map_wet.webp' : 'zoom/map_dry.webp'),
-        note: ['물얼룩 지도', '맨 위 산, 가운데 호수, 왼쪽 바위, 오른쪽 나무, 맨 아래 작은 둥근 문. 마른 물길이 산에서부터 아래로 이어져 있다.'],
-        objects: [
-          ...[['mountain', '산', [690, 40, 220, 170]], ['lake', '호수', [680, 360, 240, 170]], ['rock', '바위', [240, 330, 200, 180]], ['tree', '나무', [1160, 320, 200, 200]], ['mdoor', '작은 문', [700, 700, 200, 150]]].map(([id, name, hit]) => ({
-            id: 'map_' + id, x: 0, y: 0, w: 0, h: 0, img: '', hit, label: '지도의 ' + name,
-            click: (api) => api.say(`마른 물얼룩으로 그린 ${name}.`),
-            use: {
-              spring: (api) => {
-                const f = api.flags;
-                if (f.flowed) { api.say('물은 이미 문까지 흘러.'); return; }
-                if (id !== 'mountain') { api.sfx('splash'); api.say(`${name}에 한 방울 떨어뜨렸어. 물이 아래쪽으로만 조금 번지다 멈췄어. 위쪽 물길은 바싹 마른 그대로야.`); return; }
-                api.take('spring'); api.set('flowed'); api.set('doorOpen'); api.sfx('water'); api.burst('bubble', 800, 200, 30);
-                api.say('산꼭대기에 샘물을 똑. 물이 마른 물길을 따라 아래로아래로 흘러 호수를 채우고, 작은 문까지 닿았어! 서쪽에서 물소리가 들려.', 6200);
-              },
-              ladle: (api) => api.say('보통 물을 부으면 얼룩만 번져서 지도가 망가질 거야.'),
-            },
-          })),
-        ],
-      },
     },
 
     hints(s) {
       const f = s.flags, has = (i) => s.inv.includes(i);
       if (f.doorOpen) return { key: 'go', steps: ['물이 다시 흘러요! 어딘가 열렸어요.', '서쪽 둥근 문이에요.', '서쪽 둥근 문을 누르세요.'] };
       if (!f.talked) return { key: 'talk', steps: ['찻집 주인을 찾아봐요.', '남쪽 탁자 옆에 누가 있어요.', '남쪽 수달 달래를 누르세요.'] };
-      if (has('spring')) return { key: 'drop', steps: ['샘물을 마른 물얼룩 지도에 돌려줘요. 어디에 떨어뜨려야 물길 전체가 이어질까요?', '물은 높은 곳에서 낮은 곳으로 흘러요.', '남쪽 지도를 열고, 샘물 병을 고른 채 맨 위 산을 누르세요.'] };
+      if (has('spring')) return { key: 'drop', steps: ['샘물을 마른 물얼룩 지도에 돌려줘요. 어디에 떨어뜨려야 물길 전체가 이어질까요?', '물은 높은 곳에서 낮은 곳으로 흘러요.', '샘물 병을 고른 채 남쪽 탁자 지도의 맨 위 산을 누르세요.'] };
       if (f.served) return { key: 'drawer', steps: ['찻잔 바닥에 남은 찻잎 모양을 기억해요.', '서쪽 서랍마다 그림이 있어요. 찻잎 모양과 같은 그림은?', '서쪽 물고기 서랍을 누르세요.'] };
       if (has('tea')) return { key: 'serve', steps: ['차를 마셔야 할 분이 있어요.', '남쪽 달래예요.', '우린 차를 고른 채 달래를 누르세요.'] };
       if (!f.cabinetOpen) {
