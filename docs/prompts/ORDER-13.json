@@ -1,0 +1,84 @@
+{
+  "style_ref": "docs/prompts/ref/12-north.jpg",
+  "items": [
+    {
+      "file": "13-01-north.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. A NEW ROOM: the inside of a round clockwork observatory at night, deep navy blue, polished brass, warm starlight gold, curved wooden walls. Front view: in the center a big brass telescope on a sturdy wooden mount pointing up toward a closed slit in the domed ceiling. The front end of the telescope is an EMPTY brass ring with no glass lens, and the small eyepiece end is also an empty ring with no lens. A sliding brass tube section in the middle. A wooden owl perch on the left, rolled star charts in a basket on the right. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "13-02-east.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same round clockwork observatory as 13-01 (deep navy blue, polished brass, warm starlight gold, curved wooden walls): a round window in the upper middle showing a dark night sky with a HALF MOON whose RIGHT half is bright and left half dark (first quarter moon). Below it on the wall, a long wooden board with EIGHT small paintings of the moon in a row, each with a tiny wooden drawer under it: new moon, thin crescent lit on the right, half moon lit on the right, gibbous lit on the right, full moon, gibbous lit on the left, half moon lit on the left, thin crescent lit on the left. On the right a writing desk with a lit brass oil lamp and a magnifying glass on a little stand. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "13-03-south.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same round clockwork observatory as 13-01 (deep navy blue, polished brass, warm starlight gold, curved wooden walls): on a round wooden table in the center, a large brass clockwork orrery: a golden sun in the middle and THREE small planets (red, blue, green) on three concentric brass rings, a crank handle on the side of its base and a small closed drawer in the base. On the wall behind, a framed hand drawing of the same orrery with the three planets standing in one straight line pointing toward a little window drawn at the edge of the paper. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "13-04-west.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same round clockwork observatory as 13-01 (deep navy blue, polished brass, warm starlight gold, curved wooden walls): tall curved bookshelves full of old star atlases, a celestial globe on a brass stand, and on the right a tall arched door of dark navy blue wood covered with a smooth panel (no studs, no decorations on the panel), with a brass handle, closed. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "13-05-west-open.png",
+      "kind": "배경",
+      "edit_of": "13-04",
+      "prompt": "Edit this image. Keep everything exactly the same. Change only this: the dark navy blue door is wide open, and through it a path of soft glowing stars leads out into the night sky. No text."
+    },
+    {
+      "file": "13-06-whi.png",
+      "kind": "캐릭터",
+      "edit_of": "",
+      "prompt": "Character sheet, transparent background: a gentle little owl astronomer named Whi, huge round eyes, tiny round spectacles, soft grey-brown feathers, a navy scarf with tiny golden stars, standing, full body, same art style as the reference (ink line, hatching, watercolor). Three poses side by side with big gaps: sleepy and worried (heavy eyelids, inner eyebrow ends raised), surprised (eyes very wide, feathers puffed), happy (wings spread wide, smiling). No text.",
+      "canva_prompt": "Character sheet, on a plain flat pure white background with nothing else: a gentle little owl astronomer named Whi, huge round eyes, tiny round spectacles, soft grey-brown feathers, a navy scarf with tiny golden stars, standing, full body, same art style as the reference (ink line, hatching, watercolor). Three poses side by side with big gaps: sleepy and worried (heavy eyelids, inner eyebrow ends raised), surprised (eyes very wide, feathers puffed), happy (wings spread wide, smiling). No text."
+    },
+    {
+      "file": "13-07-props.png",
+      "kind": "소품",
+      "edit_of": "",
+      "prompt": "Game prop sheet, transparent background, objects far apart and not touching, same art style as the reference: a small brass winding key; a big round glass telescope lens in a brass ring; a small glass eyepiece lens in a brass ring; a brass star-shaped door stud; a red planet ball; a blue planet ball; a green planet ball. No text.",
+      "canva_prompt": "Game prop sheet, on a plain flat pure white background with nothing else, objects far apart and not touching, same art style as the reference: a small brass winding key; a big round glass telescope lens in a brass ring; a small glass eyepiece lens in a brass ring; a brass star-shaped door stud; a red planet ball; a blue planet ball; a green planet ball. No text."
+    },
+    {
+      "file": "13-08-calendar.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up of a long wooden board on a wall with EIGHT small paintings of the moon in one row, each with a tiny wooden drawer with a brass knob underneath: new moon (dark), thin crescent lit on the right, half moon lit on the right, gibbous lit on the right, full moon, gibbous lit on the left, half moon lit on the left, thin crescent lit on the left. Warm lamp light. Landscape. No text, no numbers."
+    },
+    {
+      "file": "13-09-orrery-top.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Top-down view of a brass clockwork orrery on a dark navy cloth: a golden sun in the center and three empty concentric brass rings around it (NO planets on the rings), engraved tick marks around the outer edge, and a small arrow engraved at the top pointing up. Landscape. No text, no numbers."
+    },
+    {
+      "file": "13-10-sky.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. The view through a telescope eyepiece: a big round circle of deep navy night sky with many tiny faint stars and soft nebula colors, surrounded by the dark brass rim of the eyepiece. No bright constellation, no lines. Landscape. No text."
+    },
+    {
+      "file": "13-11-lampdesk.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up from above of a writing desk under a lit brass oil lamp: a blank sheet of cream paper lying on the desk, a wooden ruler with plain tick marks standing upright beside it, warm light pooling on the paper. Landscape. No text, no numbers."
+    },
+    {
+      "file": "13-12-door-panel.png",
+      "kind": "확대 화면",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up of the smooth panel of a dark navy blue wooden door, fine wood grain, faint painted silver star dust speckles, a brass handle at the right edge, soft starlight. Nothing else on the panel. Landscape. No text."
+    }
+  ],
+  "canva_media": {},
+  "exported": [],
+  "notes": {
+    "design": "docs/PART3_DESIGN.md 13장. 별자리·문 단추·행성·초점 점은 코드에서 그림 위에 얹는다."
+  }
+}
