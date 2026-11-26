@@ -102,7 +102,8 @@
     "12-08-dalle.png",
     "12-09-props.png",
     "12-10-glasses.png",
-    "12-11-tinlabel.png"
+    "12-11-tinlabel.png",
+    "12-12-leaves.png"
   ],
   "notes": {
     "canva": "캐릭터·소품은 canva_prompt(흰 배경)로 뽑아 tools/gen/cutout.py로 오린다. 스타일 참조 MAHb7tzVJKc(11장 북쪽).",
