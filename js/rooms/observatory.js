@@ -263,9 +263,9 @@
         name: '행성 모형',
         bg: 'bg/south.webp',
         objects: [
-          { id: 'drawing', x: 0, y: 0, w: 0, h: 0, img: '', hit: [560, 60, 480, 280], label: '벽에 걸린 그림', look: '행성 모형 그림. 빨강·파랑·초록 행성 셋이 한 줄로 서서, 종이 가장자리의 작은 창을 똑바로 가리키고 있어.' },
+          { id: 'drawing', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1105, 165, 440, 320], label: '벽에 걸린 그림', look: '행성 모형 그림. 빨강·파랑·초록 행성 셋이 한 줄로 서서, 종이 가장자리의 작은 창을 똑바로 가리키고 있어.' },
           {
-            id: 'orrery', x: 0, y: 0, w: 0, h: 0, img: '', hit: [480, 360, 640, 420], label: '태엽 행성 모형',
+            id: 'orrery', x: 0, y: 0, w: 0, h: 0, img: '', hit: [430, 240, 660, 450], label: '태엽 행성 모형',
             click: (api, n) => {
               const f = api.flags;
               if (f.aligned) {
