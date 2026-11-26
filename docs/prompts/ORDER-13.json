@@ -76,7 +76,9 @@
       "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up of the smooth panel of a dark navy blue wooden door, fine wood grain, faint painted silver star dust speckles, a brass handle at the right edge, soft starlight. Nothing else on the panel. Landscape. No text."
     }
   ],
-  "canva_media": {},
+  "canva_media": {
+    "13-01-north.png": "MAHcBLkA6WY"
+  },
   "exported": [],
   "notes": {
     "design": "docs/PART3_DESIGN.md 13장. 별자리·문 단추·행성·초점 점은 코드에서 그림 위에 얹는다."
