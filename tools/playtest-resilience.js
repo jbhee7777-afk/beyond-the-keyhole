@@ -23,6 +23,8 @@ const CASES = [
   { room: 'sea', flags: { gotLetter: true, letterGiven: true, hatchOpen: true, posted: true }, inv: [], expectFlags: ['whale', 'whaleWrote'] },
   { room: 'bindery', flags: { talked: true, pressed: true, moriDone: true }, inv: [], expectFlags: ['opened'] },
   { room: 'bindery', flags: { talked: true, typeSet: true }, inv: [], expectInv: ['typeset'] },
+  { room: 'teahouse', flags: { talked: true, brewed: true }, inv: [], expectInv: ['tea'] },
+  { room: 'teahouse', flags: { talked: true, flowed: true }, inv: [], expectFlags: ['doorOpen'] },
 ];
 
 (async () => {
