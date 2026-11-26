@@ -280,7 +280,12 @@
                 if (!api.flags.moon) { api.say('창에 종이를 대 봤는데 구름 때문에 너무 어두워. 아무것도 안 비쳐.'); return; }
                 api.set('watermarkSeen'); api.zoom('watermark');
               },
-              leafcover: (api) => api.say('금박이 빛을 가려서 안 비쳐. 맨 종이로 비춰 봐야 해.'),
+              // 금박을 먼저 올렸어도 막히지 않게: 금박 둘레 맨 종이로도 무늬가 비친다
+              leafcover: (api) => {
+                if (!api.flags.moon) { api.say('창에 종이를 대 봤는데 구름 때문에 너무 어두워. 아무것도 안 비쳐.'); return; }
+                api.set('watermarkSeen'); api.zoom('watermark'); api.say('금박 둘레의 맨 종이 쪽으로 달빛이 비쳐 들어와… 종이 속 무늬가 보여!', 4200);
+              },
+              titlecover: (api) => { api.set('watermarkSeen'); api.zoom('watermark'); },
               sigs: (api) => api.say('접장은 글씨가 빼곡해서 비춰 봐도 알 수 없어.'),
               hook: (api) => api.say(api.flags.moon ? '창은 이미 열었어.' : '갈고리로 창을 열어 봤자 구름은 그대로야.'),
             },
@@ -472,7 +477,7 @@
             if (!f.bellowsTaken) return { key: 'bellows', steps: ['모리 말로는 책 이름이 종이 속에 숨어 있고, 어두우면 안 보인대요. 종이를 밝은 빛에 비춰야 해요.', '가장 밝은 빛은 동쪽 창의 달인데 구름이 가렸어요. 구름을 밀어낼 바람을 만드는 도구가 있어요.', '남쪽 벽의 풀무를 내리세요.'] };
             return { key: 'moon', steps: ['구름을 날려 보내요.', '동쪽 둥근 창이에요. 빨랫줄 접장을 먼저 걷어야 해요.', '풀무를 고른 채 동쪽 둥근 창을 누르세요.'] };
           }
-          return { key: 'watermark', steps: ['보름달이 떴어요. 종이를 비춰 봐요.', '동쪽 둥근 창이에요.', '표지 종이를 고른 채 동쪽 둥근 창을 누르세요.'] };
+          return { key: 'watermark', steps: ['보름달이 떴어요. 종이를 비춰 봐요.', '동쪽 둥근 창이에요.', '표지 종이(금박을 올렸어도 괜찮아요)를 고른 채 동쪽 둥근 창을 누르세요.'] };
         }
         if (!f.typeSet) return { key: 'type', steps: ['비침 무늬(나방 하나, 그 아래 별 셋)를 표지에 찍어요. 남쪽 활자판을 보세요.', '활자 면은 거울처럼 뒤집혀 있어요. 도장을 찍으면 좌우가 바뀌어 나와요.', '조판 막대에 별, 별, 별, 나방 순서로 놓고 시험 찍기를 누르세요.'] };
         if (!has('leafcover')) {
