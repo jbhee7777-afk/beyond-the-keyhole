@@ -12,7 +12,8 @@
   const F = (s) => s.flags;
   const MOONS = ['new', 'wax1', 'firstq', 'wax3', 'full', 'wane3', 'lastq', 'wane1'];
   const MNAME = { new: '그믐(깜깜한 달)', wax1: '오른쪽이 가늘게 빛나는 초승달', firstq: '오른쪽이 빛나는 반달', wax3: '오른쪽이 불룩한 달', full: '보름달', wane3: '거의 둥근 달', lastq: '왼쪽이 빛나는 반달', wane1: '왼쪽이 가늘게 빛나는 그믐달' };
-  const ORB = [{ c: 'red', r: 150, speed: 1, start: 0 }, { c: 'blue', r: 250, speed: 1 / 2, start: 6 }, { c: 'green', r: 340, speed: 1 / 3, start: 8 }];
+  // 행성 고리는 비스듬히 본 타원 (zoom/orrery_top 그림의 고리 반지름: 가로 rx, 세로 ry, 중심 800,445)
+  const ORB = [{ c: 'red', rx: 200, ry: 155, speed: 1, start: 0 }, { c: 'blue', rx: 280, ry: 225, speed: 1 / 2, start: 6 }, { c: 'green', rx: 362, ry: 290, speed: 1 / 3, start: 8 }];
   const FOCAL = { big: 4, small: 1 };
   const TUBE = FOCAL.big + FOCAL.small; // 두 렌즈 거리 = 초점 거리의 합
   // 별 단추 12개 (문 확대 화면 좌표)와 별자리가 쓰는 7개
@@ -31,7 +32,7 @@
     ORB.forEach((o, i) => {
       const a = (pos[i] / 12) * Math.PI * 2 - Math.PI / 2;
       const im = document.createElement('img'); im.className = 'planet'; im.alt = ''; im.src = game.src(`props/planet_${o.c}.webp`);
-      im.style.cssText = `left:${800 + Math.cos(a) * o.r - 36}px;top:${450 + Math.sin(a) * o.r - 36}px`;
+      im.style.cssText = `left:${800 + Math.cos(a) * o.rx - 36}px;top:${445 + Math.sin(a) * o.ry - 36}px`;
       im.dataset.pos = pos[i];
       box.appendChild(im);
     });
@@ -46,9 +47,9 @@
         api.say('한 줄로 서긴 했는데 창 쪽이 아니야. 벽 그림에선 창을 가리키고 있었어.');
       }
     };
-    [['손잡이 한 바퀴 돌리기', 1, 1220], ['손잡이 거꾸로 한 바퀴', -1, 1220]].forEach(([label, d, x], k) => {
+    [['손잡이 한 바퀴 돌리기', 1, 1290], ['손잡이 거꾸로 한 바퀴', -1, 1290]].forEach(([label, d, x], k) => {
       const b = document.createElement('button'); b.className = 'plain-btn orrery-btn'; b.textContent = label; b.setAttribute('aria-label', label);
-      b.style.cssText = `left:${x}px;top:${330 + k * 100}px;width:330px;height:70px`;
+      b.style.cssText = `left:${x}px;top:${330 + k * 100}px;width:230px;height:70px`;
       b.onclick = (e) => { e.stopPropagation(); crank(d); };
       box.appendChild(b);
     });
