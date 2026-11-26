@@ -285,10 +285,10 @@
         name: '남색 문',
         bg: (s) => (F(s).doorOpen ? 'bg/west_open.webp' : 'bg/west.webp'),
         objects: [
-          { id: 'globe', x: 0, y: 0, w: 0, h: 0, img: '', hit: [600, 380, 260, 380], label: '천구의', look: '별자리가 새겨진 놋쇠 천구의. 빙글 돌려 보니 별들이 반은 지워져 있어.' },
-          { id: 'books', x: 0, y: 0, w: 0, h: 0, img: '', hit: [80, 120, 460, 640], label: '별 지도 책장', look: '두꺼운 별 지도책들. 펼쳐 보니 별자리마다 별 몇 개가 하얗게 비어 있어.' },
+          { id: 'globe', x: 0, y: 0, w: 0, h: 0, img: '', hit: [950, 400, 215, 370], label: '천구의', look: '별자리가 새겨진 놋쇠 천구의. 빙글 돌려 보니 별들이 반은 지워져 있어.' },
+          { id: 'books', x: 0, y: 0, w: 0, h: 0, img: '', hit: [80, 130, 865, 560], label: '별 지도 책장', look: '두꺼운 별 지도책들. 펼쳐 보니 별자리마다 별 몇 개가 하얗게 비어 있어.' },
           {
-            id: 'door', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1000, 120, 420, 680], label: '남색 문',
+            id: 'door', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 190, 270, 590], label: '남색 문',
             click: (api) => { if (api.flags.doorOpen) { api.sfx('step'); api.win(); return; } api.zoom('door'); },
           },
         ],
