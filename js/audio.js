@@ -120,6 +120,8 @@
   S.jar = () => { noise(0, 0.25, { vol: 0.12, freq: 600, q: 4 }); tone(900, 0.25, 0.15, { type: 'triangle', vol: 0.08 }); };
   window.Sfx = {
     notes(f, gap) { if (!muted) try { notes(f, gap); } catch (e) { /* noop */ } },
+    // 물잔처럼 맑은 음 하나 (12장 물잔 실로폰)
+    tone(freq, dur) { if (!muted) try { tone(freq, 0, dur || 0.5, { type: 'sine', vol: 0.16 }); tone(freq * 2, 0, (dur || 0.5) * 0.6, { type: 'sine', vol: 0.04 }); } catch (e) { /* noop */ } },
     get muted() { return muted; },
     play(n) { if (muted || !S[n]) return; try { S[n](); } catch (e) { /* 소리 실패는 무시 */ } },
     birthday() { if (!muted) try { S.birthday(); } catch (e) { /* noop */ } },

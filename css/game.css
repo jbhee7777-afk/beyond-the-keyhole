@@ -454,3 +454,22 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .type-proof { position: absolute; display: flex; gap: 20px; justify-content: center; align-items: center; padding: 10px; background: #efe2c2; border-radius: 6px; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3); transform: rotate(-1.5deg); }
 .type-proof img { height: 96px; width: 96px; filter: sepia(0.6) contrast(1.1); }
 .type-btn { font-size: 26px; }
+/* 12장 물잔 실로폰 */
+.glass-row { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.glass-row button { pointer-events: auto; position: absolute; }
+.glass-row .glass img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.glass-row .glass img.water { transition: clip-path 0.3s ease; }
+.glass-row .glass.ring { animation: ring 0.35s ease; }
+@keyframes ring { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-3deg); } 60% { transform: rotate(3deg); } }
+.glass-tap { font-size: 28px; }
+/* 12장 차 우리기 */
+.brew { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.brew button { pointer-events: auto; position: absolute; }
+.brew .brew-tool.on img { filter: brightness(1.15) drop-shadow(0 0 16px rgba(255, 220, 150, 0.9)); transform: translateY(-10px); }
+.brew-pot { position: absolute; }
+.brew-pot img { width: 100%; height: 100%; }
+.brew-level { position: absolute; left: 0; right: 0; bottom: -46px; text-align: center; font-size: 34px; letter-spacing: 10px; color: #f3e2b4; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5); }
+.thermo { position: absolute; border-radius: 35px; background: #f4ead2; border: 4px solid #3b2a1c; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35); overflow: hidden; }
+.thermo i { position: absolute; left: 0; width: 45%; height: 4px; background: #3b2a1c; }
+.thermo b { position: absolute; left: 30%; width: 40%; bottom: 4%; background: #c8402f; border-radius: 10px; transition: height 0.6s ease; }
+.brew-empty { font-size: 26px; }
