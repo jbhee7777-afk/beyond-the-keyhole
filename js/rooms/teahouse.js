@@ -204,9 +204,9 @@
         name: '찻장',
         bg: (s) => (F(s).cabinetOpen ? 'bg/east_open.webp' : 'bg/east.webp'),
         objects: [
-          { id: 'glasses', x: 0, y: 0, w: 0, h: 0, img: '', hit: [80, 300, 460, 220], label: '물잔 네 개', click: (api) => (api.flags.cabinetOpen ? api.say('물잔들이 맑게 반짝여. 노래는 이미 끝났어.') : api.zoom('glasses')) },
+          { id: 'glasses', x: 0, y: 0, w: 0, h: 0, img: '', hit: [160, 385, 440, 115], label: '물잔 네 개', click: (api) => (api.flags.cabinetOpen ? api.say('물잔들이 맑게 반짝여. 노래는 이미 끝났어.') : api.zoom('glasses')) },
           {
-            id: 'cabinet', x: 0, y: 0, w: 0, h: 0, img: '', hit: [620, 120, 380, 560], label: '유리문 찻장',
+            id: 'cabinet', x: 0, y: 0, w: 0, h: 0, img: '', hit: [660, 100, 430, 670], label: '유리문 찻장',
             click: (api, n) => {
               const f = api.flags;
               if (!f.cabinetOpen) { api.say('유리문 찻장이 잠겨 있어. 열쇠 구멍 대신 작은 종 모양 자물쇠… 소리로 여는 건가 봐.'); return; }
@@ -216,7 +216,7 @@
             },
           },
           {
-            id: 'jar', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1150, 300, 360, 420], label: '물항아리',
+            id: 'jar', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1160, 460, 320, 340], label: '물항아리',
             click: (api, n) => {
               if (api.has('ladle')) { api.say('국자엔 이미 찬물이 가득해.'); return; }
               api.give('ladle', n); api.sfx('water'); api.say('걸려 있던 국자로 찬물을 한가득 떴어. 얼음처럼 차가워.');
