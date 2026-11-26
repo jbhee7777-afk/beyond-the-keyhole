@@ -34,8 +34,8 @@
     {
       "file": "12-06-west.png",
       "kind": "배경",
-      "edit_of": "",
-      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same cozy steamy tea house as 12-01 (celadon green tiles, warm copper, wooden beams, soft lantern light, wisps of white steam): on the left a wall of TWELVE small wooden tea drawers in 3 rows of 4, each drawer front painted with one small simple picture: fish, bird, leaf, moon, sun, flower, shell, cloud, cat, teapot, star, boat (each different, clearly readable). On the right a round wooden door with an iron ring handle, closed. Dried herbs hanging from a beam. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+      "edit_of": "12-07",
+      "prompt": "Edit this image. Keep everything exactly the same (same drawers with their pictures, lanterns, herbs, shelves, pots, same composition). Change only this: the round wooden door is now CLOSED, filling the round doorway, with its iron ring handle; no view outside, no water. No text."
     },
     {
       "file": "12-07-west-open.png",
@@ -95,13 +95,19 @@
     "12-02-north-fog.png",
     "12-03-east.png",
     "12-04-east-open.png",
-    "12-05-south.png"
+    "12-05-south.png",
+    "12-07-west-open.png",
+    "12-08-dalle.png",
+    "12-09-props.png",
+    "12-10-glasses.png",
+    "12-11-tinlabel.png"
   ],
   "notes": {
     "canva": "캐릭터·소품은 canva_prompt(흰 배경)로 뽑아 tools/gen/cutout.py로 오린다. 스타일 참조 MAHb7tzVJKc(11장 북쪽).",
     "north": "12-01: 창 580-1010,130-470 / 주전자·화로 640-950,380-600 / 오른쪽 찻주전자 쟁반 1040-1260,520-610. 주전자는 화로 위에 그대로 두고 국자로 물을 부어 끓이는 흐름으로 바꿈.",
     "birds": "12-02 실제 새 높이: [3,2,4,1] (가지가 오른쪽으로 내려감). 정답 물 [2,3,1,4]로 코드 반영.",
     "east": "물잔 175-445,400-490 / 망치 465-585 / 찻장 660-1090,95-780 / 항아리 1165-1475,470-800",
-    "south": "탁자 260-1300,340-700. 지도: 산 690-810,350-410 / 나무 490-580,505-590 / 바위 640-720,540-595 / 호수 825-990,515-600 / 작은 문 715-830,605-675. 안락의자 1220-1590,270-650. 지도 확대 대신 남쪽 탁자에서 바로 떨어뜨리기(12-13/14 → 12-13-south-wet 하나로)."
+    "south": "탁자 260-1300,340-700. 지도: 산 690-810,350-410 / 나무 490-580,505-590 / 바위 640-720,540-595 / 호수 825-990,515-600 / 작은 문 715-830,605-675. 안락의자 1220-1590,270-650. 지도 확대 대신 남쪽 탁자에서 바로 떨어뜨리기(12-13/14 → 12-13-south-wet 하나로).",
+    "west": "사용자 ChatGPT 12-07(문 열림)이 먼저 옴. 서랍 3x4 순서가 코드 DRAWERS와 같음(물고기 왼쪽 위). 서랍 191-737 x, 354-694 y. 문 1045-1495,255-795. 12-06(닫힘)은 12-07을 고쳐 만들어야 함(Canva 업로드는 네트워크 차단)."
   }
 }

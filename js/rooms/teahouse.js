@@ -30,7 +30,7 @@
     f.levels.forEach((lv, i) => {
       const b = document.createElement('button');
       b.className = 'piece glass';
-      b.style.cssText = `left:${330 + i * 250}px;top:250px;width:190px;height:300px`;
+      b.style.cssText = `left:${320 + i * 250}px;top:250px;width:210px;height:246px`;
       b.dataset.level = lv;
       b.setAttribute('aria-label', `${i + 1}번째 물잔`);
       const empty = document.createElement('img'); empty.alt = ''; empty.src = game.src('props/glass_empty.webp'); b.appendChild(empty);
@@ -84,8 +84,8 @@
       b.onclick = (e) => { e.stopPropagation(); if (!game.busy) fn(); }; box.appendChild(b); return b;
     };
     // 따르는 도구
-    btn('piece brew-tool' + (f.tool === 'jug' ? ' on' : ''), 'left:150px;top:180px;width:220px;height:220px', '큰 계량 주전자 (3잔)', () => { f.tool = 'jug'; game.save(); brewWidget(container, api, game); }, 'items/jug.webp');
-    btn('piece brew-tool' + (f.tool === 'cup' ? ' on' : ''), 'left:180px;top:450px;width:160px;height:160px', '작은 잔 (1잔)', () => { f.tool = 'cup'; game.save(); brewWidget(container, api, game); }, 'items/cup.webp');
+    btn('piece brew-tool' + (f.tool === 'jug' ? ' on' : ''), 'left:150px;top:180px;width:220px;height:220px', '큰 계량 주전자 (3잔)', () => { f.tool = 'jug'; game.save(); brewWidget(container, api, game); }, 'items/jug_big.webp');
+    btn('piece brew-tool' + (f.tool === 'cup' ? ' on' : ''), 'left:180px;top:450px;width:160px;height:160px', '작은 잔 (1잔)', () => { f.tool = 'cup'; game.save(); brewWidget(container, api, game); }, 'items/cup_big.webp');
     const pour = (t, name) => {
       const n = f.tool === 'jug' ? 3 : 1;
       if (amount + n > POT) { api.say(`${f.tool === 'jug' ? '큰 주전자' : '작은 잔'}로 ${name}을 부으면 찻주전자가 넘쳐. 찻주전자는 네 잔 들이야.`); return; }
@@ -100,7 +100,7 @@
         else api.say('미지근해서 찻잎이 안 풀려. 맹맹한 맛일 거야.');
       }
     };
-    btn('piece brew-src', 'left:1180px;top:170px;width:260px;height:260px', '화로의 끓는 물', () => pour(HOT, '끓는 물'), 'items/kettle.webp');
+    btn('piece brew-src', 'left:1180px;top:170px;width:260px;height:260px', '화로의 끓는 물', () => pour(HOT, '끓는 물'), 'items/kettle_big.webp');
     btn('piece brew-src', 'left:1180px;top:460px;width:260px;height:260px', '국자의 찬물', () => { if (!api.has('ladle')) { api.say('찬물이 없어. 동쪽 항아리에서 국자로 떠 와야 해.'); return; } pour(COLD, '찬물'); }, 'items/ladle.webp');
     // 찻주전자와 온도계
     const pot = document.createElement('div'); pot.className = 'brew-pot'; pot.style.cssText = 'left:520px;top:230px;width:420px;height:420px';
@@ -267,7 +267,7 @@
         bg: (s) => (F(s).doorOpen ? 'bg/west_open.webp' : 'bg/west.webp'),
         objects: [
           ...DRAWERS.map((d, i) => ({
-            id: 'drawer_' + d, x: 0, y: 0, w: 0, h: 0, img: '', hit: [90 + (i % 4) * 150, 180 + Math.floor(i / 4) * 150, 140, 140], label: `${DNAME[d]} 서랍`,
+            id: 'drawer_' + d, x: 0, y: 0, w: 0, h: 0, img: '', hit: [191 + (i % 4) * 140, 354 + Math.floor(i / 4) * 117, 126, 104], label: `${DNAME[d]} 서랍`,
             click: (api, n) => {
               if (d !== 'fish') { api.say(`${DNAME[d]} 그림 서랍. 말린 찻잎만 가득해.`); return; }
               if (api.flags.springTaken) { api.say('물고기 서랍. 이제 비었어.'); return; }
@@ -275,7 +275,7 @@
               api.say('물고기 그림 서랍 안에 작은 병이 누워 있었어. 반짝이는 샘물이 찰랑찰랑!');
             },
           })),
-          { id: 'door', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1000, 150, 420, 620], label: '둥근 문', click: (api) => { if (api.flags.doorOpen) { api.sfx('step'); api.win(); return; } api.sfx('locked'); api.say('둥근 나무 문. 쇠고리를 당겨도 꼼짝 안 해. 문틈이 바싹 말라 쩍쩍 갈라졌어.'); } },
+          { id: 'door', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1045, 255, 450, 540], label: '둥근 문', click: (api) => { if (api.flags.doorOpen) { api.sfx('step'); api.win(); return; } api.sfx('locked'); api.say('둥근 나무 문. 쇠고리를 당겨도 꼼짝 안 해. 문틈이 바싹 말라 쩍쩍 갈라졌어.'); } },
         ],
       },
     },
