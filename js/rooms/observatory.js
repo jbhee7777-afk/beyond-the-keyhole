@@ -11,7 +11,7 @@
 (function () {
   const F = (s) => s.flags;
   const MOONS = ['new', 'wax1', 'firstq', 'wax3', 'full', 'wane3', 'lastq', 'wane1'];
-  const MNAME = { new: '그믐(깜깜한 달)', wax1: '오른쪽이 가늘게 빛나는 초승달', firstq: '오른쪽이 빛나는 반달', wax3: '오른쪽이 불룩한 달', full: '보름달', wane3: '왼쪽이 불룩한 달', lastq: '왼쪽이 빛나는 반달', wane1: '왼쪽이 가늘게 빛나는 그믐달' };
+  const MNAME = { new: '그믐(깜깜한 달)', wax1: '오른쪽이 가늘게 빛나는 초승달', firstq: '오른쪽이 빛나는 반달', wax3: '오른쪽이 불룩한 달', full: '보름달', wane3: '거의 둥근 달', lastq: '왼쪽이 빛나는 반달', wane1: '왼쪽이 가늘게 빛나는 그믐달' };
   const ORB = [{ c: 'red', r: 150, speed: 1, start: 0 }, { c: 'blue', r: 250, speed: 1 / 2, start: 6 }, { c: 'green', r: 340, speed: 1 / 3, start: 8 }];
   const FOCAL = { big: 4, small: 1 };
   const TUBE = FOCAL.big + FOCAL.small; // 두 렌즈 거리 = 초점 거리의 합
@@ -232,14 +232,23 @@
         name: '달 달력',
         bg: 'bg/east.webp',
         objects: [
-          { id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [620, 60, 360, 300], label: '둥근 창', look: '창밖에 반달이 떠 있어. 오른쪽 반이 환하고 왼쪽 반은 어두워.' },
-          { id: 'calendar', x: 0, y: 0, w: 0, h: 0, img: '', hit: [260, 380, 1000, 200], label: '달 모양 달력', click: (api) => api.zoom('calendar') },
+          { id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [615, 60, 330, 340], label: '둥근 창', look: '창밖에 반달이 떠 있어. 오른쪽 반이 환하고 왼쪽 반은 어두워.' },
+          ...MOONS.map((m, i) => ({
+            id: 'moon_' + m, x: 0, y: 0, w: 0, h: 0, img: '', hit: [226 + i * 109.5, 478, 100, 176], label: `${MNAME[m]} 서랍`,
+            click: (api, n) => {
+              const f = api.flags;
+              if (m === 'lastq') { api.say('반달이긴 한데… 이건 왼쪽이 빛나는 반달이야. 창밖 달은 오른쪽이 빛났어.'); return; }
+              if (m !== 'firstq') { api.sfx('creak'); api.say(`${MNAME[m]} 서랍. 별 가루만 조금 있어.`); return; }
+              if (f.keyTaken) { api.say('빈 서랍이야.'); return; }
+              f.keyTaken = true; api.give('key', n); api.sfx('unlock'); api.say('오늘 달과 같은 모양 서랍! 안에 작은 놋쇠 태엽 열쇠가 있었어.');
+            },
+          })),
           {
-            id: 'magnifier', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1260, 520, 200, 200], label: '책상 돋보기', show: (s) => !F(s).magTaken,
+            id: 'magnifier', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1370, 385, 190, 225], label: '책상 돋보기', show: (s) => !F(s).magTaken,
             click: (api, n) => { api.set('magTaken'); api.give('lenssmall', n); api.sfx('pick'); api.say('돋보기 틀에서 작은 볼록 렌즈를 빼냈어.'); },
           },
           {
-            id: 'lamp', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1100, 420, 160, 300], label: '책상 등잔',
+            id: 'lamp', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 340, 110, 250], label: '책상 등잔',
             click: (api) => api.say('밝은 등잔 아래 빈 종이와 세워 둔 자가 있어. 렌즈를 대 보면 빛을 모을 수 있겠다.'),
             use: {
               lensbig: (api) => { api.flags.focusLens = 'big'; api.flags.lensH = 2; api.zoom('focus'); },
@@ -287,20 +296,6 @@
     },
 
     zooms: {
-      calendar: {
-        bg: 'zoom/calendar.webp',
-        note: ['달 모양 달력', '달 그림 여덟 개, 아래마다 작은 서랍.'],
-        objects: MOONS.map((m, i) => ({
-          id: 'moon_' + m, x: 0, y: 0, w: 0, h: 0, img: '', hit: [110 + i * 175, 560, 160, 160], label: `${MNAME[m]} 서랍`,
-          click: (api, n) => {
-            const f = api.flags;
-            if (m === 'lastq') { api.say('반달이긴 한데… 이건 왼쪽이 빛나는 반달이야. 창밖 달은 오른쪽이 빛났어.'); return; }
-            if (m !== 'firstq') { api.say(`${MNAME[m]} 서랍. 별 가루만 조금 있어.`); return; }
-            if (f.keyTaken) { api.say('빈 서랍이야.'); return; }
-            f.keyTaken = true; api.give('key', n); api.sfx('unlock'); api.say('오늘 달과 같은 모양 서랍! 안에 작은 놋쇠 태엽 열쇠가 있었어.');
-          },
-        })),
-      },
       orrery: { bg: 'zoom/orrery_top.webp', note: ['행성 모형 손잡이', '한 바퀴에 빨강 1칸, 파랑 반 칸, 초록 3분의 1칸.'], widget: orreryWidget },
       focus: { bg: 'zoom/lampdesk.webp', note: ['등잔 아래 렌즈', '렌즈 높이를 바꾸면 종이 위 빛 동그라미 크기가 바뀐다.'], widget: focusWidget },
       scope: { bg: 'zoom/sky.webp', widget: scopeWidget },

@@ -46,12 +46,6 @@
       "canva_prompt": "Game prop sheet, on a plain flat pure white background with nothing else, objects far apart and not touching, same art style as the reference: a small brass winding key; a big round glass telescope lens in a brass ring; a small glass eyepiece lens in a brass ring; a brass star-shaped door stud; a red planet ball; a blue planet ball; a green planet ball. No text."
     },
     {
-      "file": "13-08-calendar.png",
-      "kind": "확대 화면",
-      "edit_of": "",
-      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up of a long wooden board on a wall with EIGHT small paintings of the moon in one row, each with a tiny wooden drawer with a brass knob underneath: new moon (dark), thin crescent lit on the right, half moon lit on the right, gibbous lit on the right, full moon, gibbous lit on the left, half moon lit on the left, thin crescent lit on the left. Warm lamp light. Landscape. No text, no numbers."
-    },
-    {
       "file": "13-09-orrery-top.png",
       "kind": "확대 화면",
       "edit_of": "",
@@ -81,10 +75,12 @@
     "13-02-east.png": "MAHcBa2g4b0"
   },
   "exported": [
-    "13-01-north.png"
+    "13-01-north.png",
+    "13-02-east.png"
   ],
   "notes": {
     "design": "docs/PART3_DESIGN.md 13장. 별자리·문 단추·행성·초점 점은 코드에서 그림 위에 얹는다.",
-    "north": "앞 렌즈 고리 470-600,120-300 / 눈 고리 1040-1110,505-605 / 횃대 200-390,490-790 / 바구니 1240-1410,530-780"
+    "north": "앞 렌즈 고리 470-600,120-300 / 눈 고리 1040-1110,505-605 / 횃대 200-390,490-790 / 바구니 1240-1410,530-780",
+    "east": "창 615-945,60-400 (오른쪽 반달 확인) / 달 서랍 8칸 x=226+i*109.5, y 478-654 (그믐·초승·상현·차는·보름·거의둥근·하현·그믐달) / 등잔 1240-1350 / 돋보기 1370-1560,385-610. 달력 확대 그림은 필요 없어서 13-08 삭제"
   }
 }
