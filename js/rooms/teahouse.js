@@ -215,13 +215,14 @@
         name: '찻장',
         bg: (s) => (F(s).cabinetOpen ? 'bg/east_open.webp' : 'bg/east.webp'),
         objects: [
+          { id: 'shelfTaken', img: 'props/shelf_taken.webp', x: 690, y: 395, w: 270, h: 150, show: (s) => !!F(s).tinTaken },
           { id: 'glasses', x: 0, y: 0, w: 0, h: 0, img: '', hit: [160, 385, 440, 115], label: '물잔 네 개', click: (api) => (api.flags.cabinetOpen ? api.say('물잔들이 맑게 반짝여. 노래는 이미 끝났어.') : api.zoom('glasses')) },
           {
             id: 'cabinet', x: 0, y: 0, w: 0, h: 0, img: '', hit: [660, 100, 430, 670], label: '유리문 찻장',
             click: (api, n) => {
               const f = api.flags;
               if (!f.cabinetOpen) { api.say('유리문 찻장이 잠겨 있어. 열쇠 구멍 대신 작은 종 모양 자물쇠가 달렸어.'); return; }
-              if (!f.tinTaken) { f.tinTaken = true; api.give('tin', n); api.sfx('pick'); api.zoom('tinlabel'); return; }
+              if (!f.tinTaken) { f.tinTaken = true; f.toolsTaken = true; api.give('tin', n); api.sfx('pick'); api.say('찻잎 통과 큰 계량 주전자(세 잔 들이), 작은 잔(한 잔 들이)을 챙겼어.'); api.zoom('tinlabel'); return; }
               if (!f.toolsTaken) { f.toolsTaken = true; api.sfx('pick'); api.say('큰 계량 주전자(세 잔 들이)와 작은 잔(한 잔 들이)도 챙겼어.'); return; }
               api.say('찻장이 비었어.');
             },
@@ -276,6 +277,7 @@
         name: '찻잎 서랍장',
         bg: (s) => (F(s).doorOpen ? 'bg/west_open.webp' : 'bg/west.webp'),
         objects: [
+          { id: 'openFish', img: 'props/open_fish.webp', x: 140, y: 330, w: 195, h: 182, show: (s) => !!F(s).springTaken },
           ...DRAWERS.map((d, i) => ({
             id: 'drawer_' + d, x: 0, y: 0, w: 0, h: 0, img: '', hit: [191 + (i % 4) * 140, 354 + Math.floor(i / 4) * 117, 126, 104], label: `${DNAME[d]} 서랍`,
             click: (api, n) => {

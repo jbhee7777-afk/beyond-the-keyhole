@@ -219,6 +219,8 @@
         name: '매표소',
         bg: 'bg/south.webp',
         objects: [
+          { id: 'boothOpen', img: 'props/booth_open.webp', x: 225, y: 565, w: 215, h: 180, show: (s) => !!F(s).celloTaken },
+          { id: 'trunkOpen', img: 'props/trunk_open.webp', x: 1050, y: 490, w: 445, h: 325, show: (s) => !!F(s).trunkOpen },
           { id: 'bell', x: 0, y: 0, w: 0, h: 0, img: '', hit: [295, 470, 85, 85], label: '매표소 종', click: (api) => { api.sfx('clink'); api.say('땡— 아무도 안 나와.'); } },
           {
             id: 'booth', x: 0, y: 0, w: 0, h: 0, img: '', hit: [240, 575, 185, 155], label: '매표소 아래 문',

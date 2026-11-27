@@ -260,6 +260,8 @@
         name: '달 달력',
         bg: 'bg/east.webp',
         objects: [
+          { id: 'openMoon', img: 'props/open_moondrawer.webp', x: 432, y: 590, w: 133, h: 140, show: (s) => !!F(s).keyTaken },
+          { id: 'magEmpty', img: 'props/mag_empty.webp', x: 1360, y: 375, w: 210, h: 245, show: (s) => !!F(s).magTaken },
           { id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [615, 60, 330, 340], label: '둥근 창', look: '창밖에 반달이 떠 있어.' },
           ...MOONS.map((m, i) => ({
             id: 'moon_' + m, x: 0, y: 0, w: 0, h: 0, img: '', hit: [226 + i * 109.5, 478, 100, 176], label: `달력 서랍 ${i + 1}`,
@@ -296,6 +298,7 @@
         name: '행성 모형',
         bg: 'bg/south.webp',
         objects: [
+          { id: 'openOrrery', img: 'props/open_orrerydrawer.webp', x: 625, y: 595, w: 270, h: 155, show: (s) => !!F(s).aligned },
           { id: 'drawing', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1105, 165, 440, 320], label: '벽에 걸린 그림', look: '행성 모형을 그린 그림이야.' },
           {
             id: 'orrery', x: 0, y: 0, w: 0, h: 0, img: '', hit: [430, 240, 660, 450], label: '태엽 행성 모형',
