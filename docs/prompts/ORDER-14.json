@@ -64,7 +64,9 @@
       "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up of the front of an old wooden trunk with iron corners and a large brass lock plate that has four EMPTY round windows in a row, a small brass knob under each window. Landscape. No text, no numbers."
     }
   ],
-  "canva_media": {},
+  "canva_media": {
+    "14-01-north.png": "MAHcGhu9Rwg"
+  },
   "exported": [],
   "notes": {
     "design": "14장 그림자 인형극장. 순서 ORDER=boat,bird,deer,wolf (대본, 빨간 셀로판으로 빨간 낙서 지움). 포스터 네 컷은 섞인 순서(미끼). 트렁크 자물쇠 = 대본 순서 → 늑대 인형. 토끼+나뭇가지=사슴. 무대 뒤: 촛불에 가까울수록 그림자 큼, 늑대만 1칸(막 가득), 나머지는 2~4칸. 대본 빨간 필터 화면은 14-08에서 R 채널로 직접 만든다."
