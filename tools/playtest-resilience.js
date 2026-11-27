@@ -27,6 +27,8 @@ const CASES = [
   { room: 'teahouse', flags: { talked: true, flowed: true }, inv: [], expectFlags: ['doorOpen'] },
   { room: 'observatory', flags: { talked: true, keyTaken: true, keyIn: true, turns: 12, aligned: true }, inv: [], expectFlags: ['aligned'] },
   { room: 'observatory', flags: { talked: true, focused: true, lit: [1, 2, 5, 6, 7, 9, 10], doorOpen: true }, inv: [], expectFlags: ['doorOpen'] },
+  { room: 'shadow', flags: { talked: true, redLook: true, trunkOpen: true }, inv: [], expectInv: ['wolf'] },
+  { room: 'shadow', flags: { talked: true, performed: true }, inv: [], expectFlags: ['doorOpen'] },
 ];
 
 (async () => {
