@@ -109,7 +109,7 @@
     const lv = document.createElement('div'); lv.className = 'scope-len'; lv.textContent = '통 길이 ' + '■'.repeat(f.tube) + '□'.repeat(8 - f.tube); box.appendChild(lv);
     const btn = (label, d, y) => {
       const b = document.createElement('button'); b.className = 'plain-btn scope-btn'; b.textContent = label; b.setAttribute('aria-label', label);
-      b.style.cssText = `left:1240px;top:${y}px;width:300px;height:70px`;
+      b.style.cssText = `left:1370px;top:${y}px;width:150px;height:70px`;
       b.onclick = (e) => {
         e.stopPropagation(); if (game.busy) return;
         f.tube = Math.min(8, Math.max(1, f.tube + d)); api.sfx('dial'); game.save(); scopeWidget(container, api, game);
