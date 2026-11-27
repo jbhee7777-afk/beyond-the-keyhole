@@ -62,7 +62,7 @@
           api.say('띵— 딩— 띠잉— 딩. 창에 그려진 새들의 노래야! 찰칵, 유리문 찻장이 저절로 열렸어.', 5200);
           game.s.zoom = null; game.render();
         } else if (same(f.levels, BIRDS)) {
-          api.say('새 높이대로 물을 부었는데… 노래가 거꾸로 들려. 높은 새 자리에서 낮은 소리가 나. 물이 많을수록 소리가 낮아지잖아!', 6200);
+          api.say('어… 노래랑 비슷한데, 뭔가 뒤집혀 들려.', 6200);
         } else {
           api.say('띵, 딩, 동… 그냥 아무 소리야. 노래가 되지 않아.', 3600);
         }
@@ -93,9 +93,9 @@
     const pour = (t, name) => {
       const n = f.tool === 'jug' ? 3 : 1;
       if (t === COLD && (f.coldLeft || 0) < n) { api.say(`국자에 남은 찬물은 ${f.coldLeft || 0}잔뿐이야. ${n}잔을 뜰 수 없어.`); return; }
-      if (amount + n > POT) { api.say(`${f.tool === 'jug' ? '큰 주전자' : '작은 잔'}로 ${name}을 부으면 찻주전자가 넘쳐. 찻주전자는 네 잔 들이야.`); return; }
+      if (amount + n > POT) { api.say(`${f.tool === 'jug' ? '큰 주전자' : '작은 잔'}로 ${name}을 부으면 찻주전자가 넘쳐.`); return; }
       f.pot.push({ n, t }); api.sfx('water');
-      if (t === COLD) { f.coldLeft -= n; if (f.coldLeft <= 0) { api.take('ladle'); api.say('국자의 찬물을 다 썼어. 더 필요하면 동쪽 항아리에서 다시 떠 와야 해.'); } }
+      if (t === COLD) { f.coldLeft -= n; if (f.coldLeft <= 0) { api.take('ladle'); api.say('국자가 비었어.'); } }
       game.save(); brewWidget(container, api, game);
       const amt = amount + n;
       if (amt === POT) {
@@ -131,9 +131,9 @@
       return;
     }
     if (f.doorOpen) { api.say('달래: “물이 다시 흘러요. 다음 쪽은… 별빛이 꺼지고 있대요.”', 0, { who: 'dalle' }); return; }
-    if (f.served) { api.say('달래: “찻잔 바닥에 남은 찻잎 모양, 봤어요? 옛날엔 그걸로 물건 둔 자리를 점쳤대요.”', 0, { who: 'dalle' }); return; }
-    if (f.cabinetOpen) { api.say('달래: “이 찻잎은 너무 뜨거운 물을 싫어해요. 통에 적힌 대로 맞춰 주세요.”', 0, { who: 'dalle' }); return; }
-    if (f.fogged) { api.say('달래: “창에 새 그림! 그 노래였어요. 물잔으로 치면 열리는데… 저는 늘 높고 낮은 게 헷갈렸어요.”', 0, { who: 'dalle' }); return; }
+    if (f.served) { api.say('달래: “찻잔 바닥에 남은 찻잎 모양, 봤어요?”', 0, { who: 'dalle' }); return; }
+    if (f.cabinetOpen) { api.say('달래: “이 찻잎은 까다로워요. 통에 그려진 대로요.”', 0, { who: 'dalle' }); return; }
+    if (f.fogged) { api.say('달래: “창에 새 그림! 그 노래였어요.”', 0, { who: 'dalle' }); return; }
     api.say('달래: “찻장 노래는 제가 김 서린 창에 손가락으로 적어 뒀는데… 주전자가 말라서 김이 안 나요.”', 0, { who: 'dalle' });
   }
 
@@ -183,7 +183,7 @@
               ladle: (api) => {
                 if (api.flags.boiled) { api.say('주전자엔 물이 충분해.'); return; }
                 api.take('ladle'); api.set('boiled'); api.set('fogged'); api.sfx('water');
-                api.note('김 서린 창의 그림', '비스듬한 나뭇가지 위 새 네 마리. 왼쪽부터: 둘째로 높음, 셋째로 높음, 가장 높음, 가장 낮음.');
+                api.note('김 서린 창의 그림', '김 서린 창에 손가락 그림: 나뭇가지 위 새 네 마리.');
                 api.say('국자의 찬물을 주전자에 부었어. 보글보글… 금세 끓어올라 하얀 김이 바로 뒤 유리창에 서리기 시작했어.', 5200);
                 api.after(5200, () => api.say('어? 김 서린 유리에 손가락으로 그린 그림만 또렷하게 떠올랐어! 나뭇가지 위 새 네 마리야.', 5200));
               },
@@ -192,7 +192,7 @@
           {
             id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [580, 120, 440, 255], label: '큰 유리창',
             click: (api) => api.say(api.flags.fogged ? '하얗게 김 서린 유리에 손가락 그림이 떠올랐어. 나뭇가지 위 새 네 마리, 앉은 높이가 다 달라.' : '차갑고 까만 유리창. 손을 대니 얼음처럼 차가워. 유리에 희미한 손자국 같은 게 있어.'),
-            use: { ladle: (api) => api.say('창에 물을 끼얹어 봤자 흘러내릴 뿐이야. 김처럼 고르게 서려야 해.') },
+            use: { ladle: (api) => api.say('창에 물을 끼얹어 봤자 흘러내릴 뿐이야.') },
           },
           {
             id: 'tray', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1035, 500, 240, 115], label: '찻주전자 쟁반',
@@ -220,9 +220,9 @@
             id: 'cabinet', x: 0, y: 0, w: 0, h: 0, img: '', hit: [660, 100, 430, 670], label: '유리문 찻장',
             click: (api, n) => {
               const f = api.flags;
-              if (!f.cabinetOpen) { api.say('유리문 찻장이 잠겨 있어. 열쇠 구멍 대신 작은 종 모양 자물쇠… 소리로 여는 건가 봐.'); return; }
+              if (!f.cabinetOpen) { api.say('유리문 찻장이 잠겨 있어. 열쇠 구멍 대신 작은 종 모양 자물쇠가 달렸어.'); return; }
               if (!f.tinTaken) { f.tinTaken = true; api.give('tin', n); api.sfx('pick'); api.zoom('tinlabel'); return; }
-              if (!f.toolsTaken) { f.toolsTaken = true; api.sfx('pick'); api.say('큰 계량 주전자(세 잔 들이)와 작은 잔(한 잔 들이)도 챙겼어. 차는 북쪽 계산대 찻주전자에서 우리자.'); return; }
+              if (!f.toolsTaken) { f.toolsTaken = true; api.sfx('pick'); api.say('큰 계량 주전자(세 잔 들이)와 작은 잔(한 잔 들이)도 챙겼어.'); return; }
               api.say('찻장이 비었어.');
             },
           },
@@ -250,7 +250,7 @@
                 const f = api.flags;
                 if (f.flowed) { api.say('물은 이미 문까지 흘러.'); return; }
                 if (secLeft(f.springDry) > 0) { api.say(`샘물 병이 비었어. 병 바닥에서 샘물이 조금씩 다시 솟고 있어… ${secLeft(f.springDry)}초쯤 기다려야 해.`); return; }
-                if (id !== 'mountain') { f.springDry = Date.now() + DRY_MS; api.sfx('splash'); api.say(`${name}에 샘물을 똑 떨어뜨렸어. 물이 아래쪽으로만 조금 번지다 스며들어 사라졌어. 위쪽 물길은 바싹 마른 그대로야. 병이 비었어…`, 5600); return; }
+                if (id !== 'mountain') { f.springDry = Date.now() + DRY_MS; api.sfx('splash'); api.say(`${name}에 샘물을 똑 떨어뜨렸어. 조금 번지다 스며들어 사라졌어. 병이 비었어…`, 5600); return; }
                 api.take('spring'); api.set('flowed'); api.set('doorOpen'); api.sfx('water'); api.burst('bubble', 750, 380, 30);
                 api.say('산꼭대기에 샘물을 똑. 물이 마른 물길을 따라 아래로아래로 흘러 호수를 채우고, 작은 문까지 닿았어! 서쪽에서 물소리가 들려.', 6200);
               },
@@ -264,7 +264,7 @@
               tea: (api) => { api.take('tea'); api.set('served'); api.sfx('shine'); api.say('달래: “아아… 이 맛이에요!” 달래가 차를 호로록 비우고 빈 찻잔을 내밀었어. 바닥에 찻잎이 몇 장 붙어 있어.', 5600, { who: 'dalle' }); api.after(1800, () => api.zoom('leaves')); },
               ladle: (api) => api.say('달래: “맹물보다는… 차가 좋아요.”', 0, { who: 'dalle' }),
               tin: (api) => api.say('달래: “찻잎을 그냥 씹을 순 없잖아요.”', 0, { who: 'dalle' }),
-              spring: (api) => api.say('달래: “그건 마시는 물이 아니에요. 샘이 마른 자리에 돌려줘야 해요.”', 0, { who: 'dalle' }),
+              spring: (api) => api.say('달래: “그건 마시는 물이 아니에요.”', 0, { who: 'dalle' }),
             },
             wrong: '달래: “음… 그건 차가 아니잖아요.”',
           },
@@ -284,7 +284,7 @@
               if (secLeft(f.drawerJam) > 0) { api.sfx('locked'); api.say(`서랍장이 꽉 잠겼어. ${secLeft(f.drawerJam)}초쯤 지나야 풀릴 것 같아.`); return; }
               if (d !== 'fish') {
                 f.drawerJam = Date.now() + JAM_MS; api.sfx('locked');
-                api.say(`${DNAME[d]} 그림 서랍을 당기자 말린 찻잎이 와르르… 철컥! 서랍장 전체가 잠겨 버렸어. 아무 서랍이나 열면 안 되나 봐.`, 5200);
+                api.say(`${DNAME[d]} 그림 서랍을 당기자 말린 찻잎이 와르르… 철컥! 서랍장 전체가 잠겨 버렸어.`, 5200);
                 return;
               }
               api.set('springTaken'); api.give('spring', n); api.sfx('unlock');
@@ -297,9 +297,9 @@
     },
 
     zooms: {
-      glasses: { bg: 'zoom/glass_bg.webp', note: ['물잔 네 개', '잔을 누르면 물이 한 칸씩 늘어난다. 두드리면 소리가 난다.'], widget: glassWidget },
-      tinlabel: { bg: 'zoom/tinlabel.webp', note: ['찻잎 통 라벨', '찻잎 그림 옆에 온도계. 다섯 눈금 중 아래에서 넷째까지 빨간 줄.'] },
-      brew: { bg: 'zoom/brew_bg.webp', note: ['차 우리기', '찻주전자는 여덟 잔 들이. 큰 계량 주전자는 세 잔, 작은 잔은 한 잔. 온도계는 가득 찼을 때만 꽂을 수 있다. 국자 찬물은 세 잔뿐.'], widget: brewWidget },
+      glasses: { bg: 'zoom/glass_bg.webp', note: ['물잔 네 개', '잔을 누르면 물이 한 칸씩 늘어난다.'], widget: glassWidget },
+      tinlabel: { bg: 'zoom/tinlabel.webp', note: ['찻잎 통 라벨', '찻잎과 온도계 그림.'] },
+      brew: { bg: 'zoom/brew_bg.webp', note: ['차 우리기', '큰 계량 주전자는 세 잔, 작은 잔은 한 잔.'], widget: brewWidget },
       leaves: { bg: 'zoom/leaves.webp', note: ['찻잔 바닥의 찻잎', '젖은 찻잎이 물고기 모양으로 붙어 있다.'] },
     },
 

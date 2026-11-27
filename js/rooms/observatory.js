@@ -13,7 +13,6 @@
 (function () {
   const F = (s) => s.flags;
   const MOONS = ['new', 'wax1', 'firstq', 'wax3', 'full', 'wane3', 'lastq', 'wane1'];
-  const MNAME = { new: '그믐(깜깜한 달)', wax1: '오른쪽이 가늘게 빛나는 초승달', firstq: '오른쪽이 빛나는 반달', wax3: '오른쪽이 불룩한 달', full: '보름달', wane3: '거의 둥근 달', lastq: '왼쪽이 빛나는 반달', wane1: '왼쪽이 가늘게 빛나는 그믐달' };
   // 행성 고리는 비스듬히 본 타원 (zoom/orrery_top 그림의 고리 반지름: 가로 rx, 세로 ry, 중심 800,445)
   const ORB = [{ c: 'red', rx: 200, ry: 155, speed: 1, start: 0 }, { c: 'blue', rx: 280, ry: 225, speed: 1 / 2, start: 6 }, { c: 'green', rx: 362, ry: 290, speed: 1 / 3, start: 8 }];
   const FOCAL = { big: 9, small: 3 }; // 등잔 아래에서 빛이 한 점으로 모이는 높이 (자 눈금 칸)
@@ -78,7 +77,7 @@
           return;
         }
         const p = posAt(n);
-        api.say(p[0] === p[1] && p[1] === p[2] ? '한 줄로 서긴 했는데 창 쪽이 아니야… 태엽이 다 풀리자 행성들이 처음 자리로 스르르 돌아갔어.' : `${n}바퀴 돌고 멈췄어. 셋이 제각각이야. 태엽이 풀리자 행성들이 처음 자리로 돌아갔어.`, 4800);
+        api.say(p[0] === p[1] && p[1] === p[2] ? '셋이 한 줄로 섰는데… 그림하고는 달라. 태엽이 풀리자 처음 자리로 돌아갔어.' : `${n}바퀴 돌고 멈췄어. 태엽이 풀리자 처음 자리로 돌아갔어.`, 4800);
         game.after(1400, () => { game.busy = false; draw(0); });
       });
     };
@@ -109,8 +108,8 @@
         f.lensH = v; api.sfx('tap'); game.save(); focusWidget(container, api, game);
         if (v === F0) {
           const name = lens === 'big' ? '큰 렌즈' : '작은 렌즈';
-          api.say(`빛이 바늘 끝처럼 작고 밝게 모였어! ${name}는 종이에서 ${F0}칸 높이일 때야.`, 4200);
-          api.note(`${name}의 초점`, `등잔 빛이 한 점으로 모이는 높이: 자 눈금 ${F0}칸.`);
+          api.say('빛이 바늘 끝처럼 작고 밝게 모였어!', 3200);
+          api.note(`${name}의 초점`, `자 눈금 ${F0}칸에서 빛이 한 점.`);
           f['focal_' + lens] = true;
         }
       },
@@ -142,7 +141,7 @@
       if (f.tube === TUBE) {
         f.focused = true; game.save(); api.sfx('shine'); scopeWidget(container, api, game);
         api.say('또렷해졌어! 별 일곱 개가 이어진 별자리가 보여. 다른 별들은 꺼져 가는데 이 일곱 개만 반짝여.', 5600);
-        api.note('망원경 속 별자리', `통 길이 ${TUBE}칸(큰 렌즈 ${FOCAL.big}칸 + 작은 렌즈 ${FOCAL.small}칸)에서 또렷. 별 일곱 개짜리 별자리.`);
+        api.note('망원경 속 별자리', '별 일곱 개짜리 별자리.');
         return;
       }
       game.busy = true; api.sfx('nope');
@@ -191,10 +190,10 @@
       return;
     }
     if (f.doorOpen) { api.say('휘: “별이 다시 켜졌어요. 다음 쪽은… 그림자가 몸을 잃었대요.”', 0, { who: 'whi' }); return; }
-    if (f.bigIn && f.smallIn) { api.say('휘: “렌즈 두 개 사이 거리가 중요해요. 각 렌즈가 빛을 모으는 거리를 더한 만큼이요.”', 0, { who: 'whi' }); return; }
-    if (api.has('lensbig') || api.has('lenssmall')) { api.say('휘: “렌즈마다 빛을 한 점에 모으는 거리가 달라요. 등잔 아래에서 재 볼 수 있어요.”', 0, { who: 'whi' }); return; }
-    if (f.keyTaken) { api.say('휘: “행성 모형은 지난번에 셋이 한 줄로 섰을 때 그림을 그려 뒀어요. 남쪽 벽에요.”', 0, { who: 'whi' }); return; }
-    api.say('휘: “태엽 열쇠는… 오늘 달 모양 서랍에 넣어 뒀던 것 같아요. 오늘 달이 어땠더라.”', 0, { who: 'whi' });
+    if (f.bigIn && f.smallIn) { api.say('휘: “망원경이 이렇게 뿌연 건 처음이에요…”', 0, { who: 'whi' }); return; }
+    if (api.has('lensbig') || api.has('lenssmall')) { api.say('휘: “렌즈가 돌아왔군요! 조심히 다뤄 주세요.”', 0, { who: 'whi' }); return; }
+    if (f.keyTaken) { api.say('휘: “행성들이 나란히 서던 날이 그리워요.”', 0, { who: 'whi' }); return; }
+    api.say('휘: “태엽 열쇠는… 오늘 밤 달 모양 서랍에 넣어 뒀어요.”', 0, { who: 'whi' });
   }
 
   Engine.registerRoom({
@@ -222,7 +221,7 @@
       lenssmall: { name: '작은 렌즈', img: 'items/lenssmall.webp', desc: '돋보기에서 빼낸 작은 볼록 렌즈.' },
     },
     combos: [
-      { a: 'lensbig', b: 'lenssmall', say: '두 렌즈를 겹쳐 봤는데 아무것도 또렷하지 않아. 사이를 얼마나 띄워야 할까?' },
+      { a: 'lensbig', b: 'lenssmall', say: '두 렌즈를 겹쳐 봤는데 아무것도 또렷하지 않아.' },
     ],
 
     views: {
@@ -248,7 +247,7 @@
             click: whiTalk,
             use: {
               key: (api) => api.say('휘: “그건 행성 모형 태엽 열쇠예요!”', 0, { who: 'whi' }),
-              lensbig: (api) => api.say('휘: “망원경 앞쪽에 끼우는 큰 렌즈예요.”', 0, { who: 'whi' }),
+              lensbig: (api) => api.say('휘: “조심해요, 귀한 렌즈예요.”', 0, { who: 'whi' }),
             },
             wrong: '휘: “부엉… 그건 별이랑 상관없는 것 같아요.”',
           },
@@ -261,20 +260,20 @@
         name: '달 달력',
         bg: 'bg/east.webp',
         objects: [
-          { id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [615, 60, 330, 340], label: '둥근 창', look: '창밖에 반달이 떠 있어. 오른쪽 반이 환하고 왼쪽 반은 어두워.' },
+          { id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [615, 60, 330, 340], label: '둥근 창', look: '창밖에 반달이 떠 있어.' },
           ...MOONS.map((m, i) => ({
-            id: 'moon_' + m, x: 0, y: 0, w: 0, h: 0, img: '', hit: [226 + i * 109.5, 478, 100, 176], label: `${MNAME[m]} 서랍`,
+            id: 'moon_' + m, x: 0, y: 0, w: 0, h: 0, img: '', hit: [226 + i * 109.5, 478, 100, 176], label: `달력 서랍 ${i + 1}`,
             click: (api, n) => {
               const f = api.flags;
-              if (f.keyTaken) { api.say(m === 'firstq' ? '빈 서랍이야.' : `${MNAME[m]} 서랍. 별 가루만 조금 있어.`); return; }
+              if (f.keyTaken) { api.say(m === 'firstq' ? '빈 서랍이야.' : '별 가루만 조금 있어.'); return; }
               const left = Math.ceil(((f.calJam || 0) - Date.now()) / 1000);
               if (left > 0) { api.sfx('locked'); api.say(`서랍들이 꽉 잠겨 있어. 톱니 소리가 째깍째깍… ${left}초쯤 뒤에 풀릴 것 같아.`); return; }
               if (m !== 'firstq') {
                 f.calJam = Date.now() + JAM_MS; api.sfx('locked');
-                api.say(m === 'lastq' ? '반달 서랍인데… 철컥! 달력 서랍이 전부 잠겨 버렸어. 오늘 달과 다른 모양이었나 봐. 창밖 달을 다시 봐야겠어.' : `${MNAME[m]} 서랍을 당기자 철컥! 달력 서랍이 전부 잠겨 버렸어. 오늘 달 모양 서랍만 열어야 하나 봐.`, 5200);
+                api.say('서랍을 당기자 철컥! 달력 서랍이 전부 잠겨 버렸어.', 4200);
                 return;
               }
-              f.keyTaken = true; api.give('key', n); api.sfx('unlock'); api.say('오늘 달과 같은 모양 서랍! 안에 작은 놋쇠 태엽 열쇠가 있었어.');
+              f.keyTaken = true; api.give('key', n); api.sfx('unlock'); api.say('서랍 안에 작은 놋쇠 태엽 열쇠가 있었어.');
             },
           })),
           {
@@ -283,7 +282,7 @@
           },
           {
             id: 'lamp', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 340, 110, 250], label: '책상 등잔',
-            click: (api) => api.say('밝은 등잔 아래 빈 종이와 세워 둔 자가 있어. 렌즈를 대 보면 빛을 모을 수 있겠다.'),
+            click: (api) => api.say('밝은 등잔 아래 빈 종이와 자가 놓여 있어.'),
             use: {
               lensbig: (api) => { api.flags.focusLens = 'big'; api.flags.lensH = 2; api.zoom('focus'); },
               lenssmall: (api) => { api.flags.focusLens = 'small'; api.flags.lensH = 8; api.zoom('focus'); },
@@ -297,16 +296,16 @@
         name: '행성 모형',
         bg: 'bg/south.webp',
         objects: [
-          { id: 'drawing', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1105, 165, 440, 320], label: '벽에 걸린 그림', look: '행성 모형 그림. 빨강·파랑·초록 행성 셋이 한 줄로 서서, 종이 가장자리의 작은 창을 똑바로 가리키고 있어.' },
+          { id: 'drawing', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1105, 165, 440, 320], label: '벽에 걸린 그림', look: '행성 모형을 그린 그림이야.' },
           {
             id: 'orrery', x: 0, y: 0, w: 0, h: 0, img: '', hit: [430, 240, 660, 450], label: '태엽 행성 모형',
             click: (api, n) => {
               const f = api.flags;
               if (f.aligned) {
-                if (f.lensBigTaken) { api.say('받침 서랍은 비었어. 세 행성은 창 쪽으로 나란히.'); return; }
+                if (f.lensBigTaken) { api.say('받침 서랍은 비었어.'); return; }
                 f.lensBigTaken = true; api.give('lensbig', n); api.sfx('pick'); api.say('받침 서랍에서 큰 렌즈를 꺼냈어.'); return;
               }
-              if (!f.keyIn) { api.say('손잡이를 돌려도 헛돌아. 태엽이 다 풀렸나 봐. 받침에 열쇠 구멍이 있어.'); return; }
+              if (!f.keyIn) { api.say('손잡이가 헛돌아. 받침에 작은 구멍이 있어.'); return; }
               api.zoom('orrery');
             },
             use: { key: (api) => { api.take('key'); api.set('keyIn'); api.sfx('dial'); api.say('태엽 열쇠를 끼워 끝까지 감았어. 이제 손잡이가 돌아가!'); api.zoom('orrery'); } },
@@ -330,8 +329,8 @@
     },
 
     zooms: {
-      orrery: { bg: 'zoom/orrery_top.webp', note: ['행성 모형 손잡이', '손잡이 한 바퀴에 빨강 1칸, 파랑 반 칸, 초록 3분의 1칸 (한 바퀴 둘레는 12칸). 처음 자리: 빨강 맨 위(0칸), 파랑 6칸, 초록 8칸.'], widget: orreryWidget },
-      focus: { bg: 'zoom/lampdesk.webp', note: ['등잔 아래 렌즈', '렌즈 높이를 바꾸면 종이 위 빛 동그라미 크기가 바뀐다.'], widget: focusWidget },
+      orrery: { bg: 'zoom/orrery_top.webp', note: ['행성 모형', '감을 바퀴 수를 정하고 태엽을 푼다.'], widget: orreryWidget },
+      focus: { bg: 'zoom/lampdesk.webp', note: ['등잔 아래 렌즈', '렌즈를 종이 위로 올렸다 내렸다 할 수 있다.'], widget: focusWidget },
       scope: { bg: 'zoom/sky.webp', widget: scopeWidget },
       door: { bg: 'zoom/door_panel.webp', note: ['남색 문의 별 단추', '단추 열두 개. 누르면 켜지고, 다시 누르면 꺼진다.'], widget: doorWidget },
     },

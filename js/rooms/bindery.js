@@ -48,7 +48,7 @@
             game.s.zoom = null; game.save(); game.render();
           }, 500);
         } else if (same(f.sigOrder, [6, 5, 4, 3, 2, 1])) {
-          api.say('계단 모양이긴 한데 거꾸로 올라가. 가죽 책 등에선 첫 묶음 표시가 맨 위였어.', 4200);
+          api.say('표시가 계단을 이루긴 하는데… 가죽 책 등이랑은 달라.', 4200);
         }
       };
       box.appendChild(b);
@@ -100,7 +100,7 @@
           game.s.zoom = null; game.save(); game.render();
         }, 900);
       } else if (same(f.stick, TITLE)) {
-        api.say('어? 찍어 보니 별 셋이 먼저 나오고 나방이 맨 끝이야. 열쇠 같은 그림은 좌우도 뒤집혀 찍히고… 활자는 도장처럼 거꾸로 찍히는구나!', 6600);
+        api.say('어? 찍어 보니 별 셋이 먼저 나오고 나방이 맨 끝이야.', 6600);
       } else {
         api.say('찍힌 그림: ' + printed.map((t) => TNAME[t]).join(', ') + '.', 4200);
       }
@@ -126,14 +126,14 @@
       return;
     }
     if (has('book')) { api.say('모리: “아직 표지가 들떠 있어요. 책 누르개로 하룻밤… 아니, 꾹 한 번이면 돼요.”', 0, { who: 'mori' }); return; }
-    if (f.sewn) { api.say('모리: “책 몸통이 생겼어요! 이제 표지가 있어야 해요. 그 책의 이름은… 표지 종이 속에 숨겨 뒀었는데, 어두우면 안 보여요.”', 0, { who: 'mori' }); return; }
-    if (has('silk')) { api.say('모리: “제 고치 실이네요! 그대로는 미끄러워서 꿰맬 수 없어요. 옛날 제본사들은 꿀벌이 만든 걸로 실을 문질렀대요.”', 0, { who: 'mori' }); return; }
+    if (f.sewn) { api.say('모리: “책 몸통이 생겼어요! 이제 표지가 있어야 해요. 그 책의 이름은… 표지 종이 속에 숨겨 뒀어요.”', 0, { who: 'mori' }); return; }
+    if (has('silk')) { api.say('모리: “제 고치 실이네요! 그런데 그대로는 꿰맬 수 없을 거예요.”', 0, { who: 'mori' }); return; }
     if (!f.silkTaken) { api.say('모리: “실이 없어요… 저는 원래 고치에서 나왔는데, 제 빈 고치가 어디 있더라.”', 0, { who: 'mori' }); return; }
-    api.say('모리: “접장은 페이지 번호가 없어요. 대신 등에 작은 표시가 있죠.”', 0, { who: 'mori' });
+    api.say('모리: “접장엔 페이지 번호가 없어요.”', 0, { who: 'mori' });
   }
 
   function pressBook(api) {
-    if (!api.has('thandle')) { api.say('책을 넣었는데 나사를 돌릴 손잡이가 없어. 위쪽 네모 구멍에 끼울 긴 손잡이가 필요해.'); return; }
+    if (!api.has('thandle')) { api.say('책을 넣었는데 나사를 돌릴 손잡이가 없어.'); return; }
     api.take('book'); api.take('thandle'); api.set('pressed');
     api.sfx('creak'); api.burst('dust', 430, 470, 18);
     api.say('책을 누르개에 넣고, 쇠 손잡이를 나사 구멍에 끼워 끝까지 돌렸어. 끼익… 꾹! 들떠 있던 표지가 단단하게 붙었어. 모리에게 알려 주자.', 5600);
@@ -178,15 +178,15 @@
       thandle: { name: 'T자 쇠 손잡이', img: 'items/thandle.webp', desc: '굵은 쇠 T자 손잡이. 아래쪽에 네모난 촉이 있어.' },
     },
     combos: [
-      { a: 'silk', b: 'needle', say: '비단실이 너무 미끄러워서 바늘귀에 꿰어도 쏙 빠져 버려. 뭔가로 실을 뻑뻑하게 만들어야 해.' },
+      { a: 'silk', b: 'needle', say: '비단실이 너무 미끄러워서 바늘귀에서 쏙 빠져 버려.' },
       { a: 'waxsilk', b: 'needle', result: 'threaded', say: '밀랍 먹인 실은 바늘귀에 착 걸렸어. 실 꿴 바늘 완성!' },
       { a: 'cover', b: 'goldleaf', result: 'leafcover', say: '표지 종이 한가운데에 금박을 살며시 얹었어.' },
-      { a: 'typeset', b: 'leafcover', say: '차가운 활자로 꾹 눌렀더니 금박이 하나도 안 붙어. 금박은 뜨겁게 눌러야 붙는대.' },
+      { a: 'typeset', b: 'leafcover', say: '활자로 꾹 눌렀는데 금박이 하나도 안 붙어.' },
       { a: 'typeset', b: 'cover', say: '잉크도 금박도 없이 누르니 종이에 자국만 살짝 남아.' },
-      { a: 'hottype', b: 'cover', say: '뜨거운 활자를 그냥 누르면 종이가 눌어붙어 갈색 자국만 남을 거야. 금박을 먼저 얹자.' },
+      { a: 'hottype', b: 'cover', say: '맨 종이에 뜨거운 활자를 누르면 갈색으로 눌어붙기만 할 거야.' },
       { a: 'hottype', b: 'leafcover', result: 'titlecover', say: '달군 활자를 금박 위에 꾹— 떼어 내니 나방 하나와 별 셋이 반짝반짝 찍혔어!' },
-      { a: 'textblock', b: 'cover', say: '이름 없는 표지로 싸면 뒷면 세계가 이 책을 못 알아볼 거야. 모리가 이름은 종이 속에 숨겨 뒀다고 했지.' },
-      { a: 'textblock', b: 'leafcover', say: '금박만 얹고 아직 아무것도 안 찍었어. 제목부터 찍자.' },
+      { a: 'textblock', b: 'cover', say: '이름 없는 표지로 싸면 뒷면 세계가 이 책을 못 알아볼 거야.' },
+      { a: 'textblock', b: 'leafcover', say: '금박만 얹고 아직 아무것도 안 찍었어.' },
       { a: 'textblock', b: 'titlecover', result: 'book', say: '책 몸통 등에 풀을 바르고 표지로 감쌌어. 그런데 표지가 자꾸 들떠.' },
       { a: 'silk', b: 'hook', say: '이미 실은 풀어냈어.' },
     ],
@@ -212,7 +212,7 @@
             id: 'press', x: 0, y: 0, w: 0, h: 0, img: '', hit: [300, 265, 290, 280], label: '책 누르개',
             click: (api) => {
               if (api.flags.pressed) { api.say('새 책이 누르개 속에서 꾹 눌려 있어.'); return; }
-              api.say('무쇠 책 누르개. 나사 꼭대기에 긴 손잡이를 끼우는 네모 구멍만 비어 있어. 가운데 짧은 놋쇠 막대로는 힘이 하나도 안 들어가.', 5600);
+              api.say('무쇠 책 누르개. 나사 꼭대기에 네모난 구멍이 비어 있어.', 5600);
             },
             use: {
               book: (api) => pressBook(api),
@@ -238,7 +238,7 @@
                 api.say('끈을 감아 돌며 한 묶음씩 꿰맸어. 밀랍 먹인 실이 쓱쓱 잘 나가! 책 몸통 완성.', 5000);
               },
               needle: (api) => api.say('실 없는 바늘로는 못 꿰매.'),
-              silk: (api) => api.say('실만으론 꿰맬 수 없어. 바늘이 필요해. 게다가 이 실, 너무 미끄러워.'),
+              silk: (api) => api.say('실만으론 꿰맬 수 없어.'),
               waxsilk: (api) => api.say('실만으론 꿰맬 수 없어. 바늘에 꿰어야지.'),
             },
           },
@@ -294,7 +294,7 @@
           {
             id: 'tableE', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 420, 420, 340], label: '작은 탁자와 촛불',
             click: (api) => api.say('촛불과 솔, 송곳이 놓인 작은 탁자.'),
-            use: { cover: (api) => api.say('촛불에 대면 종이가 그을릴 거야. 더 크고 차가운 빛이 필요해.') },
+            use: { cover: (api) => api.say('촛불에 대면 종이가 그을릴 거야.') },
           },
           {
             id: 'basketE', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1280, 550, 260, 260], label: '두루마리 바구니',
@@ -308,10 +308,10 @@
             id: 'mori', img: (s) => `props/${F(s).moriDone ? 'mori_happy' : F(s).sewn ? 'mori_surprised' : 'mori_worried'}.webp`, x: 900, y: 470, w: 450, h: 320, cls: 'bob', hit: [1010, 480, 230, 310], label: '나방 모리',
             click: moriTalk,
             use: {
-              silk: (api) => api.say('모리: “제 고치 실이에요! 그대로는 미끄러워서 바늘이 쏙 빠져요.”', 0, { who: 'mori' }),
+              silk: (api) => api.say('모리: “제 고치 실이에요!”', 0, { who: 'mori' }),
               book: (api) => api.say('모리: “아직 표지가 들떠 있어요. 책 누르개로 꾹 눌러 주세요.”', 0, { who: 'mori' }),
-              sigs: (api) => api.say('모리: “순서요? 다 쓴 책 등을 보면 알 수 있어요. 제가 만든 가죽 책이 작업대에 있을 거예요.”', 0, { who: 'mori' }),
-              cover: (api) => api.say('모리: “그 종이엔 이름이 숨어 있어요. 밝은 빛에 비춰야 보여요.”', 0, { who: 'mori' }),
+              sigs: (api) => api.say('모리: “순서요? 제가 만든 책은 다 같은 방식으로 묶었는데…”', 0, { who: 'mori' }),
+              cover: (api) => api.say('모리: “그 종이엔 이름이 숨어 있어요.”', 0, { who: 'mori' }),
             },
             wrong: '모리: “그건… 제본에 쓰는 건 아닌 것 같아요.”',
           },
@@ -350,7 +350,7 @@
           },
           { id: 'hedgehog', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1060, 620, 290, 220], label: '고슴도치 바늘꽂이', click: (api) => api.zoom('hedgehog') },
           { id: 'candleS', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1360, 430, 170, 350], label: '촛불', look: '촛농이 흘러내린 굵은 초.' },
-          { id: 'roundWinS', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1090, 20, 370, 370], label: '둥근 창', look: '이쪽 창으론 지붕만 보여. 달은 반대쪽에 있나 봐.' },
+          { id: 'roundWinS', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1090, 20, 370, 370], label: '둥근 창', look: '이쪽 창으론 지붕만 보여.' },
           {
             id: 'thandle', img: 'props/thandle_floor.webp', x: 230, y: 680, w: 140, h: 132, cls: 'under', show: (s) => !F(s).thandleTaken, label: 'T자 쇠 손잡이',
             click: (api, n) => { api.set('thandleTaken'); api.give('thandle', n); api.sfx('clink'); api.say('서랍장 밑 그늘에 굵은 T자 쇠 손잡이가 굴러가 있었어. 아래쪽에 네모난 촉이 달렸네.'); },
@@ -405,9 +405,9 @@
     zooms: {
       spine: {
         bg: 'zoom/spine.webp',
-        note: ['가죽 책의 등', '묶음 여섯 개, 묶음마다 작은 검은 네모 하나. 위 묶음부터 아래로 갈수록 오른쪽으로, 계단처럼 비스듬히.'],
+        note: ['가죽 책의 등', '묶음 여섯 개, 묶음마다 작은 검은 네모 하나.'],
         objects: [
-          { id: 'spineBody', x: 0, y: 0, w: 0, h: 0, img: '', hit: [540, 90, 540, 760], label: '책 등', look: '모리가 만든 책의 등이야. 묶음마다 찍힌 검은 네모가 위에서 아래로 계단처럼 내려가.' },
+          { id: 'spineBody', x: 0, y: 0, w: 0, h: 0, img: '', hit: [540, 90, 540, 760], label: '책 등', look: '모리가 만든 책의 등이야. 묶음마다 검은 네모가 찍혀 있어.' },
           { id: 'waxBowl', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 620, 300, 200], label: '밀랍 그릇', look: '밀랍 부스러기. 실 자국이 나 있어.' },
         ],
       },
@@ -438,7 +438,7 @@
       },
       typecase: {
         bg: 'zoom/type_bg.webp',
-        note: ['활자판', '조판 막대 네 칸에 그림 활자를 놓고 시험 찍기. 활자 면은 거울처럼 좌우가 뒤집혀 보인다.'],
+        note: ['활자판', '조판 막대 네 칸에 그림 활자를 놓고 시험 찍기.'],
         widget: typeWidget,
       },
     },

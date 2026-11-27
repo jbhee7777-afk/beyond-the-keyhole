@@ -37,10 +37,10 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-observ
   await view('north'); await clickObj('부엉이 휘'); await p.waitForTimeout(12400); await shot('03-whi');
 
   // 2. 달 서랍: 왼쪽 반달(틀림) → 오른쪽 반달
-  await view('east'); await clickObj('왼쪽이 빛나는 반달 서랍'); await expect(async () => !(await has('key')), '왼쪽 반달 서랍에서 열쇠가 나옴');
-  await clickObj('오른쪽이 빛나는 반달 서랍'); await expect(async () => !(await has('key')), '틀린 서랍 뒤 잠겼는데 바로 열림'); await shot('04a-jammed');
+  await view('east'); await clickObj('달력 서랍 7'); await expect(async () => !(await has('key')), '왼쪽 반달 서랍에서 열쇠가 나옴');
+  await clickObj('달력 서랍 3'); await expect(async () => !(await has('key')), '틀린 서랍 뒤 잠겼는데 바로 열림'); await shot('04a-jammed');
   await p.evaluate(() => { window.__game.s.flags.calJam = 0; }); // 20초 기다리는 대신
-  await clickObj('오른쪽이 빛나는 반달 서랍'); await expect(async () => await has('key'), '오른쪽 반달 서랍에 열쇠가 없음'); await shot('04-key');
+  await clickObj('달력 서랍 3'); await expect(async () => await has('key'), '오른쪽 반달 서랍에 열쇠가 없음'); await shot('04-key');
 
   // 3. 행성 모형: 열쇠 없이 → 열쇠 → 11바퀴(틀림) → 12바퀴
   await view('south'); await clickObj('태엽 행성 모형'); await expect(async () => !(await zoom()), '열쇠 없이 행성 모형이 열림');
