@@ -473,3 +473,16 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .thermo i { position: absolute; left: 0; width: 45%; height: 4px; background: #3b2a1c; }
 .thermo b { position: absolute; left: 30%; width: 40%; bottom: 4%; background: #c8402f; border-radius: 10px; transition: height 0.6s ease; }
 .brew-empty { font-size: 26px; }
+/* 13장 행성 모형 · 등잔 초점 · 망원경 · 별 단추 */
+.orrery, .focus, .scope, .studs { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.orrery button, .focus button, .scope button, .studs button { pointer-events: auto; position: absolute; }
+.orrery .planet { position: absolute; width: 72px; height: 72px; filter: drop-shadow(4px 6px 0 rgba(0, 0, 0, 0.4)); transition: left 0.5s ease, top 0.5s ease; }
+.focus-spot { position: absolute; border-radius: 50%; background: radial-gradient(circle, #fffbe6 0%, rgba(255, 236, 170, 0.85) 30%, rgba(255, 210, 120, 0.25) 70%, rgba(255, 210, 120, 0) 100%); mix-blend-mode: screen; transition: all 0.35s ease; }
+.focus-lens { position: absolute; opacity: 0.42; filter: drop-shadow(14px 18px 10px rgba(0, 0, 0, 0.45)); transition: all 0.35s ease; }
+.focus-len, .scope-len { position: absolute; left: 0; right: 0; top: 104px; text-align: center; font-size: 34px; letter-spacing: 6px; color: #f3e2b4; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6); }
+.focus-len { left: 450px; }
+.scope-sky { position: absolute; inset: 0; transition: filter 0.4s ease; }
+.scope-sky svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.studs .stud img { opacity: 0.55; filter: saturate(0.4) brightness(0.7); transition: all 0.25s ease; }
+.studs .stud.lit img { opacity: 1; filter: brightness(1.35) drop-shadow(0 0 18px rgba(255, 236, 170, 0.95)); }
+.orrery .plain-btn, .scope .plain-btn { padding: 0 8px; white-space: nowrap; }

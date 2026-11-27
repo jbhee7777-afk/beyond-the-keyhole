@@ -47,7 +47,7 @@
         api.say('한 줄로 서긴 했는데 창 쪽이 아니야. 벽 그림에선 창을 가리키고 있었어.');
       }
     };
-    [['손잡이 한 바퀴 돌리기', 1, 1290], ['손잡이 거꾸로 한 바퀴', -1, 1290]].forEach(([label, d, x], k) => {
+    [['한 바퀴 돌리기', 1, 1290], ['거꾸로 한 바퀴', -1, 1290]].forEach(([label, d, x], k) => {
       const b = document.createElement('button'); b.className = 'plain-btn orrery-btn'; b.textContent = label; b.setAttribute('aria-label', label);
       b.style.cssText = `left:${x}px;top:${330 + k * 100}px;width:230px;height:70px`;
       b.onclick = (e) => { e.stopPropagation(); crank(d); };
@@ -69,10 +69,10 @@
     const spot = document.createElement('div'); spot.className = 'focus-spot';
     const r = 14 + Math.abs(h - F0) * 46;
     spot.style.cssText = `left:${860 - r}px;top:${450 - r}px;width:${r * 2}px;height:${r * 2}px;opacity:${Math.max(0.25, 1 - Math.abs(h - F0) * 0.2)}`;
-    box.appendChild(spot);
     const ls = (lens === 'big' ? 170 : 110) + h * 26;
     lensIm.style.cssText = `left:${860 - ls / 2 + h * 18}px;top:${450 - ls / 2 - h * 14}px;width:${ls}px;height:${ls}px`;
     box.appendChild(lensIm);
+    box.appendChild(spot); // 빛 동그라미가 보이도록 렌즈 위에 그린다
     const lv = document.createElement('div'); lv.className = 'focus-len'; lv.textContent = '렌즈 높이 ' + '■'.repeat(h) + '□'.repeat(6 - h); box.appendChild(lv);
     const btn = (label, d, y) => {
       const b = document.createElement('button'); b.className = 'plain-btn focus-btn'; b.textContent = label; b.setAttribute('aria-label', label);
@@ -318,8 +318,8 @@
       }
       if (!f.lensBigTaken) return { key: 'lensbig', steps: ['받침 서랍이 열렸어요.', '남쪽 행성 모형이에요.', '행성 모형을 눌러 큰 렌즈를 꺼내세요.'] };
       if (!f.magTaken) return { key: 'lenssmall', steps: ['망원경엔 렌즈가 하나 더 필요해요.', '동쪽 책상에 볼록 렌즈가 달린 물건이 있어요.', '동쪽 책상 돋보기를 누르세요.'] };
+      if (!(f.focal_big && f.focal_small) && (has('lensbig') || has('lenssmall'))) return { key: 'focal', steps: ['망원경에 끼우기 전에, 렌즈마다 빛을 한 점에 모으는 거리를 재 봐요.', '동쪽 책상 등잔에 렌즈를 대고 종이 위로 올렸다 내렸다 해 봐요.', '렌즈를 고른 채 동쪽 등잔을 누르고, 빛이 바늘 끝처럼 작아지는 높이를 찾으세요. (큰 렌즈 4칸, 작은 렌즈 1칸)'] };
       if (!f.bigIn || !f.smallIn) return { key: 'lensin', steps: ['렌즈를 망원경에 끼워요.', '북쪽 큰 망원경이에요.', '큰 렌즈와 작은 렌즈를 각각 고른 채 망원경을 누르세요.'] };
-      if (!(f.focal_big && f.focal_small)) return { key: 'focal', steps: ['망원경 통 길이를 맞추려면 각 렌즈가 빛을 모으는 거리를 알아야 해요.', '동쪽 책상 등잔 아래에서 렌즈를 종이 위로 올렸다 내렸다 해 봐요. (끼운 렌즈는 망원경을 눌러 보는 대신, 여기서 먼저 재도 돼요)', '큰 렌즈는 4칸, 작은 렌즈는 1칸에서 빛이 한 점에 모여요.'] };
       return { key: 'tube', steps: ['두 렌즈 사이 거리 = 두 초점 거리의 합이에요.', '4칸 + 1칸.', '망원경을 열고 통 길이를 5칸으로 맞추세요.'] };
     },
 
