@@ -65,15 +65,18 @@
     f.lensH = f.lensH || 3;
     const h = f.lensH, F0 = FOCAL[lens];
     const lensIm = document.createElement('img'); lensIm.className = 'focus-lens'; lensIm.alt = ''; lensIm.src = game.src(`items/${lens === 'big' ? 'lensbig' : 'lenssmall'}.webp`);
-    lensIm.style.cssText = `left:640px;top:${620 - h * 80}px;width:320px;height:120px`;
-    box.appendChild(lensIm);
+    // 위에서 내려다본 책상: 종이 가운데(860,450)에 빛 동그라미. 렌즈는 높이 올라갈수록 눈에 가까워 크게 보인다.
     const spot = document.createElement('div'); spot.className = 'focus-spot';
     const r = 14 + Math.abs(h - F0) * 46;
-    spot.style.cssText = `left:${800 - r}px;top:${720 - r * 0.35}px;width:${r * 2}px;height:${r * 0.7}px;opacity:${Math.max(0.25, 1 - Math.abs(h - F0) * 0.2)}`;
+    spot.style.cssText = `left:${860 - r}px;top:${450 - r}px;width:${r * 2}px;height:${r * 2}px;opacity:${Math.max(0.25, 1 - Math.abs(h - F0) * 0.2)}`;
     box.appendChild(spot);
+    const ls = (lens === 'big' ? 170 : 110) + h * 26;
+    lensIm.style.cssText = `left:${860 - ls / 2 + h * 18}px;top:${450 - ls / 2 - h * 14}px;width:${ls}px;height:${ls}px`;
+    box.appendChild(lensIm);
+    const lv = document.createElement('div'); lv.className = 'focus-len'; lv.textContent = '렌즈 높이 ' + '■'.repeat(h) + '□'.repeat(6 - h); box.appendChild(lv);
     const btn = (label, d, y) => {
       const b = document.createElement('button'); b.className = 'plain-btn focus-btn'; b.textContent = label; b.setAttribute('aria-label', label);
-      b.style.cssText = `left:1180px;top:${y}px;width:300px;height:70px`;
+      b.style.cssText = `left:110px;top:${y + 280}px;width:280px;height:70px`;
       b.onclick = (e) => {
         e.stopPropagation(); if (game.busy) return;
         f.lensH = Math.min(6, Math.max(1, f.lensH + d)); api.sfx('tap'); game.save(); focusWidget(container, api, game);
