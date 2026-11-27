@@ -1,0 +1,72 @@
+{
+  "style_ref": "MAHcBLkA6WY (13장 북쪽) — 3편 화풍 유지",
+  "items": [
+    {
+      "file": "14-01-north.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. A NEW ROOM: the inside of a small cozy shadow-puppet theater, deep plum red velvet curtains, warm candle amber light, cream paper, dark wood. Front view of the little stage: in the center a large blank glowing white cloth screen in a carved wooden frame, softly lit from behind by a candle (only its warm glow shows through the cloth), velvet curtains drawn open on both sides. To the left of the stage a wooden music stand holding one sheet of paper. Two short wooden audience benches in the foreground. The screen must be completely empty. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "14-02-east.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same small paper shadow-puppet theater as 14-01 (deep plum red velvet, warm candle amber, cream paper, dark wood): backstage: a long wooden workbench and above it a wall rack with pegs where four flat paper shadow puppets on thin sticks hang far apart: a rabbit, a bare tree branch, a small bird, a little sailboat. Scissors, a glue pot and paper scraps on the bench. One peg on the rack is empty. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "14-03-south.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same small paper shadow-puppet theater as 14-01 (deep plum red velvet, warm candle amber, cream paper, dark wood): on the left a small wooden ticket booth with a little brass bell on its counter and a small closed drawer under the counter. In the middle of the wall a big performance poster made of four separate picture panels pinned up in a row, each panel a different scene: a big wolf, a sailboat, a deer, a bird. On the right on the floor a sturdy old wooden trunk closed with a brass lock that has four small round dials. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "14-04-west.png",
+      "kind": "배경",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Another wall of the same small paper shadow-puppet theater as 14-01 (deep plum red velvet, warm candle amber, cream paper, dark wood): an exit doorway covered by heavy plum velvet curtains that are closed and tied shut with a thick golden rope and tassel, a small brass lamp beside it, a coat stand with a little cape. The curtained doorway is on the right half of the image. Landscape. Keep important objects away from the top and bottom edges. No people, no animals, no text, no letters, no numbers."
+    },
+    {
+      "file": "14-05-west-open.png",
+      "kind": "배경",
+      "edit_of": "14-04-west.png",
+      "prompt": "Edit this image. Keep everything exactly the same. Change only this: the velvet curtains of the doorway are drawn wide open, the rope hangs loose, and warm golden light pours out from a bright passage beyond. No text."
+    },
+    {
+      "file": "14-06-nuul.png",
+      "kind": "캐릭터",
+      "edit_of": "",
+      "prompt": "",
+      "canva_prompt": "Character sheet, on a plain flat pure white background with nothing else: a small gentle shadow-puppet actor named Nuul, a child-sized figure with a round head, pointy little ears and a short fluttering cape, full body, same art style as the reference (ink line, hatching, watercolor). Three poses side by side with big gaps: (1) as a flat solid dark grey-violet shadow silhouette, sad, drooping, only the eye shapes cut out, (2) the same flat shadow silhouette, surprised, arms up, (3) the same character now with a real colorful body (cream face, plum cape, golden buttons), happy, arms wide, smiling. No text."
+    },
+    {
+      "file": "14-07-props.png",
+      "kind": "소품",
+      "edit_of": "",
+      "prompt": "",
+      "canva_prompt": "Game prop sheet, on a plain flat pure white background with nothing else, objects far apart and not touching, same art style as the reference: flat cut-paper shadow puppets each on a thin wooden stick: a rabbit, a bare tree branch, a small bird, a little sailboat, a small wolf, a deer with antlers; and one square sheet of transparent red cellophane. No text."
+    },
+    {
+      "file": "14-08-script.png",
+      "kind": "확대",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up of a single cream paper sheet on a wooden music stand: four simple BLUE ink line drawings in one row from left to right: a sailboat, a flying bird, a deer with antlers, a big wolf howling. The whole sheet is covered with many thick messy RED crayon scribbles over and between the drawings so the drawings are hard to see. Landscape. No text, no letters, no numbers."
+    },
+    {
+      "file": "14-09-backstage.png",
+      "kind": "확대",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. View from backstage of a shadow-puppet theater: a lit candle in a brass holder in the foreground at the bottom center, a straight wooden floor rail with four evenly spaced notches leading straight back from the candle to a large glowing blank white cloth screen in a wooden frame in the background center. Dark plum velvet around. The screen is completely empty. Landscape. No text, no numbers."
+    },
+    {
+      "file": "14-10-trunk.png",
+      "kind": "확대",
+      "edit_of": "",
+      "prompt": "Same art style as the reference image: detailed hand-drawn storybook illustration, ink line art with slightly wobbly pen strokes, cross-hatching in the shadows, warm watercolor washes on textured paper. Close-up of the front of an old wooden trunk with iron corners and a large brass lock plate that has four EMPTY round windows in a row, a small brass knob under each window. Landscape. No text, no numbers."
+    }
+  ],
+  "canva_media": {},
+  "exported": [],
+  "notes": {
+    "design": "14장 그림자 인형극장. 순서 ORDER=boat,bird,deer,wolf (대본, 빨간 셀로판으로 빨간 낙서 지움). 포스터 네 컷은 섞인 순서(미끼). 트렁크 자물쇠 = 대본 순서 → 늑대 인형. 토끼+나뭇가지=사슴. 무대 뒤: 촛불에 가까울수록 그림자 큼, 늑대만 1칸(막 가득), 나머지는 2~4칸. 대본 빨간 필터 화면은 14-08에서 R 채널로 직접 만든다."
+  }
+}
