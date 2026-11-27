@@ -93,7 +93,8 @@
     "13-07-props.png",
     "13-09-orrery-top.png",
     "13-10-sky.png",
-    "13-11-lampdesk.png"
+    "13-11-lampdesk.png",
+    "13-12-door-panel.png"
   ],
   "notes": {
     "design": "docs/PART3_DESIGN.md 13장. 별자리·문 단추·행성·초점 점은 코드에서 그림 위에 얹는다.",
