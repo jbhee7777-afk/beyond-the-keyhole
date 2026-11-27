@@ -63,11 +63,13 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-teahou
 
   // 5. 차 우리기: 끓는 물만(틀림) → 3:1(맞음)
   await view('north'); await clickObj('찻주전자 쟁반'); await shot('08a-brew');
-  await clickObj('작은 잔 (1잔)'); for (let i = 0; i < 4; i++) await clickObj('화로의 끓는 물');
+  await clickObj('큰 계량 주전자 (3잔)'); await clickObj('화로의 끓는 물');
+  await expect(async () => (await p.evaluate(() => parseFloat(document.querySelector('.thermo b').style.height) || 0)) === 0, '가득 차기 전에 온도가 보임');
+  await clickObj('화로의 끓는 물'); await clickObj('작은 잔 (1잔)'); await clickObj('화로의 끓는 물'); await clickObj('화로의 끓는 물');
   await expect(async () => !(await flags()).brewed, '끓는 물만으로 차가 됨'); await shot('08b-too-hot');
   await clickObj('찻주전자 비우기');
-  await clickObj('큰 계량 주전자 (3잔)'); await clickObj('화로의 끓는 물');
-  await clickObj('작은 잔 (1잔)'); await clickObj('국자의 찬물'); await p.waitForTimeout(1300); await shot('08c-brewed');
+  await clickObj('큰 계량 주전자 (3잔)'); await clickObj('화로의 끓는 물'); await clickObj('화로의 끓는 물');
+  await clickObj('작은 잔 (1잔)'); await clickObj('국자의 찬물'); await clickObj('국자의 찬물'); await p.waitForTimeout(1300); await shot('08c-brewed');
   await expect(async () => await has('tea'), '차를 못 우림');
 
   // 6. 달래에게 차 → 찻잎 점
@@ -75,11 +77,15 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-teahou
 
   // 7. 물고기 서랍
   await view('west'); await clickObj('새 서랍'); await expect(async () => !(await has('spring')), '새 서랍에서 샘물이 나옴');
+  await clickObj('물고기 서랍'); await expect(async () => !(await has('spring')), '틀린 서랍 뒤 잠겼는데 바로 열림');
+  await p.evaluate(() => { window.__game.s.flags.drawerJam = 0; }); // 20초 기다리는 대신
   await clickObj('물고기 서랍'); await shot('10-spring');
 
   // 8. 지도: 호수(틀림) → 산(맞음)
   await view('south'); await sel('spring'); await clickObj('지도의 호수'); await expect(async () => !(await flags()).flowed, '호수에 떨어뜨렸는데 물이 흐름');
   await p.evaluate(() => window.__game.openHint()); await shot('11-hint'); await p.keyboard.press('Escape');
+  await sel('spring'); await clickObj('지도의 산'); await expect(async () => !(await flags()).flowed, '빈 병인데 물이 흐름');
+  await p.evaluate(() => { window.__game.s.flags.springDry = 0; }); // 샘물이 다시 고일 때까지 기다리는 대신
   await sel('spring'); await clickObj('지도의 산'); await p.waitForTimeout(800); await shot('12-flow');
 
   // 9. 둥근 문

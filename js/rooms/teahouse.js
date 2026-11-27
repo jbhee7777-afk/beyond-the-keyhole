@@ -3,7 +3,9 @@
  *  1 주전자: 화로 위 구리 주전자가 비어 있다 → 동쪽 물항아리에서 국자로 찬물을 떠 와 붓기 → 끓는다
  *  2 김 서린 창: 끓는 김이 바로 뒤 차가운 유리창에 서리면, 손가락으로 그렸던 새 네 마리만 또렷이 떠오른다
  *  3 물잔 실로폰: 새 높이 = 음 높이. 하지만 물이 많을수록 소리가 낮다 → 높이를 뒤집어 물을 붓는다 → 찻장이 열림
- *  4 찻잎 통 라벨: 온도계 다섯 눈금 중 넷째(80도). 끓는 물(100) 큰 주전자 3잔 + 찬물(20) 작은 잔 1잔 = 80
+ *  4 찻잎 통 라벨: 온도계 다섯 눈금 중 넷째(80도). 찻주전자는 8잔 들이. 끓는 물(100) 6잔 + 찬물(20) 2잔 = 80
+ *     온도는 찻주전자가 가득 찼을 때만 잰다(붓는 중에 눈금을 보며 맞추는 걸 막음). 국자 찬물은 한 번에 3잔뿐, 비우면 다시 떠 와야 한다
+ *  (서랍·지도는 틀리면 잠깐 잠기거나 샘물이 다시 고일 때까지 기다려야 한다 — 아무거나 눌러 보는 걸 막음)
  *  5 달래가 차를 마시고 남긴 찻잎 모양 = 물고기 → 서쪽 그림 서랍 중 물고기 → 샘물 병
  *  6 물얼룩 지도: 물은 높은 데서 낮은 데로. 산꼭대기에 샘물을 떨어뜨려야 물길이 문까지 이어진다 → 둥근 문이 열림
  * 좌표(hit)는 그림을 받은 뒤 맞춘다 (art-src/teahouse, ORDER-12.json).
@@ -14,7 +16,9 @@
   const WATER = BIRDS.map((b) => 5 - b); // 정답 물 높이: 높은 음일수록 물이 적다 → [2, 3, 1, 4]
   const DRAWERS = ['fish', 'bird', 'leaf', 'moon', 'sun', 'flower', 'shell', 'cloud', 'cat', 'teapot', 'star', 'boat'];
   const DNAME = { fish: '물고기', bird: '새', leaf: '잎', moon: '달', sun: '해', flower: '꽃', shell: '조개', cloud: '구름', cat: '고양이', teapot: '찻주전자', star: '별', boat: '배' };
-  const HOT = 100, COLD = 20, POT = 4;
+  const HOT = 100, COLD = 20, POT = 8, LADLE = 3;
+  const JAM_MS = 20000, DRY_MS = 20000;
+  const secLeft = (t) => Math.ceil(((t || 0) - Date.now()) / 1000);
   // 남쪽 탁자 물얼룩 지도의 자리 (그림 좌표)
   const MAP = [['mountain', '산', [690, 345, 125, 70]], ['tree', '나무', [490, 505, 95, 90]], ['rock', '바위', [638, 538, 85, 60]], ['lake', '호수', [825, 512, 170, 90]], ['mdoor', '작은 문', [712, 602, 120, 75]]];
   const same = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
@@ -67,7 +71,7 @@
     box.appendChild(tap);
   }
 
-  /* ── 차 우리기: 찻주전자는 4잔 들이. 큰 주전자(3잔)·작은 잔(1잔)으로 끓는 물·찬물을 붓는다 ── */
+  /* ── 차 우리기: 찻주전자는 8잔 들이. 큰 주전자(3잔)·작은 잔(1잔)으로 끓는 물·찬물을 붓는다. 가득 차야 온도를 잰다 ── */
   function brewWidget(container, api, game) {
     const f = api.flags;
     let box = container.querySelector('.brew');
@@ -88,16 +92,19 @@
     btn('piece brew-tool' + (f.tool === 'cup' ? ' on' : ''), 'left:180px;top:450px;width:160px;height:160px', '작은 잔 (1잔)', () => { f.tool = 'cup'; game.save(); brewWidget(container, api, game); }, 'items/cup_big.webp');
     const pour = (t, name) => {
       const n = f.tool === 'jug' ? 3 : 1;
+      if (t === COLD && (f.coldLeft || 0) < n) { api.say(`국자에 남은 찬물은 ${f.coldLeft || 0}잔뿐이야. ${n}잔을 뜰 수 없어.`); return; }
       if (amount + n > POT) { api.say(`${f.tool === 'jug' ? '큰 주전자' : '작은 잔'}로 ${name}을 부으면 찻주전자가 넘쳐. 찻주전자는 네 잔 들이야.`); return; }
-      f.pot.push({ n, t }); api.sfx('water'); game.save(); brewWidget(container, api, game);
+      f.pot.push({ n, t }); api.sfx('water');
+      if (t === COLD) { f.coldLeft -= n; if (f.coldLeft <= 0) { api.take('ladle'); api.say('국자의 찬물을 다 썼어. 더 필요하면 동쪽 항아리에서 다시 떠 와야 해.'); } }
+      game.save(); brewWidget(container, api, game);
       const amt = amount + n;
       if (amt === POT) {
         const tt = Math.round((f.pot.reduce((a, p) => a + p.n * p.t, 0)) / POT);
         if (tt === 80) {
           f.brewed = true; game.busy = true; game.save();
           game.after(900, () => { game.busy = false; api.give('tea'); api.sfx('shine'); api.say('온도계 빨간 줄이 넷째 눈금에 딱! 찻잎이 활짝 피어나며 초록빛 차가 우러났어. 한 잔 따랐어.', 5600); game.s.zoom = null; game.save(); game.render(); });
-        } else if (tt > 80) api.say('김이 펄펄. 너무 뜨거워서 찻잎이 타 버리겠어. 맛이 쓸 거야.');
-        else api.say('미지근해서 찻잎이 안 풀려. 맹맹한 맛일 거야.');
+        } else if (tt > 80) api.say('찻주전자가 가득 찼어. 온도계를 꽂아 보니… 넷째 눈금보다 위야. 너무 뜨거워서 찻잎이 타 버리겠어. 비우고 다시 해야 해.', 5200);
+        else api.say('찻주전자가 가득 찼어. 온도계를 꽂아 보니… 넷째 눈금보다 아래야. 미지근해서 찻잎이 안 풀려. 비우고 다시 해야 해.', 5200);
       }
     };
     btn('piece brew-src', 'left:1180px;top:170px;width:260px;height:260px', '화로의 끓는 물', () => pour(HOT, '끓는 물'), 'items/kettle_big.webp');
@@ -109,7 +116,8 @@
     box.appendChild(pot);
     const th = document.createElement('div'); th.className = 'thermo'; th.style.cssText = 'left:990px;top:180px;width:70px;height:480px'; th.setAttribute('aria-label', '온도계');
     for (let k = 1; k <= 5; k++) { const tick = document.createElement('i'); tick.style.bottom = (k * 16) + '%'; th.appendChild(tick); }
-    const fill = document.createElement('b'); fill.style.height = amount ? (temp / 100) * 80 + '%' : '0'; th.appendChild(fill);
+    const fill = document.createElement('b'); fill.style.height = amount === POT ? (temp / 100) * 80 + '%' : '0'; th.appendChild(fill); // 가득 찼을 때만 잰다
+    th.onclick = (e) => { e.stopPropagation(); api.say(amount === POT ? '찻주전자 물에 꽂은 온도계야.' : '온도계는 찻주전자가 가득 차야 꽂을 수 있어. 끓는 물에 대 보면 맨 위 눈금, 항아리 찬물은 맨 아래 눈금이었어.'); };
     box.appendChild(th);
     btn('plain-btn brew-empty', 'left:560px;top:690px;width:340px;height:64px', '찻주전자 비우기', () => { f.pot = []; api.sfx('splash'); game.save(); brewWidget(container, api, game); });
   }
@@ -147,6 +155,7 @@
       const f = s.flags;
       if (f.brewed && !f.served && !s.inv.includes('tea')) fix.give('tea');
       if (f.flowed && !f.doorOpen) f.doorOpen = true;
+      if (s.inv.includes('ladle') && f.coldLeft === undefined) f.coldLeft = LADLE; // 예전 저장: 국자 찬물 양
     },
 
     items: {
@@ -220,8 +229,8 @@
           {
             id: 'jar', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1160, 460, 320, 340], label: '물항아리',
             click: (api, n) => {
-              if (api.has('ladle')) { api.say('국자엔 이미 찬물이 가득해.'); return; }
-              api.give('ladle', n); api.sfx('water'); api.say('걸려 있던 국자로 찬물을 한가득 떴어. 얼음처럼 차가워.');
+              if (api.has('ladle') && api.flags.coldLeft >= LADLE) { api.say('국자엔 이미 찬물이 가득해.'); return; }
+              api.flags.coldLeft = LADLE; if (!api.has('ladle')) api.give('ladle', n); api.sfx('water'); api.say('걸려 있던 국자로 찬물을 한가득 떴어. 작은 잔으로 세 잔쯤. 얼음처럼 차가워.');
             },
           },
         ],
@@ -240,7 +249,8 @@
               spring: (api) => {
                 const f = api.flags;
                 if (f.flowed) { api.say('물은 이미 문까지 흘러.'); return; }
-                if (id !== 'mountain') { api.sfx('splash'); api.say(`${name}에 한 방울 떨어뜨렸어. 물이 아래쪽으로만 조금 번지다 멈췄어. 위쪽 물길은 바싹 마른 그대로야.`); return; }
+                if (secLeft(f.springDry) > 0) { api.say(`샘물 병이 비었어. 병 바닥에서 샘물이 조금씩 다시 솟고 있어… ${secLeft(f.springDry)}초쯤 기다려야 해.`); return; }
+                if (id !== 'mountain') { f.springDry = Date.now() + DRY_MS; api.sfx('splash'); api.say(`${name}에 샘물을 똑 떨어뜨렸어. 물이 아래쪽으로만 조금 번지다 스며들어 사라졌어. 위쪽 물길은 바싹 마른 그대로야. 병이 비었어…`, 5600); return; }
                 api.take('spring'); api.set('flowed'); api.set('doorOpen'); api.sfx('water'); api.burst('bubble', 750, 380, 30);
                 api.say('산꼭대기에 샘물을 똑. 물이 마른 물길을 따라 아래로아래로 흘러 호수를 채우고, 작은 문까지 닿았어! 서쪽에서 물소리가 들려.', 6200);
               },
@@ -269,8 +279,14 @@
           ...DRAWERS.map((d, i) => ({
             id: 'drawer_' + d, x: 0, y: 0, w: 0, h: 0, img: '', hit: [191 + (i % 4) * 140, 354 + Math.floor(i / 4) * 117, 126, 104], label: `${DNAME[d]} 서랍`,
             click: (api, n) => {
-              if (d !== 'fish') { api.say(`${DNAME[d]} 그림 서랍. 말린 찻잎만 가득해.`); return; }
-              if (api.flags.springTaken) { api.say('물고기 서랍. 이제 비었어.'); return; }
+              const f = api.flags;
+              if (f.springTaken) { api.say(d === 'fish' ? '물고기 서랍. 이제 비었어.' : `${DNAME[d]} 그림 서랍. 말린 찻잎만 가득해.`); return; }
+              if (secLeft(f.drawerJam) > 0) { api.sfx('locked'); api.say(`서랍장이 꽉 잠겼어. ${secLeft(f.drawerJam)}초쯤 지나야 풀릴 것 같아.`); return; }
+              if (d !== 'fish') {
+                f.drawerJam = Date.now() + JAM_MS; api.sfx('locked');
+                api.say(`${DNAME[d]} 그림 서랍을 당기자 말린 찻잎이 와르르… 철컥! 서랍장 전체가 잠겨 버렸어. 아무 서랍이나 열면 안 되나 봐.`, 5200);
+                return;
+              }
               api.set('springTaken'); api.give('spring', n); api.sfx('unlock');
               api.say('물고기 그림 서랍 안에 작은 병이 누워 있었어. 반짝이는 샘물이 찰랑찰랑!');
             },
@@ -283,7 +299,7 @@
     zooms: {
       glasses: { bg: 'zoom/glass_bg.webp', note: ['물잔 네 개', '잔을 누르면 물이 한 칸씩 늘어난다. 두드리면 소리가 난다.'], widget: glassWidget },
       tinlabel: { bg: 'zoom/tinlabel.webp', note: ['찻잎 통 라벨', '찻잎 그림 옆에 온도계. 다섯 눈금 중 아래에서 넷째까지 빨간 줄.'] },
-      brew: { bg: 'zoom/brew_bg.webp', note: ['차 우리기', '찻주전자는 네 잔 들이. 큰 계량 주전자는 세 잔, 작은 잔은 한 잔.'], widget: brewWidget },
+      brew: { bg: 'zoom/brew_bg.webp', note: ['차 우리기', '찻주전자는 여덟 잔 들이. 큰 계량 주전자는 세 잔, 작은 잔은 한 잔. 온도계는 가득 찼을 때만 꽂을 수 있다. 국자 찬물은 세 잔뿐.'], widget: brewWidget },
       leaves: { bg: 'zoom/leaves.webp', note: ['찻잔 바닥의 찻잎', '젖은 찻잎이 물고기 모양으로 붙어 있다.'] },
     },
 
@@ -304,7 +320,7 @@
       if (!f.tinTaken) return { key: 'tin', steps: ['찻장이 열렸어요.', '동쪽 찻장 안을 보세요.', '동쪽 유리문 찻장을 누르세요.'] };
       if (!f.toolsTaken) return { key: 'tools', steps: ['찻장에 계량 도구가 더 있어요.', '동쪽 찻장이에요.', '동쪽 찻장을 한 번 더 누르세요.'] };
       if (!has('ladle')) return { key: 'cold', steps: ['차 온도를 맞추려면 찬물도 있어야 해요.', '동쪽 물항아리예요.', '동쪽 물항아리를 눌러 찬물을 뜨세요.'] };
-      return { key: 'brew', steps: ['찻잎 통 라벨의 온도계를 보세요. 다섯 눈금 중 넷째, 80도예요. 북쪽 찻주전자 쟁반에서 우려요.', '끓는 물은 100도, 찬물은 20도. 찻주전자는 네 잔 들이예요.', '큰 계량 주전자로 끓는 물 3잔, 작은 잔으로 찬물 1잔을 부으세요.'] };
+      return { key: 'brew', steps: ['찻잎 통 라벨의 온도계를 보세요. 다섯 눈금(20·40·60·80·100도) 중 넷째, 80도예요. 북쪽 찻주전자 쟁반에서 우려요.', '끓는 물은 100도, 찬물은 20도. 찻주전자는 8잔 들이예요. 끓는 물이 찬물보다 몇 배 많아야 80도가 될까요?', '끓는 물 6잔(큰 주전자 두 번) + 찬물 2잔(작은 잔 두 번)을 부으세요.'] };
     },
 
     ending: {

@@ -38,14 +38,23 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-observ
 
   // 2. 달 서랍: 왼쪽 반달(틀림) → 오른쪽 반달
   await view('east'); await clickObj('왼쪽이 빛나는 반달 서랍'); await expect(async () => !(await has('key')), '왼쪽 반달 서랍에서 열쇠가 나옴');
+  await clickObj('오른쪽이 빛나는 반달 서랍'); await expect(async () => !(await has('key')), '틀린 서랍 뒤 잠겼는데 바로 열림'); await shot('04a-jammed');
+  await p.evaluate(() => { window.__game.s.flags.calJam = 0; }); // 20초 기다리는 대신
   await clickObj('오른쪽이 빛나는 반달 서랍'); await expect(async () => await has('key'), '오른쪽 반달 서랍에 열쇠가 없음'); await shot('04-key');
 
   // 3. 행성 모형: 열쇠 없이 → 열쇠 → 11바퀴(틀림) → 12바퀴
   await view('south'); await clickObj('태엽 행성 모형'); await expect(async () => !(await zoom()), '열쇠 없이 행성 모형이 열림');
   await sel('key'); await clickObj('태엽 행성 모형'); await shot('05a-orrery');
-  for (let i = 0; i < 11; i++) { await p.click('[aria-label="한 바퀴 돌리기"]'); await p.waitForTimeout(150); }
+  const setTurns = async (n) => { // +10·+1 버튼으로 n바퀴 맞추기
+    await p.evaluate(() => { window.__game.s.flags.turnsSet = 1; window.__game.render(); }); await p.waitForTimeout(200);
+    for (let k = 0; k < Math.floor((n - 1) / 10); k++) await p.click('[aria-label="감을 바퀴 수 +10"]');
+    for (let k = 0; k < (n - 1) % 10; k++) await p.click('[aria-label="감을 바퀴 수 +1"]');
+    await p.waitForTimeout(200);
+  };
+  await setTurns(11); await shot('05b-orrery-set11'); await p.click('[aria-label="태엽 풀기"]'); await p.waitForTimeout(4600);
   await expect(async () => !(await flags()).aligned, '11바퀴에 정렬됨'); await shot('05b-orrery-11');
-  await p.click('[aria-label="한 바퀴 돌리기"]'); await p.waitForTimeout(1500); await shot('05c-aligned');
+  await p.waitForTimeout(1200);
+  await setTurns(12); await p.click('[aria-label="태엽 풀기"]'); await p.waitForTimeout(3800); await shot('05c-aligned');
   await expect(async () => (await flags()).aligned, '12바퀴에 정렬 안 됨');
   if (await zoom()) await back();
   await clickObj('태엽 행성 모형'); await expect(async () => await has('lensbig'), '큰 렌즈를 못 얻음');
@@ -55,18 +64,20 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-observ
 
   // 5. 초점 재기
   await sel('lensbig'); await clickObj('책상 등잔'); await shot('06a-focus-big');
-  for (let i = 0; i < 2; i++) await clickObj('렌즈 올리기');
-  await shot('06b-focus-big-4'); await expect(async () => (await flags()).focal_big, '큰 렌즈 초점(4칸)을 못 찾음'); await back();
+  for (let i = 0; i < 7; i++) await clickObj('렌즈 높이 (자 눈금) +1');
+  await shot('06b-focus-big-9'); await expect(async () => (await flags()).focal_big, '큰 렌즈 초점(9칸)을 못 찾음'); await back();
   await sel('lenssmall'); await clickObj('책상 등잔');
-  for (let i = 0; i < 2; i++) await clickObj('렌즈 내리기');
-  await shot('06c-focus-small-1'); await expect(async () => (await flags()).focal_small, '작은 렌즈 초점(1칸)을 못 찾음'); await back();
+  for (let i = 0; i < 5; i++) await clickObj('렌즈 높이 (자 눈금) −1');
+  await shot('06c-focus-small-3'); await expect(async () => (await flags()).focal_small, '작은 렌즈 초점(3칸)을 못 찾음'); await back();
 
   // 6. 망원경: 렌즈 하나만 → 둘 → 통 길이 5칸
   await view('north'); await sel('lensbig'); await clickObj('큰 망원경'); await clickObj('큰 망원경');
   await expect(async () => !(await zoom()), '렌즈 하나로 망원경이 열림');
   await sel('lenssmall'); await clickObj('큰 망원경'); await clickObj('큰 망원경'); await shot('07a-scope-blur');
-  for (let i = 0; i < 3; i++) await clickObj('통 늘이기');
-  await shot('07b-scope-sharp'); await expect(async () => (await flags()).focused, '통 5칸인데 또렷하지 않음'); await back();
+  for (let i = 0; i < 5; i++) await clickObj('통 길이 (칸) +1');
+  await clickObj('들여다보기'); await expect(async () => !(await flags()).focused, '통 11칸인데 또렷함'); await p.waitForTimeout(3200);
+  await clickObj('통 길이 (칸) +1'); await clickObj('들여다보기');
+  await shot('07b-scope-sharp'); await expect(async () => (await flags()).focused, '통 12칸인데 또렷하지 않음'); await back();
   await p.evaluate(() => window.__game.openHint()); await shot('08-hint'); await p.keyboard.press('Escape');
 
   // 7. 남색 문: 틀린 단추 → 모두 끄기 → 별자리 일곱 개
