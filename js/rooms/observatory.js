@@ -312,6 +312,8 @@
         bg: 'bg/south.webp',
         objects: [
           { id: 'openOrrery', img: 'props/open_orrerydrawer.webp', x: 625, y: 595, w: 270, h: 155, show: (s) => !!F(s).aligned },
+          { id: 'lensDrawer', img: 'props/lens_drawer.webp', x: 712, y: 610, w: 112, h: 50, show: (s) => !!F(s).aligned && !F(s).lensBigTaken },
+          { id: 'keyIn', img: 'props/key_in.webp', x: 860, y: 592, w: 80, h: 80, show: (s) => !!F(s).keyIn },
           { id: 'drawing', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1105, 165, 440, 320], label: '벽에 걸린 그림', look: '행성 모형을 그린 그림이야.' },
           {
             id: 'orrery', x: 0, y: 0, w: 0, h: 0, img: '', hit: [430, 240, 660, 450], label: '태엽 행성 모형',

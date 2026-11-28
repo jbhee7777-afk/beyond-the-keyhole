@@ -197,6 +197,7 @@
         name: '제본 작업대',
         bg: (s) => (F(s).pressed ? 'bg/north_done.webp' : 'bg/north.webp'),
         objects: [
+          { id: 'frameSigs', img: 'props/frame_sigs.webp', x: 673, y: 432, w: 150, h: 80, show: (s) => !!F(s).sigsOn && !F(s).sewn },
           { id: 'racks', x: 0, y: 0, w: 0, h: 0, img: '', hit: [490, 60, 610, 250], label: '도구 선반', look: '뼈 접칼, 송곳, 풀 붓이 가지런해. 실이나 바늘은 하나도 없어.' },
           { id: 'roundWinN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1130, 30, 330, 340], label: '둥근 창', look: '둥근 창 너머로 지붕들이 보여. 이쪽엔 달이 없어.' },
           { id: 'candleN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1240, 360, 100, 180], label: '촛불', look: '작은 촛불이 일렁여. 촛농이 받침에 고여 있어.' },

@@ -235,6 +235,7 @@
         name: '긴 포스터',
         bg: 'bg/north.webp',
         objects: [
+          { id: 'roomPoster', img: 'props/room_poster.webp', x: 270, y: 294, w: 1066, h: 246 },
           { id: 'poster', x: 0, y: 0, w: 0, h: 0, img: '', hit: [270, 285, 1070, 260], label: '긴 포스터', click: (api) => api.zoom('poster') },
           { id: 'stage', x: 0, y: 0, w: 0, h: 0, img: '', hit: [300, 620, 1000, 120], label: '낮은 무대', look: '종이로 접은 낮은 무대. 비어 있어.', show: (s) => !F(s).doorOpen },
           { id: 'mori', img: 'assets/rooms/bindery/props/mori_happy.webp', x: 290, y: 470, w: 300, h: 213, cls: 'bob', show: (s) => !!F(s).doorOpen },
@@ -253,6 +254,8 @@
         name: '지도 탁자',
         bg: 'bg/east.webp',
         objects: [
+          { id: 'roomMap', img: (s) => (F(s).mapFolded ? 'props/room_map_folded.webp' : 'props/room_map.webp'), x: 426, y: 503, w: 850, h: 187 },
+          { id: 'shelfSheet', img: 'props/room_shelf_sheet.webp', x: 1352, y: 142, w: 116, h: 116, show: (s) => !F(s).mapFolded },
           { id: 'map', x: 0, y: 0, w: 0, h: 0, img: '', hit: [380, 495, 900, 200], label: '탁자 위 지도', click: (api) => api.zoom('map') },
           { id: 'shelf', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1250, 225, 260, 100], label: '높은 선반', click: (api) => api.say(api.flags.mapFolded ? '선반이 비었어.' : '방 건너편 높은 선반에 종이 한 장이 얹혀 있어. 너무 멀고 높아서 닿지 않아.') },
           { id: 'window', x: 0, y: 0, w: 0, h: 0, img: '', hit: [80, 150, 260, 320], label: '종이 창', look: '창밖이 새벽빛으로 물들어.' },
@@ -264,6 +267,7 @@
         name: '책상',
         bg: 'bg/south.webp',
         objects: [
+          { id: 'easelSheet', img: 'props/room_easel.webp', x: 894, y: 392, w: 96, h: 96, show: (s) => !!F(s).sheetOn },
           {
             id: 'easel', x: 0, y: 0, w: 0, h: 0, img: '', hit: [860, 330, 200, 250], label: '작은 이젤',
             click: (api) => (api.flags.sheetOn ? api.zoom('sheet') : api.say('빈 이젤이야.')),
