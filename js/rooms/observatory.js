@@ -61,9 +61,9 @@
     };
     draw(f.aligned ? 12 : 0);
     if (f.aligned) return;
-    stepper(box, game, { x: 1080, y: 80, label: '감을 바퀴 수', value: f.turnsSet, min: 1, max: TURN_MAX, big: 10, onChange: (v) => { f.turnsSet = v; api.sfx('tap'); game.save(); orreryWidget(container, api, game); } });
+    stepper(box, game, { x: 1080, y: 70, label: '감을 바퀴 수', value: f.turnsSet, min: 1, max: TURN_MAX, big: 10, onChange: (v) => { f.turnsSet = v; api.sfx('tap'); game.save(); orreryWidget(container, api, game); } });
     const go = document.createElement('button'); go.className = 'plain-btn orrery-go'; go.textContent = '태엽 풀기'; go.setAttribute('aria-label', '태엽 풀기');
-    go.style.cssText = 'left:1200px;top:720px;width:240px;height:76px';
+    go.style.cssText = 'left:1140px;top:215px;width:260px;height:72px';
     go.onclick = (e) => {
       e.stopPropagation(); if (game.busy) return;
       const n = f.turnsSet; game.busy = true; api.sfx('dial');
