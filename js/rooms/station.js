@@ -153,6 +153,8 @@
         name: '역 밖',
         bg: (s) => (F(s).dug ? 'bg/west_dug.webp' : F(s).shovelTaken ? 'bg/west_noshovel.webp' : 'bg/west.webp'),
         objects: [
+          { id: 'leverThawed', img: 'props/lever_thawed.webp', x: 625, y: 340, w: 270, h: 355, show: (s) => !!F(s).thawed && !F(s).dug },
+          { id: 'leverThawedDug', img: 'props/lever_thawed.webp', x: 605, y: 334, w: 270, h: 355, show: (s) => !!F(s).thawed && !!F(s).dug },
           {
             id: 'pile', x: 0, y: 0, w: 0, h: 0, img: '', hit: [20, 330, 380, 470], label: '눈 더미',
             click: (api, n) => {
