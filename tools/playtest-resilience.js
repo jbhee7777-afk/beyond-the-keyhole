@@ -29,6 +29,8 @@ const CASES = [
   { room: 'observatory', flags: { talked: true, focused: true, lit: [1, 2, 5, 6, 7, 9, 10], doorOpen: true }, inv: [], expectFlags: ['doorOpen'] },
   { room: 'shadow', flags: { talked: true, redLook: true, trunkOpen: true }, inv: [], expectInv: ['wolf'] },
   { room: 'shadow', flags: { talked: true, performed: true }, inv: [], expectFlags: ['doorOpen'] },
+  { room: 'foldhouse', flags: { talked: true, foldin: true, mapFolded: true }, inv: [], expectInv: ['sheet'] },
+  { room: 'foldhouse', flags: { talked: true, foldin: true, mapFolded: true, sheetOn: true, doorOpen: true }, inv: [], expectFlags: ['doorOpen'] },
 ];
 
 (async () => {

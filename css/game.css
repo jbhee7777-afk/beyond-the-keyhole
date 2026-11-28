@@ -506,3 +506,25 @@ button:focus-visible, .clickable:focus-visible { outline: 3px dashed var(--brass
 .stage-puppet { position: absolute; pointer-events: none; filter: drop-shadow(4px 6px 0 rgba(0, 0, 0, 0.4)); transition: all 0.3s ease; }
 .stage-pick.on img { filter: brightness(1.15) drop-shadow(0 0 14px rgba(255, 220, 150, 0.9)); transform: translateY(-8px); }
 .stage-scene { position: absolute; left: 1220px; top: 700px; width: 280px; text-align: center; font-size: 34px; letter-spacing: 10px; color: #f3e2b4; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6); }
+/* 15장 접히는 집 */
+.poster-w, .map-w, .sheet-w, .door-w { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+.poster-w button, .map-w button, .sheet-w button, .door-w button { pointer-events: auto; position: absolute; }
+.poster-art { position: absolute; }
+.poster-art svg { position: absolute; inset: 0; }
+.poster-art img { position: absolute; mix-blend-mode: multiply; }
+.poster-line { border: 0; background: none; cursor: var(--cursor); }
+.poster-line::after { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 3px dashed rgba(90, 60, 40, 0.55); }
+.poster-line.on::after { border-left-color: #a8321e; border-left-width: 5px; }
+.poster-folded { position: absolute; box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45); }
+.poster-part { position: absolute; top: 0; overflow: hidden; }
+.poster-crease { position: absolute; top: 0; bottom: 0; width: 4px; background: linear-gradient(90deg, rgba(60, 40, 20, 0.35), rgba(255, 245, 220, 0.4)); }
+.map-w svg { position: absolute; inset: 0; }
+.map-mark, .map-ghost { position: absolute; mix-blend-mode: multiply; pointer-events: none; }
+.map-ghost { opacity: 0.42; filter: sepia(1) hue-rotate(-20deg) saturate(2); }
+.map-handle { border-radius: 50%; border: 3px solid #5a4030; background: #f3e6c4; color: #3b2a1c; font-size: 28px; font-family: var(--f-title); cursor: var(--cursor); box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3); }
+.map-handle.on { background: #a8321e; color: #fff3df; }
+.sheet-paper { position: absolute; }
+.sheet-paper img { position: absolute; mix-blend-mode: multiply; }
+.sheet-paper.back { background: rgba(120, 90, 50, 0.08); }
+.door-tile { border-radius: 14px; background: #efe2c2 !important; box-shadow: inset 0 0 0 4px #b08a4a, 0 6px 0 rgba(0, 0, 0, 0.3); }
+.door-tile img { width: 84%; height: 84%; margin: 8%; }
