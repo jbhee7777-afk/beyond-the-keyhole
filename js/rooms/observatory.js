@@ -259,6 +259,7 @@
       /* ───── 동쪽: 창밖 반달, 달 모양 달력, 책상 등잔과 돋보기 ───── */
       east: {
         name: '달 달력',
+        navY: 250, // 오른쪽 화살표가 책상 돋보기를 가리지 않게 위로
         bg: 'bg/east.webp',
         objects: [
           { id: 'openMoon', img: 'props/open_moondrawer.webp', x: 432, y: 590, w: 133, h: 140, show: (s) => !!F(s).keyTaken },
@@ -280,7 +281,7 @@
             },
           })),
           {
-            id: 'magnifier', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1290, 496, 186, 124], label: '책상 돋보기', show: (s) => !F(s).magTaken,
+            id: 'magnifier', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1360, 380, 116, 240], label: '책상 돋보기', show: (s) => !F(s).magTaken,
             click: (api, n) => { api.set('magTaken'); api.give('lenssmall', n); api.sfx('pick'); api.say('돋보기 틀에서 작은 볼록 렌즈를 빼냈어.'); },
           },
           {

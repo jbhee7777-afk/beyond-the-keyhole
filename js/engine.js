@@ -286,6 +286,9 @@
         if (this.pendingTip) { const [k, x] = this.pendingTip; this.pendingTip = null; this.tip(k, x); }
       }
       this.navL.hidden = this.navR.hidden = !!s.zoom;
+      // views[벽].navY: 그 벽에서만 좌우 화살표 높이를 옮긴다 (그림 속 물건이 화살표 자리에 있을 때)
+      const vy = room.views[s.view] && room.views[s.view].navY;
+      this.navL.style.top = this.navR.style.top = vy != null ? vy + 'px' : '';
       this.navB.hidden = !s.zoom;
       this.stage.classList.toggle('zooming', !!s.zoom);
       this.renderCompass();
