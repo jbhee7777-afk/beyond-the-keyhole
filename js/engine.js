@@ -53,6 +53,7 @@
       this.lastAction = Date.now();
       this.build();
       this.render(true);
+      this.preload();
       if (!saved && room.intro) this.after(500, () => this.say(room.intro, 7000));
       this.after(saved ? 600 : 7800, () => this.tip('move', '화살표를 누르면 다른 벽을 볼 수 있어. 위쪽 나침반이 지금 보고 있는 쪽을 알려 줘.'));
       this.idleTimer = setInterval(() => { if (Date.now() - this.lastAction > 60000) { this.lastAction = Date.now(); this.tip('stuck', '막혔다면 왼쪽 위 돋보기로 둘러보거나, 달팽이 껍데기를 눌러 힌트를 받아 봐.'); } }, 5000);
@@ -226,6 +227,27 @@
       this.timers.add(t);
     }
     save() { if (!this.dead) store.set(this.key, this.s); }
+    // 방의 모든 그림을 미리 받아 두어 벽을 돌릴 때 빈 화면·늦은 표시가 없게 한다.
+    // 방 데이터(함수 본문 포함)에서 그림 경로를 찾아, 지금 벽부터 차례로 내려받고 디코드해 둔다.
+    preload() {
+      const seen = new Set(), names = [];
+      const scan = (v, depth) => {
+        if (depth > 6 || v == null) return;
+        if (typeof v === 'string') { if (/\.(webp|png|svg|jpg)$/.test(v) || /^(bg|props|zoom|items)\//.test(v)) names.push(v); return; }
+        if (typeof v === 'function') { (String(v).match(/['`]((?:assets\/[\w/.-]+|(?:bg|props|zoom|items)\/[\w.-]+))['`]/g) || []).forEach((m) => names.push(m.slice(1, -1))); return; }
+        if (typeof v === 'object') { if (seen.has(v)) return; seen.add(v); Object.values(v).forEach((x) => scan(x, depth + 1)); }
+      };
+      const v = this.room.views[this.s.view]; scan(v, 0); scan(this.room, 0);
+      const urls = [...new Set(names.filter((n) => !n.includes('${')).map((n) => this.src(n)))];
+      this.preloaded = this.preloaded || [];
+      let i = 0;
+      const next = () => {
+        if (this.dead || i >= urls.length) return;
+        const im = new Image(); im.decoding = 'async'; im.src = urls[i++]; this.preloaded.push(im);
+        (im.decode ? im.decode() : Promise.resolve()).catch(() => {}).then(next);
+      };
+      for (let k = 0; k < 4; k++) next(); // 네 갈래로 동시에
+    }
 
     /* ── 렌더링 ── */
     isLit() { return this.room.isLit ? this.room.isLit(this.s) : true; }
