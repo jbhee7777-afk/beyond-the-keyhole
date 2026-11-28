@@ -127,7 +127,7 @@
       /* ───── 동쪽: 작업대 (물통, 종이 뜨는 틀, 습작 휴지통, 순서 그림, 의자) ───── */
       east: {
         name: '종이 작업대',
-        bg: 'bg/east.webp',
+        bg: (s) => (F(s).stoolMoved ? 'bg/east_nostool.webp' : 'bg/east.webp'),
         objects: [
           { id: 'steps', x: 0, y: 0, w: 0, h: 0, img: '', hit: [890, 150, 560, 220], label: '종이 뜨기 순서 그림', look: '봄이가 그린 순서 그림: 종이를 찢어서 → 물통에 넣고 → 틀로 뜬 다음 → 햇볕에 말린다.' },
           { id: 'jars', x: 0, y: 0, w: 0, h: 0, img: '', hit: [500, 120, 380, 150], label: '선반 병', look: '풀 병, 단추 병, 붓 꽂이. 종이 뜨는 틀은 여기 없어.' },
@@ -151,12 +151,13 @@
             },
           },
           {
-            id: 'stool', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1110, 600, 230, 260], label: '나무 의자',
+            id: 'stool', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1110, 600, 230, 260], show: (s) => !F(s).stoolMoved, label: '나무 의자',
             click: (api) => {
               if (api.flags.stoolMoved) { api.say('틀 밑에 의자를 받쳐 뒀어.'); return; }
               api.set('stoolMoved'); api.sfx('step'); api.say('작은 나무 의자를 벽 쪽 못 아래로 끌어다 놓았어. 이제 올라설 수 있겠다.');
             },
           },
+          { id: 'stoolPlaced', img: 'props/stool_moved.webp', x: 1040, y: 640, w: 260, h: 274, show: (s) => !!F(s).stoolMoved },
           {
             id: 'basket', x: 0, y: 0, w: 0, h: 0, img: '', hit: [170, 600, 210, 230], label: '습작 휴지통',
             click: (api, n) => {

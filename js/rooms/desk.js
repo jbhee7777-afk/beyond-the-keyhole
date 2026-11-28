@@ -186,7 +186,7 @@
       /* ───── 동쪽: 쓰러진 유리컵, 물웅덩이, 필통 ───── */
       east: {
         name: '필통 쪽',
-        bg: 'bg/east.webp',
+        bg: (s) => (F(s).caseOpen ? 'bg/east_open.webp' : 'bg/east.webp'),
         objects: [
           { id: 'glass', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 40, 480, 480], label: '쓰러진 유리컵', look: '유리컵이 쓰러져서 물이 쏟아졌어. 나한테는 유리 터널 같아.' },
           { id: 'brush', x: 0, y: 0, w: 0, h: 0, img: '', hit: [0, 730, 1320, 170], label: '붓', look: '물감 붓이 통나무처럼 누워 있어. 노로 쓰면 딱이겠다.' },

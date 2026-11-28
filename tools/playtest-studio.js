@@ -38,7 +38,7 @@ const URL = 'file://' + path.join(__dirname, '..', 'index.html') + '#play-studio
   // 2. 종이 뜨기: 휴지통 → 물통 → 틀 → 빨랫줄 → 걷기 → 접이
   await view('east'); await clickObj('종이 뜨기 순서 그림'); await clickObj('습작 휴지통'); await shot('05-east');
   await clickObj('종이 뜨는 틀'); await expect(async () => !(await p.evaluate(() => window.__game.s.inv.includes('mould'))), '의자 없이 틀을 내림');
-  await clickObj('나무 의자'); await clickObj('종이 뜨는 틀'); await sel('mould'); await clickObj('물통');
+  await clickObj('나무 의자'); await p.screenshot({ path: OUT + '05b-stool-moved.png' }); await clickObj('종이 뜨는 틀'); await sel('mould'); await clickObj('물통');
   await expect(async () => !(await p.evaluate(() => window.__game.s.inv.includes('wetsheet'))), '맑은 물로 종이가 떠짐');
   await sel('scraps'); await clickObj('물통'); await sel('mould'); await clickObj('물통'); await shot('06-wetsheet');
   await view('south'); await sel('wetsheet'); await clickObj('창가 빨랫줄'); await shot('07-dry'); await clickObj('말린 종이');
