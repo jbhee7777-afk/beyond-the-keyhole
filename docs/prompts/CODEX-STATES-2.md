@@ -1,6 +1,6 @@
 # 상태 그림 2차 주문 (Codex용)
 
-도구를 썼는데 화면이 안 바뀌던 곳에 쓸 그림 2장. 코드는 건드리지 않는다.
+도구를 썼는데 화면이 안 바뀌던 곳에 쓸 그림 3장. 코드는 건드리지 않는다.
 
 ## 규칙
 1. 편집 그림은 입력 그림을 넣고 **말한 부분만** 바꾼다. 나머지(구도·색·빛)는 입력과 똑같이. 크기 1600x900.
@@ -17,4 +17,9 @@ Edit this image. Keep everything exactly the same. Change only this: the railway
 ### `state-10-stool.png` — 소품
 ```
 Game prop on a fully transparent background: one small old wooden step stool with three short legs and a round worn seat, warm honey-brown wood, seen from the front and slightly above, same hand-drawn storybook style as the reference (ink line, cross-hatching, watercolor). Single object, nothing else. No text.
+```
+
+### `state-6-east-open.png` — 편집 (입력: `assets/rooms/desk/bg/east.webp`)
+```
+Edit this image. Keep everything exactly the same. Change only this: the big green pencil case on the right is unzipped and lying open, its zipper pulled back along the top, the three bead charms hanging loose from the zipper pull, and a few short stubby colored pencils (red, blue, yellow) visible inside. The spilled glass, the water puddle, the paintbrush and the background stay exactly the same. Same art style. No text.
 ```
