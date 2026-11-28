@@ -297,7 +297,7 @@
             use: { cover: (api) => api.say('촛불에 대면 종이가 그을릴 거야.') },
           },
           {
-            id: 'basketE', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1280, 550, 260, 260], label: '두루마리 바구니',
+            id: 'basketE', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1280, 550, 196, 260], label: '두루마리 바구니',
             click: (api, n) => {
               if (api.flags.hookTaken) { api.say('두루마리만 남았어.'); return; }
               api.set('hookTaken'); api.give('hook', n); api.sfx('pick');
@@ -349,7 +349,7 @@
             },
           },
           { id: 'hedgehog', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1060, 620, 290, 220], label: '고슴도치 바늘꽂이', click: (api) => api.zoom('hedgehog') },
-          { id: 'candleS', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1360, 430, 170, 350], label: '촛불', look: '촛농이 흘러내린 굵은 초.' },
+          { id: 'candleS', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1340, 500, 136, 280], label: '촛불', look: '촛농이 흘러내린 굵은 초.' },
           { id: 'roundWinS', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1090, 20, 370, 370], label: '둥근 창', look: '이쪽 창으론 지붕만 보여.' },
           {
             id: 'thandle', img: 'props/thandle_floor.webp', x: 230, y: 680, w: 140, h: 132, cls: 'under', show: (s) => !F(s).thandleTaken, label: 'T자 쇠 손잡이',

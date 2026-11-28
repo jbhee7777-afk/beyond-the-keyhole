@@ -266,7 +266,7 @@
             wrong: '연필깎이에는 연필 같은 걸 넣어야지.',
           },
           {
-            id: 'cord', img: (s) => (F(s).curtainOpen ? 'props/cord_taut.webp' : 'props/cord.webp'), x: 1320, y: -20, w: 200, h: 660, hit: [1370, 160, 110, 470], label: '커튼 끈',
+            id: 'cord', img: (s) => (F(s).curtainOpen ? 'props/cord_taut.webp' : 'props/cord.webp'), x: 1320, y: -20, w: 200, h: 660, hit: [1340, 150, 136, 250], label: '커튼 끈',
             click: (api) => {
               if (api.flags.curtainOpen) { api.say('커튼 끈이 팽팽하게 당겨져 있어.'); return; }
               api.note('커튼 끈', '매달려 당겨도 내가 너무 가벼워서 안 움직인다.');

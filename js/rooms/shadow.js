@@ -96,7 +96,7 @@
       box.appendChild(b);
     });
     const play = document.createElement('button'); play.className = 'plain-btn stage-play'; play.textContent = '이 장면 올리기'; play.setAttribute('aria-label', '이 장면 올리기');
-    play.style.cssText = 'left:1220px;top:600px;width:280px;height:76px';
+    play.style.cssText = 'left:1170px;top:600px;width:280px;height:76px';
     play.onclick = (e) => {
       e.stopPropagation(); if (game.busy) return;
       if (!f.puppet) { api.say('막 뒤에 아무 인형도 안 세웠어.'); return; }
@@ -112,7 +112,7 @@
       game.after(2200, () => { game.busy = false; api.flash('#fff4d8', 900); game.s.zoom = null; game.save(); game.render(); });
     };
     box.appendChild(play);
-    const lv = document.createElement('div'); lv.className = 'stage-scene'; lv.textContent = '●'.repeat(f.scene) + '○'.repeat(ORDER.length - f.scene); box.appendChild(lv);
+    const lv = document.createElement('div'); lv.className = 'stage-scene'; lv.style.left = '1170px'; lv.textContent = '●'.repeat(f.scene) + '○'.repeat(ORDER.length - f.scene); box.appendChild(lv);
   }
 
   function nuulTalk(api) {

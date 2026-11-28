@@ -81,7 +81,7 @@
           { id: 'windowN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [390, 20, 370, 430], label: '작은 창', look: '창밖에 눈이 펑펑. 승강장 불빛이 희미하게 보여.' },
           { id: 'clockN', x: 0, y: 0, w: 0, h: 0, img: '', hit: [880, 0, 190, 250], label: '벽시계', look: '벽시계가 째깍째깍. 다락방행 별빛 열차는 밤에만 다닌대.' },
           { id: 'guide', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1195, 115, 200, 265], zoom: 'guide', label: '깨우는 법 안내문' },
-          { id: 'table', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1300, 330, 300, 450], label: '협탁', look: (s) => (warm(s) ? '책 두 권과 랜턴. 난로 불이 랜턴 유리에 비쳐.' : '책 두 권과 꺼진 랜턴. 서랍은 텅 비었어.') },
+          { id: 'table', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1290, 500, 186, 280], label: '협탁', look: (s) => (warm(s) ? '책 두 권과 랜턴. 난로 불이 랜턴 유리에 비쳐.' : '책 두 권과 꺼진 랜턴. 서랍은 텅 비었어.') },
           {
             id: 'bear', img: (s) => (F(s).awake ? 'props/bear_awake.webp' : 'props/bear_sleep.webp'), x: 600, y: 300, w: 560, h: 520, cls: 'breathe', hit: [680, 320, 420, 270], label: '곰 역장 곰곰이',
             click: bearClick,
@@ -165,7 +165,7 @@
           },
           { id: 'sled', x: 0, y: 0, w: 0, h: 0, img: '', hit: [200, 650, 430, 200], label: '나무 썰매', look: '눈썰매야. 타고 싶지만 지금은 바빠!' },
           { id: 'lamp', x: 0, y: 0, w: 0, h: 0, img: '', hit: [380, 10, 140, 540], label: '가로등', look: '가로등 불빛이 눈송이를 노랗게 비춰.' },
-          { id: 'shovel', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1320, 340, 170, 380], show: (s) => !F(s).shovelTaken, label: '눈삽', click: (api, n) => { api.set('shovelTaken'); api.give('shovel', n); api.say('문 옆에 기대 둔 눈삽을 챙겼어.'); } },
+          { id: 'shovel', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1310, 500, 166, 220], show: (s) => !F(s).shovelTaken, label: '눈삽', click: (api, n) => { api.set('shovelTaken'); api.give('shovel', n); api.say('문 옆에 기대 둔 눈삽을 챙겼어.'); } },
           { id: 'plate', img: (s) => `props/plate_${pos(s)}.webp`, x: 640, y: 278, w: 120, h: 72 },
           {
             id: 'lever', x: 0, y: 0, w: 0, h: 0, img: '', hit: [600, 250, 300, 420], label: '선로 전환기',

@@ -230,7 +230,7 @@
           { id: 'conch', img: 'props/conch', x: 330, y: 290, w: 160, h: 120, label: '소라 껍데기', click: (api) => { api.set('conchHeard'); api.sfx('whisper'); api.zoom('conch'); } },
           { id: 'hook', img: (s) => (F(s).hookTaken ? 'props/hook_none' : 'props/hook'), x: 720, y: 210, w: 80, h: 100, label: '낚싯바늘', click: (api, n) => { if (api.flags.hookTaken) return; api.set('hookTaken'); api.give('hook', n); api.say('걸이판의 낚싯바늘을 챙겼어.'); } },
           { id: 'kelp', img: (s) => (F(s).kelpTaken ? 'props/kelp_none' : 'props/kelp'), x: 900, y: 70, w: 90, h: 430, label: '미역 줄', click: (api, n) => { if (api.flags.kelpTaken) return; api.set('kelpTaken'); api.give('kelp', n); api.say('천장에서 늘어진 미역 줄을 끊어 챙겼어. 아주 질겨!'); } },
-          { id: 'desk', img: 'props/stampdesk', x: 1080, y: 400, w: 360, h: 300, hit: [1080, 440, 360, 70], look: '도장과 잉크판이 있는 우표 책상. 서랍이 있어.' },
+          { id: 'desk', img: 'props/stampdesk', x: 1080, y: 400, w: 360, h: 300, hit: [1080, 500, 360, 70], look: '도장과 잉크판이 있는 우표 책상. 서랍이 있어.' },
           { id: 'drawer', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1140, 514, 240, 72], zoom: 'stamps', label: '우표 서랍' },
           { id: 'caustic', img: 'bg/caustics', x: 0, y: 0, w: 1600, h: 900, cls: 'caustic' },
         ],

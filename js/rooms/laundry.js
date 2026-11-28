@@ -121,7 +121,7 @@
             wrong: '뭉게: “그건 빨래가 아니에요~”',
           },
           { id: 'counter', x: 0, y: 0, w: 0, h: 0, img: '', hit: [10, 460, 630, 320], label: '세탁소 카운터', look: '반질반질한 카운터. 작은 종이 놓여 있어.' },
-          { id: 'bell', x: 0, y: 0, w: 0, h: 0, img: '', hit: [80, 405, 90, 70], label: '종', click: (api) => { api.sfx('click'); api.say('땡! 맑은 소리가 구름 사이로 퍼졌어.'); } },
+          { id: 'bell', x: 0, y: 0, w: 0, h: 0, img: '', hit: [114, 398, 72, 84], label: '종', click: (api) => { api.sfx('click'); api.say('땡! 맑은 소리가 구름 사이로 퍼졌어.'); } },
           {
             id: 'machine', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1055, 205, 385, 480], label: '커다란 세탁기',
             click: (api) => {
@@ -171,7 +171,7 @@
             use: { raincloud: (api) => api.say(api.flags.sunOpen ? '창 앞 빨랫줄에 널어 봤는데… 해님을 마주 보니 눈이 부셔서 무지개가 하나도 안 보여. 다시 걷었어.' : '여긴 이불이 차지하고 있어.', 5600) },
           },
           {
-            id: 'pulley', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1370, 20, 170, 470], label: '도르래',
+            id: 'pulley', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1370, 20, 106, 380], label: '도르래',
             click: (api) => api.say(api.flags.sunOpen ? '도르래로 빨랫줄을 감아서 이불을 옆으로 걷었어.' : '빨랫줄을 감는 도르래야. 기둥에 손잡이를 끼우는 네모난 구멍이 비어 있어.'),
             use: {
               crank: (api) => { api.take('crank'); api.set('handleIn'); api.set('sunOpen'); api.sfx('creak'); api.flash('#fff6d0', 900); api.say('손잡이를 끼우고 끼릭끼릭 감았더니 이불이 스르르 옆으로! 해님이 방긋 나왔어.', 5200); },

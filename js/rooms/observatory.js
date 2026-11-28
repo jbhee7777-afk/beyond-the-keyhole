@@ -61,9 +61,9 @@
     };
     draw(f.aligned ? 12 : 0);
     if (f.aligned) return;
-    stepper(box, game, { x: 1140, y: 80, label: '감을 바퀴 수', value: f.turnsSet, min: 1, max: TURN_MAX, big: 10, onChange: (v) => { f.turnsSet = v; api.sfx('tap'); game.save(); orreryWidget(container, api, game); } });
+    stepper(box, game, { x: 1080, y: 80, label: '감을 바퀴 수', value: f.turnsSet, min: 1, max: TURN_MAX, big: 10, onChange: (v) => { f.turnsSet = v; api.sfx('tap'); game.save(); orreryWidget(container, api, game); } });
     const go = document.createElement('button'); go.className = 'plain-btn orrery-go'; go.textContent = '태엽 풀기'; go.setAttribute('aria-label', '태엽 풀기');
-    go.style.cssText = 'left:1280px;top:720px;width:240px;height:76px';
+    go.style.cssText = 'left:1200px;top:720px;width:240px;height:76px';
     go.onclick = (e) => {
       e.stopPropagation(); if (game.busy) return;
       const n = f.turnsSet; game.busy = true; api.sfx('dial');
@@ -133,9 +133,9 @@
     }
     box.appendChild(sky);
     if (f.focused) return;
-    stepper(box, game, { x: 1290, y: 230, label: '통 길이 (칸)', value: f.tube, min: 1, max: TUBE_MAX, onChange: (v) => { f.tube = v; api.sfx('dial'); game.save(); scopeWidget(container, api, game); } });
+    stepper(box, game, { x: 1240, y: 230, label: '통 길이 (칸)', value: f.tube, min: 1, max: TUBE_MAX, onChange: (v) => { f.tube = v; api.sfx('dial'); game.save(); scopeWidget(container, api, game); } });
     const look = document.createElement('button'); look.className = 'plain-btn scope-look'; look.textContent = '들여다보기'; look.setAttribute('aria-label', '들여다보기');
-    look.style.cssText = 'left:1290px;top:400px;width:220px;height:76px';
+    look.style.cssText = 'left:1240px;top:400px;width:220px;height:76px';
     look.onclick = (e) => {
       e.stopPropagation(); if (game.busy) return;
       if (f.tube === TUBE) {
@@ -176,7 +176,7 @@
       box.appendChild(b);
     });
     const r = document.createElement('button'); r.className = 'plain-btn studs-reset'; r.textContent = '모두 끄기'; r.setAttribute('aria-label', '모두 끄기');
-    r.style.cssText = 'left:1260px;top:780px;width:260px;height:64px';
+    r.style.cssText = 'left:1190px;top:780px;width:260px;height:64px';
     r.onclick = (e) => { e.stopPropagation(); f.lit = []; api.sfx('tap'); game.save(); doorWidget(container, api, game); };
     box.appendChild(r);
   }
@@ -280,7 +280,7 @@
             },
           })),
           {
-            id: 'magnifier', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1370, 385, 190, 225], label: '책상 돋보기', show: (s) => !F(s).magTaken,
+            id: 'magnifier', x: 0, y: 0, w: 0, h: 0, img: '', hit: [1290, 496, 186, 124], label: '책상 돋보기', show: (s) => !F(s).magTaken,
             click: (api, n) => { api.set('magTaken'); api.give('lenssmall', n); api.sfx('pick'); api.say('돋보기 틀에서 작은 볼록 렌즈를 빼냈어.'); },
           },
           {

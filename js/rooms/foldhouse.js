@@ -172,7 +172,7 @@
     if (!box) { box = document.createElement('div'); box.className = 'door-w'; container.appendChild(box); }
     box.innerHTML = '';
     TILES.forEach((t, i) => {
-      const x = [560, 800, 1040][i % 3], y = i < 3 ? 215 : 755;
+      const x = [560, 800, 1040][i % 3], y = i < 3 ? 215 : 715;
       const b = document.createElement('button'); b.className = 'piece door-tile';
       b.style.cssText = `left:${x - 70}px;top:${y - 70}px;width:140px;height:140px`;
       b.setAttribute('aria-label', `그림 판 ${i + 1}`);
