@@ -240,6 +240,8 @@
         name: '큰 망원경',
         bg: 'bg/north.webp',
         objects: [
+          { id: 'lensInBig', img: 'props/lens_in_big.webp', x: 458, y: 112, w: 170, h: 200, show: (s) => !!F(s).bigIn },
+          { id: 'lensInSmall', img: 'props/lens_in_small.webp', x: 1033, y: 502, w: 90, h: 110, show: (s) => !!F(s).smallIn },
           {
             id: 'scope', x: 0, y: 0, w: 0, h: 0, img: '', hit: [470, 110, 660, 520], label: '큰 망원경',
             click: (api) => {
