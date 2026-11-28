@@ -50,35 +50,44 @@
     if (!box) { box = document.createElement('div'); box.className = 'orrery'; container.appendChild(box); }
     box.innerHTML = '';
     f.turnsSet = f.turnsSet || 1;
-    const draw = (t) => {
-      [...box.querySelectorAll('.planet')].forEach((x) => x.remove());
-      posAt(t).forEach((p, i) => {
-        const o = ORB[i], a = (p / 12) * Math.PI * 2 - Math.PI / 2;
-        const im = document.createElement('img'); im.className = 'planet'; im.alt = ''; im.src = game.src(`props/planet_${o.c}.webp`);
-        im.style.cssText = `left:${800 + Math.cos(a) * o.rx - 36}px;top:${445 + Math.sin(a) * o.ry - 36}px`;
-        im.dataset.pos = p; box.appendChild(im);
-      });
-    };
-    draw(f.aligned ? 12 : 0);
+    const shown = f.aligned ? 12 : (f.orrT || 0); // 화면에 보이는 '돌아간 바퀴 수' (애니메이션 중에도 다시 그려져도 유지)
+    // 고리마다 열두 칸 눈금
+    let svg = '<svg viewBox="0 0 1600 900" width="1600" height="900" aria-hidden="true">';
+    ORB.forEach((o) => { for (let k = 0; k < 12; k++) { const a = (k / 12) * Math.PI * 2 - Math.PI / 2; svg += `<circle cx="${800 + Math.cos(a) * o.rx}" cy="${445 + Math.sin(a) * o.ry}" r="${k ? 5 : 8}" fill="${k ? 'rgba(40,24,10,.75)' : '#f6e7b0'}"/>`; } });
+    box.insertAdjacentHTML('afterbegin', svg + '</svg>');
+    posAt(shown).forEach((p, i) => {
+      const o = ORB[i], a = (p / 12) * Math.PI * 2 - Math.PI / 2;
+      const im = document.createElement('img'); im.className = 'planet'; im.alt = ''; im.src = game.src(`props/planet_${o.c}.webp`);
+      im.style.cssText = `left:${800 + Math.cos(a) * o.rx - 36}px;top:${445 + Math.sin(a) * o.ry - 36}px`;
+      im.dataset.pos = p; box.appendChild(im);
+    });
     if (f.aligned) return;
+    // 받침에 새겨진 톱니 수 (톱니가 많을수록 천천히 돈다)
+    const plate = document.createElement('div'); plate.className = 'gear-plate';
+    plate.innerHTML = '<b>고리 톱니 수</b><span class="r">빨강 12</span><span class="b">파랑 24</span><span class="g">초록 36</span><i>손잡이 한 바퀴에 톱니 한 개씩</i>';
+    plate.style.cssText = 'left:90px;top:640px';
+    box.appendChild(plate);
+    const cnt = document.createElement('div'); cnt.className = 'orrery-count'; cnt.textContent = shown ? `돌아간 바퀴 ${shown}` : '';
+    cnt.style.cssText = 'left:1080px;top:300px'; box.appendChild(cnt);
     stepper(box, game, { x: 1080, y: 70, label: '감을 바퀴 수', value: f.turnsSet, min: 1, max: TURN_MAX, big: 10, onChange: (v) => { f.turnsSet = v; api.sfx('tap'); game.save(); orreryWidget(container, api, game); } });
     const go = document.createElement('button'); go.className = 'plain-btn orrery-go'; go.textContent = '태엽 풀기'; go.setAttribute('aria-label', '태엽 풀기');
     go.style.cssText = 'left:1140px;top:215px;width:260px;height:72px';
     go.onclick = (e) => {
       e.stopPropagation(); if (game.busy) return;
       const n = f.turnsSet; game.busy = true; api.sfx('dial');
-      const step = Math.max(40, Math.min(110, 2400 / n));
-      for (let t = 1; t <= n; t++) game.after(t * step, () => draw(t));
+      f.orrT = 0; game.render(); // 처음 자리에서 출발
+      const step = Math.max(90, Math.min(260, 3600 / n));
+      for (let t = 1; t <= n; t++) game.after(t * step, () => { f.orrT = t; if (window.Sfx && window.Sfx.tone) window.Sfx.tone(520 + (t % 2) * 60, 0.05); });
       game.after(n * step + 500, () => {
+        game.busy = false;
         if (posAt(n).every(isTop)) {
-          f.aligned = true; game.busy = false; game.save(); api.sfx('unlock');
+          f.aligned = true; game.save(); api.sfx('unlock');
           api.say('딸깍! 세 행성이 창 쪽으로 한 줄로 서자 받침 서랍이 스르르 열렸어. 안에 커다란 유리 렌즈!', 5200);
           game.s.zoom = null; game.save(); game.render();
           return;
         }
         const p = posAt(n);
-        api.say(p[0] === p[1] && p[1] === p[2] ? '셋이 한 줄로 섰는데… 그림하고는 달라. 태엽이 풀리자 처음 자리로 돌아갔어.' : `${n}바퀴 돌고 멈췄어. 태엽이 풀리자 처음 자리로 돌아갔어.`, 4800);
-        game.after(1400, () => { game.busy = false; draw(0); });
+        api.say(p[0] === p[1] && p[1] === p[2] ? '셋이 한 줄로 섰는데… 그림하고는 달라.' : `${n}바퀴 돌고 멈췄어. 다시 풀면 처음 자리에서 출발해.`, 4200);
       });
     };
     box.appendChild(go);
@@ -334,7 +343,7 @@
     },
 
     zooms: {
-      orrery: { bg: 'zoom/orrery_top.webp', note: ['행성 모형', '감을 바퀴 수를 정하고 태엽을 푼다.'], widget: orreryWidget },
+      orrery: { bg: 'zoom/orrery_top.webp', note: ['행성 모형', '감을 바퀴 수를 정하고 태엽을 풀면 그만큼 돈다. 받침에 새긴 글: 고리 톱니 수 빨강 12 · 파랑 24 · 초록 36, 손잡이 한 바퀴에 톱니 한 개씩.'], widget: orreryWidget },
       focus: { bg: 'zoom/lampdesk.webp', note: ['등잔 아래 렌즈', '렌즈를 종이 위로 올렸다 내렸다 할 수 있다.'], widget: focusWidget },
       scope: { bg: 'zoom/sky.webp', widget: scopeWidget },
       door: { bg: 'zoom/door_panel.webp', note: ['남색 문의 별 단추', '단추 열두 개. 누르면 켜지고, 다시 누르면 꺼진다.'], widget: doorWidget },
@@ -348,7 +357,7 @@
       if (!f.keyTaken) return { key: 'moon', steps: ['휘는 태엽 열쇠를 오늘 달 모양 서랍에 넣었대요. 틀린 서랍을 열면 한동안 잠겨요.', '동쪽 창밖 달을 보세요. 어느 쪽이 빛나나요?', '달력에서 오른쪽이 빛나는 반달 서랍(왼쪽에서 셋째)을 여세요.'] };
       if (!f.aligned) {
         if (!f.keyIn) return { key: 'key', steps: ['태엽 열쇠는 행성 모형에 써요.', '남쪽 행성 모형이에요.', '태엽 열쇠를 고른 채 남쪽 행성 모형을 누르세요.'] };
-        return { key: 'orrery', steps: ['남쪽 벽 그림처럼 세 행성을 창 쪽(맨 위)으로 한 줄로 세워요. 감을 바퀴 수를 계산해서 정해야 해요.', '둘레는 12칸. 빨강은 0칸에서 1칸씩, 파랑은 6칸에서 ½칸씩, 초록은 8칸에서 ⅓칸씩 가요. 셋이 동시에 12칸(맨 위)에 닿는 바퀴 수는?', '빨강은 12의 배수, 파랑은 6칸 더 가야 하니 12바퀴, 초록은 4칸 더 가야 하니 12바퀴. 12바퀴로 정하고 태엽을 푸세요.'] };
+        return { key: 'orrery', steps: ['남쪽 벽 그림처럼 세 행성을 창 쪽(맨 위)으로 한 줄로 세워요. 감을 바퀴 수를 계산해서 정해야 해요.', '손잡이는 나사처럼 한 바퀴에 톱니를 하나씩 밀어요. 톱니 12개인 빨강은 한 칸, 24개인 파랑은 ½칸, 36개인 초록은 ⅓칸씩 가요 (1바퀴만 풀어 보면 확인돼요). 셋이 동시에 맨 위에 닿는 바퀴 수는?', '빨강은 12의 배수, 파랑은 6칸 더 가야 하니 12바퀴, 초록은 4칸 더 가야 하니 12바퀴. 12바퀴로 정하고 태엽을 푸세요.'] };
       }
       if (!f.lensBigTaken) return { key: 'lensbig', steps: ['받침 서랍이 열렸어요.', '남쪽 행성 모형이에요.', '행성 모형을 눌러 큰 렌즈를 꺼내세요.'] };
       if (!f.magTaken) return { key: 'lenssmall', steps: ['망원경엔 렌즈가 하나 더 필요해요.', '동쪽 책상에 볼록 렌즈가 달린 물건이 있어요.', '동쪽 책상 돋보기를 누르세요.'] };
