@@ -146,6 +146,7 @@
     order: ['north', 'east', 'south', 'west'],
     start: 'north',
     hintWait: 40,
+    saveVersion: 2, // 마구 누르기 방지로 퍼즐이 바뀌어 예전 저장은 새로 시작
     isLit: () => true,
     ambient: (s) => (F(s).doorOpen ? 'sea' : 'night'),
     guide: { name: '수달 달래', img: 'assets/rooms/teahouse/props/dalle_tired.webp' },

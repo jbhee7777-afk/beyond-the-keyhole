@@ -41,7 +41,9 @@
       this.timers = new Set();
       let saved = opts.fresh ? null : store.get(this.key);
       if (saved && saved.v !== SAVE_VERSION) saved = null; // 예전 형식 저장은 버리고 새로 시작
-      this.s = saved || { v: SAVE_VERSION, view: room.start, flags: {}, inv: [], sel: null, zoom: null, hint: { key: '', level: 0, at: 0 }, notes: [] };
+      // room.saveVersion: 그 방 퍼즐을 크게 바꿨을 때 올리면 그 방 저장만 새로 시작
+      if (saved && room.saveVersion && saved.rv !== room.saveVersion) saved = null;
+      this.s = saved || { v: SAVE_VERSION, rv: room.saveVersion, view: room.start, flags: {}, inv: [], sel: null, zoom: null, hint: { key: '', level: 0, at: 0 }, notes: [] };
       this.s.sel = null;
       this.s.notes = this.s.notes || [];
       this.repair();

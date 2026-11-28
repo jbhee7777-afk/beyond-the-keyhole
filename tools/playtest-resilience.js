@@ -52,7 +52,7 @@ const CASES = [
     await p.evaluate((c) => {
       localStorage.clear();
       localStorage.setItem('btk.tips', JSON.stringify(['move', 'stuck', 'zoom', 'select', 'firstItem', 'combine']));
-      localStorage.setItem('btk.save.' + c.room, JSON.stringify({ v: 2, view: 'north', flags: c.flags, inv: c.inv, sel: null, zoom: null, hint: { key: '', level: 0, at: 0 }, notes: [] }));
+      localStorage.setItem('btk.save.' + c.room, JSON.stringify({ v: 2, rv: 2, view: 'north', flags: c.flags, inv: c.inv, sel: null, zoom: null, hint: { key: '', level: 0, at: 0 }, notes: [] }));
     }, c);
     await p.goto(BASE + '#play-' + c.room); await p.reload();
     await p.waitForTimeout(900);
